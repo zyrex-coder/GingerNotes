@@ -20,12 +20,17 @@ export const DashboardScreen = () => {
 
   const statItems = [
     { label: 'Notes Scanned', value: stats.notesScanned, icon: 'camera', color: theme.colors.primary },
+    { label: 'Cards Mastered', value: `${stats.cardsMastered}/${stats.totalCards}`, icon: 'albums', color: theme.colors.purple },
+    { label: 'Quizzes Completed', value: stats.quizzesDone, icon: 'school', color: theme.colors.cyan },
     { label: 'Study Streak', value: `${stats.streak}d`, icon: 'flame', color: theme.colors.warning },
   ];
 
   const quickActions = [
     { title: 'Scan a Note', desc: 'Capture & digitize', icon: 'camera-outline', color: theme.colors.primary, target: 'Scan Notes' },
-    { title: 'Study Planner', desc: 'Schedule study sessions', icon: 'calendar-outline', color: theme.colors.purple, target: 'Study Planner' },
+    { title: 'Flashcards', desc: 'Spaced repetition', icon: 'albums-outline', color: theme.colors.purple, target: 'Flashcards' },
+    { title: 'Take Quiz', desc: 'Adaptive practice tests', icon: 'school-outline', color: theme.colors.cyan, target: 'Quizzes' },
+    { title: 'Study Planner', desc: 'Schedule study sessions', icon: 'calendar-outline', color: theme.colors.warning, target: 'Study Planner' },
+    { title: 'AI Summarizer', desc: 'Summarize study sheets', icon: 'sparkles-outline', color: theme.colors.success, target: 'AI Summarizer' },
   ];
 
   return (

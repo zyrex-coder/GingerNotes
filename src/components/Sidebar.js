@@ -14,9 +14,12 @@ export const Sidebar = () => {
   const isMobile = width < 1024;
 
   const menuItems = [
-    { name: 'Dashboard', label: 'My Notes', icon: 'book-outline' },
-    { name: 'Scan Notes', label: 'Scan Notes', icon: 'camera-outline' },
-    { name: 'Study Planner', label: 'Study Planner', icon: 'calendar-outline' },
+    { name: 'Dashboard', label: 'My Notes', shortLabel: 'Notes', icon: 'book-outline' },
+    { name: 'Scan Notes', label: 'Scan Notes', shortLabel: 'Scan', icon: 'camera-outline' },
+    { name: 'Flashcards', label: 'Flashcards', shortLabel: 'Cards', icon: 'albums-outline' },
+    { name: 'Quizzes', label: 'Take Quiz', shortLabel: 'Quiz', icon: 'school-outline' },
+    { name: 'Study Planner', label: 'Study Planner', shortLabel: 'Planner', icon: 'calendar-outline' },
+    { name: 'AI Summarizer', label: 'AI Summarizer', shortLabel: 'Summary', icon: 'sparkles-outline' },
   ];
 
   if (isMobile) {
@@ -37,7 +40,7 @@ export const Sidebar = () => {
                 color={isActive ? theme.colors.primary : theme.colors.textMuted}
               />
               <Text style={[styles.tabLabel, { color: isActive ? theme.colors.primary : theme.colors.textMuted }]}>
-                {item.label.split(' ')[0]} {/* shortened labels for mobile */}
+                {item.shortLabel}
               </Text>
             </TouchableOpacity>
           );

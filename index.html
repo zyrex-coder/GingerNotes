@@ -501,7 +501,7 @@
     /* Stats Grid */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 24px;
     }
@@ -580,12 +580,19 @@
       margin-bottom: 16px;
     }
 
-    /* Quick Actions 2x2 Grid */
+    /* Quick Actions Grid */
     .quick-actions-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
+    }
+
+    /* AI Summarizer Layout */
+    .summarizer-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1.5fr;
+      gap: 24px;
     }
 
     .action-button {
@@ -2266,7 +2273,7 @@
       .grid-2col {
         grid-template-columns: 1fr;
       }
-      .scan-layout, .planner-layout {
+      .scan-layout, .planner-layout, .summarizer-layout {
         grid-template-columns: 1fr;
       }
     }
@@ -2335,10 +2342,31 @@
             </div>
             <i class="fa-solid fa-chevron-right chevron"></i>
           </a>
+          <a class="menu-item" data-screen="flashcards" onclick="switchScreen('flashcards')">
+            <div class="menu-item-left">
+              <i class="fa-regular fa-clone menu-icon"></i>
+              <span>Flashcards</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="quizzes" onclick="switchScreen('quizzes')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-graduation-cap menu-icon"></i>
+              <span>Take Quiz</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
           <a class="menu-item" data-screen="planner" onclick="switchScreen('planner')">
             <div class="menu-item-left">
               <i class="fa-solid fa-calendar-days menu-icon"></i>
               <span>Study Planner</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="chat" onclick="switchScreen('chat')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-wand-magic-sparkles menu-icon"></i>
+              <span>AI Summarizer</span>
             </div>
             <i class="fa-solid fa-chevron-right chevron"></i>
           </a>
@@ -2400,6 +2428,34 @@
 
           <div class="card stat-card">
             <div class="stat-card-header">
+              <div class="stat-card-icon" style="background-color: rgba(139, 92, 246, 0.15); color: var(--purple);">
+                <i class="fa-regular fa-clone"></i>
+              </div>
+              <div class="sparkline">
+                <div class="sparkline-dot" style="background-color: var(--purple);"></div>
+                <div class="sparkline-line" style="background-color: var(--purple);"></div>
+              </div>
+            </div>
+            <span class="stat-card-value" id="stat-mastered-count">63/92</span>
+            <span class="stat-card-label">Cards Mastered</span>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon" style="background-color: rgba(6, 182, 212, 0.15); color: var(--cyan);">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <div class="sparkline">
+                <div class="sparkline-dot" style="background-color: var(--cyan);"></div>
+                <div class="sparkline-line" style="background-color: var(--cyan);"></div>
+              </div>
+            </div>
+            <span class="stat-card-value" id="stat-quizzes-count">12</span>
+            <span class="stat-card-label">Quizzes Completed</span>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-card-header">
               <div class="stat-card-icon" style="background-color: rgba(245, 158, 11, 0.15); color: var(--warning);">
                 <i class="fa-solid fa-fire"></i>
               </div>
@@ -2429,12 +2485,39 @@
                 <i class="fa-solid fa-arrow-right arrow"></i>
               </a>
 
-              <a class="action-button" onclick="switchScreen('planner')">
+              <a class="action-button" onclick="switchScreen('flashcards')">
                 <div class="action-icon-badge" style="background-color: rgba(139, 92, 246, 0.15); color: var(--purple);">
+                  <i class="fa-regular fa-clone"></i>
+                </div>
+                <span class="action-title">Flashcards</span>
+                <span class="action-desc">Spaced repetition</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+
+              <a class="action-button" onclick="switchScreen('quizzes')">
+                <div class="action-icon-badge" style="background-color: rgba(6, 182, 212, 0.15); color: var(--cyan);">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span class="action-title">Take Quiz</span>
+                <span class="action-desc">Adaptive practice tests</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+
+              <a class="action-button" onclick="switchScreen('planner')">
+                <div class="action-icon-badge" style="background-color: rgba(245, 158, 11, 0.15); color: var(--warning);">
                   <i class="fa-solid fa-calendar-days"></i>
                 </div>
                 <span class="action-title">Study Planner</span>
-                <span class="action-desc">Schedule study sessions</span>
+                <span class="action-desc">Schedule sessions & goals</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+
+              <a class="action-button" onclick="switchScreen('chat')">
+                <div class="action-icon-badge" style="background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <span class="action-title">AI Summarizer</span>
+                <span class="action-desc">Summarize study sheets</span>
                 <i class="fa-solid fa-arrow-right arrow"></i>
               </a>
             </div>
@@ -2682,59 +2765,105 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- 3. AI CHAT SCREEN -->
+      <!-- 3. AI SUMMARIZER SCREEN -->
       <!-- ========================================== -->
       <section id="screen-chat" class="screen-view">
         <div style="margin-bottom: 24px;">
-          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">AI Chat</h2>
-          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Interact with Ginger AI to summarize, explain, or structure plans</p>
+          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">AI Notes Summarizer</h2>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Paste messy study material and let Ginger AI generate highly-structured summaries</p>
         </div>
 
-        <div class="chat-layout">
-          <!-- Chat header bar -->
-          <div class="chat-header">
-            <div class="chat-header-left">
-              <div class="chat-avatar">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <div class="summarizer-layout">
+          <!-- Left Column: Input and Options -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="card" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Paste Study Notes</label>
+                <textarea id="summarizer-input-field" class="search-input" style="width: 100%; min-height: 180px; padding: 12px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; resize: vertical; line-height: 1.5;" placeholder="Paste your raw notes, paragraphs, transcripts, or study guidelines here..."></textarea>
               </div>
-              <div class="chat-name-col">
-                <span class="chat-name">Ginger AI</span>
-                <div class="online-row">
-                  <div class="online-pulse"></div>
-                  <span>Online • Ready to help</span>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Summary Style</label>
+                  <select id="summarizer-style" style="padding: 10px 12px; border: 1.5px solid var(--input-border); border-radius: 10px; background-color: var(--input-bg); color: var(--text-color); font-weight: 700; font-family: inherit; font-size: 13px; outline: none; cursor: pointer;">
+                    <option value="bullet">Bullet Points</option>
+                    <option value="concepts">Key Concepts</option>
+                    <option value="qa">Questions & Answers</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Target Length</label>
+                  <select id="summarizer-length" style="padding: 10px 12px; border: 1.5px solid var(--input-border); border-radius: 10px; background-color: var(--input-bg); color: var(--text-color); font-weight: 700; font-family: inherit; font-size: 13px; outline: none; cursor: pointer;">
+                    <option value="short">Short (Overview)</option>
+                    <option value="medium" selected>Medium (Detailed)</option>
+                    <option value="long">In-Depth (Comprehensive)</option>
+                  </select>
                 </div>
               </div>
-            </div>
-            <div class="chat-header-right">
-              <i class="fa-regular fa-bookmark"></i>
-              <i class="fa-solid fa-rotate-right" onclick="resetChatHistory()"></i>
-            </div>
-          </div>
 
-          <!-- Chat messages area -->
-          <div class="messages-area" id="chat-messages-container">
-            <!-- Dynamically populated chat bubbles -->
-          </div>
-
-          <!-- Chips quick list -->
-          <div class="chips-row">
-            <div class="chip" onclick="sendQuickChat('Explain cell mitosis simply')">Explain cell mitosis simply</div>
-            <div class="chip" onclick="sendQuickChat('Create a study plan for my biology exam')">Create a study plan for biology</div>
-            <div class="chip" onclick="sendQuickChat('Summarize the French Revolution')">Summarize French Revolution</div>
-            <div class="chip" onclick="sendQuickChat('What is the Pythagorean theorem?')">What is Pythagorean theorem?</div>
-          </div>
-
-          <!-- Chat Input Bar -->
-          <div class="input-bar-row">
-            <div class="chat-input-box">
-              <input type="text" class="chat-input" id="chat-input-field" placeholder="Ask me anything about your studies..." onkeydown="handleChatKeydown(event)">
-              <button class="send-btn" id="chat-send-btn" onclick="sendUserMessage()">
-                <i class="fa-solid fa-paper-plane"></i>
+              <button class="btn btn-primary" id="summarizer-generate-btn" style="width: 100%;" onclick="generateAiSummary()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Summary
               </button>
+            </div>
+
+            <!-- Presets card -->
+            <div class="card" style="padding: 18px; margin-bottom: 0;">
+              <span style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;">Try a Sample Preset</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <div class="chip" onclick="loadSummarizerPreset(0)" style="margin: 0; cursor: pointer;">🧬 Mitosis Biology</div>
+                <div class="chip" onclick="loadSummarizerPreset(1)" style="margin: 0; cursor: pointer;">🧪 Carbon Chains</div>
+                <div class="chip" onclick="loadSummarizerPreset(2)" style="margin: 0; cursor: pointer;">🏰 French Revolution</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Results view -->
+          <div class="card" style="display: flex; flex-direction: column; min-height: 400px; padding: 24px; margin-bottom: 0;">
+            <!-- Placeholder -->
+            <div class="ocr-placeholder" id="summarizer-placeholder" style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; padding: 20px;">
+              <div class="placeholder-circle" style="background-color: rgba(59, 130, 246, 0.08); color: var(--primary);">
+                <i class="fa-solid fa-file-invoice"></i>
+              </div>
+              <span class="placeholder-title" style="font-size: 16px; font-weight: 800;">Summary Output Area</span>
+              <span class="placeholder-desc" style="color: var(--text-muted); font-size: 13px; font-weight: 600; max-width: 320px; margin-top: 6px; line-height: 1.4;">Paste your study material on the left, customize the parameters, and click Generate to see the results.</span>
+            </div>
+
+            <!-- Loader (shimmer / spinner) -->
+            <div class="ocr-loader" id="summarizer-loader" style="display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1;">
+              <i class="fa-solid fa-circle-notch" style="font-size: 32px; color: var(--primary); animation: spin 1.5s linear infinite; margin-bottom: 16px;"></i>
+              <span class="ocr-loader-text" style="font-size: 16px; font-weight: 700;">Ginger AI is digesting notes...</span>
+              <span class="ocr-loader-sub" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Extracting semantic concepts & structuring outline</span>
+            </div>
+
+            <!-- Output Results -->
+            <div class="ocr-result" id="summarizer-result" style="display: none; flex-direction: column; flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="extracted-badge" id="summarizer-result-badge" style="background-color: rgba(16, 185, 129, 0.12); color: var(--success); width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
+                    <i class="fa-solid fa-sparkles"></i>
+                  </div>
+                  <div style="display: flex; flex-direction: column;">
+                    <span id="summarizer-result-title" style="font-size: 14px; font-weight: 800;">Generated Summary</span>
+                    <span id="summarizer-result-meta" style="font-size: 11px; font-weight: 700; color: var(--primary);">Style: Bullet Points • Medium</span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-outline btn-small" onclick="copySummarizerOutput()" title="Copy to clipboard">
+                    <i class="fa-regular fa-copy"></i> Copy
+                  </button>
+                  <button class="btn btn-primary btn-small" onclick="saveSummarizerAsNote()" title="Save as a dashboard note">
+                    <i class="fa-solid fa-floppy-disk"></i> Save as Note
+                  </button>
+                </div>
+              </div>
+              <div class="divider" style="margin: 0 0 16px 0;"></div>
+              <div id="summarizer-output-body" style="font-size: 14px; line-height: 1.6; font-weight: 500; overflow-y: auto; flex: 1; max-height: 320px; padding-right: 4px; white-space: pre-wrap; color: var(--text-color);">
+                Summary contents...
+              </div>
             </div>
           </div>
         </div>
-        <div class="chat-footer-lbl">Ginger AI • Powered by advanced language models</div>
       </section>
 
       <!-- ========================================== -->
@@ -2914,9 +3043,21 @@
         <i class="fa-solid fa-camera"></i>
         <span>Scan</span>
       </a>
+      <a class="mobile-tab-item" data-tab="flashcards" onclick="switchScreen('flashcards')">
+        <i class="fa-regular fa-clone"></i>
+        <span>Cards</span>
+      </a>
+      <a class="mobile-tab-item" data-tab="quizzes" onclick="switchScreen('quizzes')">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Quiz</span>
+      </a>
       <a class="mobile-tab-item" data-tab="planner" onclick="switchScreen('planner')">
         <i class="fa-solid fa-calendar-days"></i>
         <span>Planner</span>
+      </a>
+      <a class="mobile-tab-item" data-tab="chat" onclick="switchScreen('chat')">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Summary</span>
       </a>
     </nav>
 
@@ -3446,7 +3587,6 @@
     window.addEventListener('DOMContentLoaded', () => {
       initAuth();
       renderRecentNotes();
-      renderChatMessages();
       renderFlashcardsDecks();
       renderQuizzesGrid();
       renderSchedules();
@@ -3484,18 +3624,12 @@
       const titlesMap = {
         'dashboard': 'GingerNotes',
         'scan': 'Scan Notes',
-        'chat': 'AI Chat',
+        'chat': 'AI Summarizer',
         'flashcards': 'Flashcards',
         'quizzes': 'Quizzes',
         'planner': 'Study Planner'
       };
       document.getElementById('mobile-title-text').innerText = titlesMap[screenName] || 'GingerNotes';
-
-      // Special action: scroll to bottom of chat if entering chat
-      if (screenName === 'chat') {
-        const chatContainer = document.getElementById('chat-messages-container');
-        setTimeout(() => { chatContainer.scrollTop = chatContainer.scrollHeight; }, 100);
-      }
     }
 
     /* Global Theme Toggling Manager */
@@ -4070,103 +4204,263 @@
       updateGlobalStatsDisplay();
     }
 
-    /* AI Chat Panel logic */
-    function renderChatMessages() {
-      const container = document.getElementById('chat-messages-container');
-      container.innerHTML = '';
-
-      appState.chatMessages.forEach(msg => {
-        const isAi = msg.sender === 'ai';
-        const msgRow = document.createElement('div');
-        msgRow.className = `message-row ${isAi ? 'ai' : 'user'}`;
-
-        if (isAi) {
-          msgRow.innerHTML = `
-            <div class="msg-avatar">
-              <i class="fa-solid fa-wand-magic-sparkles"></i>
-            </div>
-            <div class="bubble">${msg.text}</div>
-          `;
-        } else {
-          msgRow.innerHTML = `
-            <div class="bubble">${msg.text}</div>
-          `;
+    /* AI Notes Summarizer Panel logic */
+    function loadSummarizerPreset(index) {
+      const presets = [
+        {
+          title: "Mitosis Biology",
+          text: "Cell division is a vital process. Mitosis is the process where a single cell divides into two identical daughter cells. The stages are Prophase (chromosomes condense and spindle fibers form), Metaphase (chromosomes align at the equatorial plate), Anaphase (sister chromatids are pulled apart to opposite poles), and Telophase (nuclear envelopes reform around the two sets of chromosomes, followed by cytokinesis)."
+        },
+        {
+          title: "Carbon Chains",
+          text: "Organic compounds are based on carbon atoms. Carbon chains can be straight, branched, or cyclic. Alkanes are saturated hydrocarbons containing only single bonds (e.g., methane, ethane). Alkenes are unsaturated and contain at least one double bond (e.g., ethene). Alkynes contain at least one triple bond (e.g., ethyne). Functional groups like hydroxyl (-OH) or carboxyl (-COOH) change the chemical properties significantly."
+        },
+        {
+          title: "French Revolution",
+          text: "The French Revolution (1789-1799) was a period of radical social and political upheaval in France. It led to the rise of democracy and nationalism. Major causes included absolute monarchy, unequal estates system (clergy, nobility, commoners), financial bankruptcy, and Enlightenment philosophies. Key phases involved the Storming of the Bastille, the Reign of Terror led by Maximilien Robespierre, and eventually ended with the rise of Napoleon Bonaparte in 1799."
         }
-        container.appendChild(msgRow);
-      });
-
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function sendUserMessage() {
-      const inputField = document.getElementById('chat-input-field');
-      const text = inputField.value.trim();
-      if (!text) return;
-
-      // User Msg
-      appState.chatMessages.push({ id: Date.now().toString(), sender: 'user', text });
-      inputField.value = '';
-      renderChatMessages();
-
-      // Trigger AI typing simulator bubble
-      const container = document.getElementById('chat-messages-container');
-      const typingRow = document.createElement('div');
-      typingRow.className = "message-row ai";
-      typingRow.id = "chat-typing-loader";
-      typingRow.innerHTML = `
-        <div class="msg-avatar">
-          <i class="fa-solid fa-wand-magic-sparkles"></i>
-        </div>
-        <div class="bubble thinking-bubble">
-          <i class="fa-solid fa-circle-notch"></i>
-          <span>Ginger AI is researching...</span>
-        </div>
-      `;
-      container.appendChild(typingRow);
-      container.scrollTop = container.scrollHeight;
-
-      // Determine answer
-      let answer = "That is an excellent academic question! I have scanned your Notes library to extract contextual information. To study this further, feel free to try your custom **Quizzes** or **Flashcards** tabs!";
-      
-      const promptChips = [
-        { q: 'Explain cell mitosis simply', a: "Mitosis is cell division where one parent cell splits to form **two identical daughter cells** for growth and repair. Think of PMAT:\n\n• **P (Prophase)**: Chromosomes pack tightly.\n• **M (Metaphase)**: Chromosomes line up in the *middle*.\n• **A (Anaphase)**: Sister chromatids pull *apart*.\n• **T (Telophase)**: *Two* new nuclei form, and the cell pinches into two!" },
-        { q: 'Create a study plan for my biology exam', a: "Here is your customized **4-Day Biology Study Plan**:\n\n• **Day 1: Cellular Structure** — Focus on cell organelles, membranes, and passive/active transport.\n• **Day 2: Cell Division** — Review Mitosis vs. Meiosis (PMAT stages and genetic variation).\n• **Day 3: Energy and Enzymes** — Study Photosynthesis, Cellular Respiration, and enzyme active sites.\n• **Day 4: Practice & Review** — Take our adaptive **Cell Biology Quiz** and review flashcard cards." },
-        { q: 'Summarize the French Revolution', a: "The **French Revolution (1789–1799)** was a watershed event that ended centuries of absolute monarchy in France. \n\n**Main Causes:**\n1. Extreme financial crises.\n2. Inequality of the Three Estates (Clergy, Nobility, and Commoners).\n3. Rise of Enlightenment ideals.\n\n**Major Phases:**\n- **1789**: Storming of the Bastille & Declaration of Rights.\n- **1793**: Reign of Terror led by Robespierre; execution of King Louis XVI.\n- **1799**: Rise of Napoleon Bonaparte, marking the end of the revolution." },
-        { q: 'What is the Pythagorean theorem?', a: "The **Pythagorean Theorem** is a fundamental principle in geometry for right-angled triangles:\n\n$$\\mathbf{a^2 + b^2 = c^2}$$\n\nWhere:\n- **a** and **b** are the lengths of the two shorter legs.\n- **c** is the length of the hypotenuse (the side opposite the right angle).\n\n*Example*: If a = 3 and b = 4, then $3^2 + 4^2 = 9 + 16 = 25 = c^2$, which means the hypotenuse $c = 5$." }
       ];
 
-      const match = promptChips.find(c => c.q.toLowerCase() === text.toLowerCase());
-      if (match) answer = match.a;
+      if (presets[index]) {
+        document.getElementById('summarizer-input-field').value = presets[index].text;
+        showToast(`Loaded preset: ${presets[index].title}`);
+      }
+    }
+
+    let lastGeneratedSummary = "";
+    let lastGeneratedTitle = "";
+
+    function generateAiSummary() {
+      const inputField = document.getElementById('summarizer-input-field');
+      const text = inputField.value.trim();
+      if (!text) {
+        showToast("Please enter or paste some study notes first!", "error");
+        return;
+      }
+
+      const style = document.getElementById('summarizer-style').value;
+      const length = document.getElementById('summarizer-length').value;
+
+      // Hide placeholder & result, show loader
+      document.getElementById('summarizer-placeholder').style.display = 'none';
+      document.getElementById('summarizer-result').style.display = 'none';
+      document.getElementById('summarizer-loader').style.display = 'flex';
+
+      // Set disabled on generate button
+      const generateBtn = document.getElementById('summarizer-generate-btn');
+      generateBtn.disabled = true;
+      generateBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...';
 
       setTimeout(() => {
-        // Remove typing
-        const typingEl = document.getElementById('chat-typing-loader');
-        if (typingEl) typingEl.remove();
+        // Hide loader
+        document.getElementById('summarizer-loader').style.display = 'none';
+        document.getElementById('summarizer-result').style.display = 'flex';
 
-        // Push AI reply
-        appState.chatMessages.push({ id: Date.now().toString(), sender: 'ai', text: answer });
-        renderChatMessages();
-      }, 1600);
-    }
+        // Re-enable button
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Summary';
 
-    function handleChatKeydown(e) {
-      if (e.key === 'Enter') sendUserMessage();
-    }
+        // Determine title and output
+        let styleLabel = "Bullet Points";
+        if (style === "concepts") styleLabel = "Key Concepts";
+        if (style === "qa") styleLabel = "Questions & Answers";
 
-    function sendQuickChat(promptText) {
-      document.getElementById('chat-input-field').value = promptText;
-      sendUserMessage();
-    }
+        let lengthLabel = "Medium";
+        if (length === "short") lengthLabel = "Short Overview";
+        if (length === "long") lengthLabel = "In-Depth";
 
-    function resetChatHistory() {
-      appState.chatMessages = [
-        {
-          id: '1',
-          sender: 'ai',
-          text: "Hi! I'm Ginger AI 🌟 Your personal study assistant. I can help you understand concepts, summarize notes, create study plans, or explain anything you're struggling with. What would you like to learn today?"
+        document.getElementById('summarizer-result-meta').innerText = `Style: ${styleLabel} • ${lengthLabel}`;
+
+        let outputTitle = "Study Summary";
+        let outputText = "";
+
+        const isMitosis = text.toLowerCase().includes("mitosis") || text.toLowerCase().includes("cell division");
+        const isCarbon = text.toLowerCase().includes("carbon") || text.toLowerCase().includes("organic");
+        const isFrenchRev = text.toLowerCase().includes("french") || text.toLowerCase().includes("revolution");
+
+        if (isMitosis) {
+          outputTitle = "Mitosis Biology Summary";
+          if (style === "bullet") {
+            outputText = `• **Overview**: Mitosis is a form of eukaryotic cell division that produces two genetically identical diploid daughter cells.
+• **Prophase**: Nuclear envelope breaks down; chromosomes condense; mitotic spindle starts forming.
+• **Metaphase**: Chromosomes align perfectly along the metaphase plate (cell equator) for equal division.
+• **Anaphase**: Sister chromatids are separated by spindle fibers and pulled to opposite ends of the cell.
+• **Telophase**: Chromosomes decondense; new nuclear membranes form around each set of chromosomes; cytokinesis completes the physical split of the cytoplasm.`;
+          } else if (style === "concepts") {
+            outputText = `**1. Genetic Identity Preservation**
+Mitosis preserves genetic continuity by ensuring each daughter cell receives an exact copy of the parent cell's DNA.
+
+**2. The Spindle Apparatus**
+Microtubules attach to kinetochores on chromosomes to guide their precise alignment and separation.
+
+**3. Cytokinesis Mechanics**
+The physical division of the cytoplasm, distinct from nuclear division (karyokinesis), completing the cell split into two independent units.`;
+          } else {
+            outputText = `**Q: What is the main purpose of mitosis?**
+*A:* Mitosis is essential for growth, tissue repair, and asexual reproduction in multicellular organisms, maintaining a stable chromosome number.
+
+**Q: How does metaphase differ from anaphase?**
+*A:* During metaphase, chromosomes line up in the center. In anaphase, the sister chromatids are pulled apart to opposite poles.`;
+          }
+        } else if (isCarbon) {
+          outputTitle = "Organic Carbon Chains Summary";
+          if (style === "bullet") {
+            outputText = `• **Carbon Hybridization**: Carbon forms 4 covalent bonds, allowing straight, branched, or cyclic molecular chains.
+• **Alkanes**: Saturated hydrocarbons with single bonds. General formula: CnH2n+2. Low chemical reactivity.
+• **Alkenes & Alkynes**: Unsaturated hydrocarbons containing double bonds (CnH2n) or triple bonds (CnH2n-2) with higher reactivity.
+• **Functional Groups**: Reactive groups like Hydroxyl (-OH) or Carboxyl (-COOH) that dictate biological/chemical functions.`;
+          } else if (style === "concepts") {
+            outputText = `**1. Tetravalency of Carbon**
+The unique ability of carbon to form four stable covalent bonds allows it to build highly diverse and complex backbone chains.
+
+**2. Degree of Saturation**
+Saturated compounds contain only single C-C bonds (alkanes), while unsaturated ones possess double or triple bonds (alkenes/alkynes), altering reactivity.
+
+**3. Functional Group Precedence**
+The presence of specific atoms (oxygen, nitrogen) in functional groups defines the chemical reactivity and class of the organic compound.`;
+          } else {
+            outputText = `**Q: What is the difference between saturated and unsaturated hydrocarbons?**
+*A:* Saturated hydrocarbons (alkanes) have only single bonds and max hydrogens. Unsaturated hydrocarbons (alkenes, alkynes) have double/triple bonds.
+
+**Q: Why is carbon the basis of organic chemistry?**
+*A:* Carbon's tetravalency allows it to form four stable covalent bonds, facilitating infinite chain lengths and diverse molecular geometries.`;
+          }
+        } else if (isFrenchRev) {
+          outputTitle = "French Revolution Summary";
+          if (style === "bullet") {
+            outputText = `• **Main Causes**: Extreme financial bankruptcy, a rigid Three Estates hierarchy, and the spread of radical Enlightenment ideas.
+• **Initial Spark (1789)**: The Storming of the Bastille and the creation of the Declaration of the Rights of Man.
+• **Radical Phase (1793)**: Reign of Terror led by Maximilien Robespierre; execution of King Louis XVI using the guillotine.
+• **Resolution (1799)**: The rise of general Napoleon Bonaparte ends the revolution, establishing a new imperial consulate.`;
+          } else if (style === "concepts") {
+            outputText = `**1. Collapse of the Old Regime**
+The absolute monarchy and feudal estate systems collapsed under bankruptcy and social inequalities between classes.
+
+**2. The Reign of Terror**
+A radical phase where extreme measures were taken to protect the revolution, leading to widespread executions and dictatorship.
+
+**3. Spread of Nationalism**
+The revolution exported liberty, equality, and nationalistic sentiments throughout Europe, permanently breaking monarchical absolute rule.`;
+          } else {
+            outputText = `**Q: What were the major causes of the French Revolution?**
+*A:* Financial crises, the unfair class privileges of the Three Estates, extreme famine, and the philosophical ideals of the Enlightenment.
+
+**Q: Who was Robespierre and why is he significant?**
+*A:* He was the leader of the radical Jacobin faction who spearheaded the Reign of Terror, executing thousands of perceived counter-revolutionaries.`;
+          }
+        } else {
+          // General Text Summarizer
+          outputTitle = "Custom Study Summary";
+          const sentences = text.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 5);
+          const firstSentence = sentences[0] || "Imported study notes";
+          const secondSentence = sentences[1] || "Analyzed material";
+          const thirdSentence = sentences[2] || "Extracted concepts";
+
+          if (style === "bullet") {
+            outputText = `• **Key Thesis**: ${firstSentence}.
+• **Core Subject Point**: ${secondSentence}.
+• **Supporting Material**: ${thirdSentence}.
+• **Study Recommendation**: Focus on reviewing terms, structures, and chronological relations mentioned in your material.`;
+          } else if (style === "concepts") {
+            outputText = `**1. Foundational Premise**
+${firstSentence}.
+
+**2. Structural Relationship**
+${secondSentence}.
+
+**3. Analytical Conclusion**
+${thirdSentence}.`;
+          } else {
+            outputText = `**Q: What is the primary takeaway from this study text?**
+*A:* The text primarily establishes that: "${firstSentence}."
+
+**Q: What other relationships are discussed?**
+*A:* The notes highlight that: "${secondSentence}" and "${thirdSentence}."`;
+          }
         }
-      ];
-      renderChatMessages();
+
+        // Adjust length of outputText
+        if (length === "short") {
+          outputText = outputText.split('\n\n').slice(0, 2).join('\n\n');
+        } else if (length === "long") {
+          outputText += `\n\n**🎯 Study Advice & Key Vocabulary:**
+- Ensure you memorize definitions of all terms bolded above.
+- Make a set of practice flashcards for the main concepts.
+- Review this summary 10 minutes before your next study session for optimal spaced repetition retention.`;
+        }
+
+        lastGeneratedSummary = outputText;
+        lastGeneratedTitle = outputTitle;
+
+        // Perform Typing Out Animation
+        const outputBody = document.getElementById('summarizer-output-body');
+        outputBody.innerHTML = '';
+        
+        let charsTyped = 0;
+        const totalChars = outputText.length;
+        const charsPerStep = 6;
+        const intervalTime = 15;
+
+        const typingTimer = setInterval(() => {
+          if (charsTyped >= totalChars) {
+            clearInterval(typingTimer);
+            outputBody.innerHTML = outputText;
+          } else {
+            charsTyped += charsPerStep;
+            outputBody.innerText = outputText.substring(0, charsTyped) + "█";
+          }
+        }, intervalTime);
+
+      }, 1500);
+    }
+
+    function copySummarizerOutput() {
+      if (!lastGeneratedSummary) return;
+      navigator.clipboard.writeText(lastGeneratedSummary)
+        .then(() => {
+          showToast("Summary copied to clipboard!");
+        })
+        .catch(() => {
+          showToast("Failed to copy text", "error");
+        });
+    }
+
+    function saveSummarizerAsNote() {
+      if (!lastGeneratedSummary) return;
+
+      const style = document.getElementById('summarizer-style').value;
+      const length = document.getElementById('summarizer-length').value;
+
+      let styleLabel = "Bullet Points";
+      if (style === "concepts") styleLabel = "Key Concepts";
+      if (style === "qa") styleLabel = "Q&A Summary";
+
+      let lengthLabel = "Medium";
+      if (length === "short") lengthLabel = "Short Overview";
+      if (length === "long") lengthLabel = "In-Depth";
+
+      const newNote = {
+        id: Date.now().toString(),
+        title: lastGeneratedTitle || "AI Note Summary",
+        subject: `AI Summary (${styleLabel})`,
+        pages: length === "short" ? 1 : length === "medium" ? 2 : 3,
+        time: "Just now",
+        starred: false,
+        color: '#10B981',
+        content: lastGeneratedSummary
+      };
+
+      appState.notes.unshift(newNote);
+      appState.stats.notesScanned++;
+
+      // Re-render dashboard list & global counters
+      renderRecentNotes();
+      updateGlobalStatsDisplay();
+
+      showToast("Saved summary to your Notes library!");
+      
+      // Go to Notes (Dashboard) screen
+      switchScreen('dashboard');
     }
 
     /* Render course Quizzes topic list */

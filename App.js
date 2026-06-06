@@ -11,6 +11,9 @@ import { AuthScreen } from './src/screens/AuthScreen';
 import { DashboardScreen } from './src/screens/DashboardScreen';
 import { ScanNotesScreen } from './src/screens/ScanNotesScreen';
 import { StudyPlannerScreen } from './src/screens/StudyPlannerScreen';
+import { FlashcardsScreen } from './src/screens/FlashcardsScreen';
+import { QuizzesScreen } from './src/screens/QuizzesScreen';
+import { AIChatScreen } from './src/screens/AIChatScreen';
 
 const MainAppContent = () => {
   const { theme } = useTheme();
@@ -28,6 +31,12 @@ const MainAppContent = () => {
         return <ScanNotesScreen />;
       case 'Study Planner':
         return <StudyPlannerScreen />;
+      case 'Flashcards':
+        return <FlashcardsScreen />;
+      case 'Quizzes':
+        return <QuizzesScreen />;
+      case 'AI Summarizer':
+        return <AIChatScreen />;
       default:
         return <DashboardScreen />;
     }
