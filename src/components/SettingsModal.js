@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Switch, ScrollView, Platform } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Switch, ScrollView, Platform, Alert } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export const SettingsModal = () => {
   const { theme } = useTheme();
-  const { isSettingsVisible, setIsSettingsVisible, profile, saveSettings } = useApp();
+  const { isSettingsVisible, setIsSettingsVisible, profile, saveSettings, deleteAccount } = useApp();
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to permanently delete your account and all study data? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { 
+          text: "Delete", 
+          style: "destructive",
+          onPress: () => {
+            deleteAccount();
+            Alert.alert("Account Deleted", "Your account has been deleted successfully.");
+          }
+        }
+      ]
+    );
+  };
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -149,6 +167,15 @@ export const SettingsModal = () => {
                 thumbColor="#f4f3f4"
               />
             </View>
+
+            {/* Delete Account */}
+            <TouchableOpacity
+              onPress={handleDeleteAccount}
+              style={[styles.deleteBtn, { borderColor: theme.colors.error }]}
+            >
+              <Ionicons name="trash-outline" size={16} color={theme.colors.error} style={{ marginRight: 6 }} />
+              <Text style={[styles.deleteBtnText, { color: theme.colors.error }]}>Delete Account</Text>
+            </TouchableOpacity>
           </ScrollView>
 
           {/* Action Row */}
@@ -303,6 +330,20 @@ const styles = StyleSheet.create({
   btnPrimaryText: {
     color: '#FFFFFF',
     fontSize: 14,
+    fontWeight: '700',
+  },
+  deleteBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 44,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    marginTop: 16,
+    borderStyle: 'dashed',
+  },
+  deleteBtnText: {
+    fontSize: 13,
     fontWeight: '700',
   },
 });

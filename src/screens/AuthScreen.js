@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,23 +8,43 @@ export const AuthScreen = () => {
   const { theme } = useTheme();
   const { login } = useApp();
 
-  const [email, setEmail] = useState('student@gingernotes.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = () => {
-    if (!email.trim() || !password.trim()) {
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedEmail || !trimmedPassword) {
+      Alert.alert("Input Required", "Please enter both email address and password.");
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      Alert.alert("Invalid Email", "Please enter a valid email address (e.g., student@gingernotes.com).");
+      return;
+    }
+
+    if (trimmedPassword.length < 6) {
+      Alert.alert("Weak Password", "Password must be at least 6 characters.");
       return;
     }
 
     setIsLoading(true);
     // Simulate API delay
     setTimeout(() => {
-      login(email.trim(), password.trim());
+      login(trimmedEmail, trimmedPassword);
       setIsLoading(false);
+      if (isSignup) {
+        Alert.alert("Success", "Account created successfully! Welcome to GingerNotes.");
+      }
     }, 1000);
   };
+
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.backgroundSolid }]}>

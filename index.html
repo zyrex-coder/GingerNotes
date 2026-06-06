@@ -3148,6 +3148,14 @@
             <span class="slider"></span>
           </label>
         </div>
+
+        <!-- Delete Account Option (Danger Zone) -->
+        <div style="margin-top: 8px; padding-top: 16px; border-top: 1.5px dashed var(--input-border); display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #ef4444; text-transform: uppercase; letter-spacing: 0.5px;">Danger Zone</span>
+          <button class="btn" onclick="handleDeleteAccount()" style="width: 100%; border: 1.5px dashed #f87171; background-color: rgba(239, 68, 68, 0.05); color: #ef4444; padding: 12px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.05)'">
+            <i class="fa-solid fa-trash-can"></i> Delete Account
+          </button>
+        </div>
       </div>
 
       <div class="modal-actions-row">
@@ -3184,7 +3192,7 @@
           <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Email Address</label>
           <div style="position: relative;">
             <i class="fa-solid fa-envelope" style="position: absolute; left: 14px; top: 15px; color: var(--text-muted);"></i>
-            <input type="email" id="login-email" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="student@gingernotes.com" value="student@gingernotes.com">
+            <input type="email" id="login-email" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="student@gingernotes.com">
           </div>
         </div>
 
@@ -3195,7 +3203,7 @@
           </div>
           <div style="position: relative;">
             <i class="fa-solid fa-lock" style="position: absolute; left: 14px; top: 15px; color: var(--text-muted);"></i>
-            <input type="password" id="login-password" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="••••••••" value="password123">
+            <input type="password" id="login-password" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="••••••••">
           </div>
         </div>
 
@@ -4812,7 +4820,19 @@ ${thirdSentence}.`;
       const password = document.getElementById('login-password').value.trim();
 
       if (!email || !password) {
-        showToast('Please enter both email and password.', 'error');
+        showToast('Please enter both email address and password.', 'error');
+        return;
+      }
+
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showToast('Please enter a valid email address (e.g., student@gingernotes.com).', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showToast('Password must be at least 6 characters.', 'error');
         return;
       }
 
@@ -4943,6 +4963,64 @@ ${thirdSentence}.`;
       updateProfileDisplay();
       closeSettingsModal();
       showToast('Settings saved successfully!');
+    }
+
+    function handleDeleteAccount() {
+      const confirmDelete = confirm("Are you sure you want to permanently delete your account and all study data? This action is irreversible.");
+      if (!confirmDelete) return;
+
+      // Clear localStorage
+      localStorage.clear();
+
+      // Reset profile state to blank defaults
+      appState.profile = {
+        name: 'Student',
+        email: '',
+        ocrMode: 'balanced',
+        dailyGoal: 4,
+        notifications: true
+      };
+
+      // Reset stats state to zero
+      appState.stats = {
+        notesScanned: 0,
+        cardsMastered: 0,
+        totalCards: 0,
+        quizzesDone: 0,
+        streak: 0,
+        lastQuizScore: 0
+      };
+
+      // Reset notes array
+      appState.notes = [];
+
+      // Update UI components with clean data
+      renderRecentNotes();
+      renderFlashcardsDecks();
+      renderQuizzesGrid();
+      renderSchedules();
+      updateGlobalStatsDisplay();
+      updateProfileDisplay();
+
+      // Close settings modal
+      closeSettingsModal();
+
+      // Log out and show auth screen
+      appState.isLoggedIn = false;
+      const authScreen = document.getElementById('auth-screen');
+      if (authScreen) {
+        authScreen.style.display = 'flex';
+        setTimeout(() => {
+          authScreen.style.opacity = '1';
+          authScreen.style.pointerEvents = 'all';
+        }, 50);
+      }
+
+      // Ensure login text inputs are cleared
+      document.getElementById('login-email').value = '';
+      document.getElementById('login-password').value = '';
+
+      showToast('Account deleted successfully.', 'success');
     }
   </script>
 </body>

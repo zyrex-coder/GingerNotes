@@ -31,6 +31,28 @@ export const AppProvider = ({ children }) => {
     setIsSettingsVisible(false);
   };
 
+  const deleteAccount = () => {
+    setIsLoggedIn(false);
+    setIsSettingsVisible(false);
+    setProfile({
+      name: 'Student',
+      email: '',
+      ocrMode: 'balanced',
+      dailyGoal: 4,
+      notifications: true,
+    });
+    setStats({
+      notesScanned: 0,
+      cardsMastered: 0,
+      totalCards: 0,
+      quizzesDone: 0,
+      streak: 0,
+      lastQuizScore: 0,
+    });
+    setNotes([]);
+  };
+
+
   const saveSettings = (newProfile) => {
     setProfile(newProfile);
     setIsSettingsVisible(false);
@@ -307,6 +329,7 @@ export const AppProvider = ({ children }) => {
       setIsSettingsVisible,
       login,
       logout,
+      deleteAccount,
       saveSettings,
       stats,
       notes,
