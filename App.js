@@ -2,9 +2,11 @@ import React from 'react';
 import { StyleSheet, View, SafeAreaView, useWindowDimensions, StatusBar } from 'react-native';
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import { NavigationProvider, useNavigation } from './src/context/NavigationContext';
-import { AppProvider } from './src/context/AppContext';
+import { AppProvider, useApp } from './src/context/AppContext';
 import { Sidebar } from './src/components/Sidebar';
 import { Header } from './src/components/Header';
+import { SettingsModal } from './src/components/SettingsModal';
+import { AuthScreen } from './src/screens/AuthScreen';
 
 import { DashboardScreen } from './src/screens/DashboardScreen';
 import { ScanNotesScreen } from './src/screens/ScanNotesScreen';
@@ -14,6 +16,7 @@ const MainAppContent = () => {
   const { theme } = useTheme();
   const { currentScreen } = useNavigation();
   const { width } = useWindowDimensions();
+  const { isLoggedIn } = useApp();
 
   const isWide = width >= 1024;
 
@@ -29,6 +32,15 @@ const MainAppContent = () => {
         return <DashboardScreen />;
     }
   };
+
+  if (!isLoggedIn) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.backgroundSolid }]}>
+        <StatusBar barStyle={theme.isDarkMode ? "light-content" : "dark-content"} />
+        <AuthScreen />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.backgroundSolid }]}>
@@ -55,6 +67,9 @@ const MainAppContent = () => {
 
         </View>
       </View>
+
+      {/* Settings overlay dialog */}
+      <SettingsModal />
     </SafeAreaView>
   );
 };

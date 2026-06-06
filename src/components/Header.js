@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, useWindowDimensions, Image } 
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigation } from '../context/NavigationContext';
+import { useApp } from '../context/AppContext';
 
 export const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const { currentScreen } = useNavigation();
   const { width } = useWindowDimensions();
+  const { setIsSettingsVisible, logout } = useApp();
 
   const isMobile = width < 1024;
 
@@ -30,8 +32,11 @@ export const Header = () => {
         <TouchableOpacity onPress={toggleTheme} style={[styles.iconBtn, { backgroundColor: theme.colors.cardBg, borderColor: theme.colors.cardBorder }]}>
           <Ionicons name={theme.isDarkMode ? "sunny-outline" : "moon-outline"} size={18} color={theme.colors.text} />
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.iconBtn, { backgroundColor: theme.colors.cardBg, borderColor: theme.colors.cardBorder }]}>
-          <Ionicons name="notifications-outline" size={18} color={theme.colors.text} />
+        <TouchableOpacity onPress={() => setIsSettingsVisible(true)} style={[styles.iconBtn, { backgroundColor: theme.colors.cardBg, borderColor: theme.colors.cardBorder }]}>
+          <Ionicons name="settings-outline" size={18} color={theme.colors.text} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={logout} style={[styles.iconBtn, { backgroundColor: theme.colors.cardBg, borderColor: theme.colors.cardBorder }]}>
+          <Ionicons name="log-out-outline" size={18} color={theme.colors.text} />
         </TouchableOpacity>
       </View>
     </View>

@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Switch, useWindowDimensions, 
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigation } from '../context/NavigationContext';
+import { useApp } from '../context/AppContext';
 
 export const Sidebar = () => {
   const { theme, toggleTheme } = useTheme();
   const { currentScreen, navigate } = useNavigation();
   const { width } = useWindowDimensions();
+  const { profile, setIsSettingsVisible, logout } = useApp();
 
   const isMobile = width < 1024;
 
@@ -124,18 +126,23 @@ export const Sidebar = () => {
 
         {/* Profile Card */}
         <View style={[styles.profileCard, { backgroundColor: theme.colors.cardBg, borderColor: theme.colors.cardBorder }]}>
-          <View style={styles.profileLeft}>
+          <TouchableOpacity onPress={() => setIsSettingsVisible(true)} style={styles.profileLeft}>
             <View style={[styles.profileAvatar, { backgroundColor: theme.colors.primary }]}>
-              <Text style={styles.avatarText}>S</Text>
+              <Text style={styles.avatarText}>{profile.name ? profile.name.charAt(0).toUpperCase() : 'S'}</Text>
             </View>
             <View style={styles.profileInfo}>
-              <Text style={[styles.profileName, { color: theme.colors.text }]}>Student</Text>
+              <Text style={[styles.profileName, { color: theme.colors.text }]} numberOfLines={1}>{profile.name}</Text>
               <Text style={[styles.profilePlan, { color: theme.colors.textMuted }]}>Free Plan</Text>
             </View>
-          </View>
-          <TouchableOpacity>
-            <Ionicons name="settings-outline" size={18} color={theme.colors.textMuted} />
           </TouchableOpacity>
+          <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => setIsSettingsVisible(true)}>
+              <Ionicons name="settings-outline" size={18} color={theme.colors.textMuted} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={logout}>
+              <Ionicons name="log-out-outline" size={18} color={theme.colors.error} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>

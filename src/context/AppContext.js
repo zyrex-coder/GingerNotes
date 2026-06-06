@@ -3,6 +3,39 @@ import React, { createContext, useState, useContext } from 'react';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  // Auth & Profile states
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const [profile, setProfile] = useState({
+    name: 'Student',
+    email: 'student@gingernotes.com',
+    ocrMode: 'balanced',
+    dailyGoal: 4,
+    notifications: true,
+  });
+
+  const login = (email, password) => {
+    setIsLoggedIn(true);
+    if (email && email.includes('@')) {
+      const part = email.split('@')[0];
+      setProfile(prev => ({
+        ...prev,
+        email,
+        name: prev.name === 'Student' ? part.charAt(0).toUpperCase() + part.slice(1) : prev.name
+      }));
+    }
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+    setIsSettingsVisible(false);
+  };
+
+  const saveSettings = (newProfile) => {
+    setProfile(newProfile);
+    setIsSettingsVisible(false);
+  };
+
   // Global stats
   const [stats, setStats] = useState({
     notesScanned: 24,
@@ -268,6 +301,13 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
+      isLoggedIn,
+      profile,
+      isSettingsVisible,
+      setIsSettingsVisible,
+      login,
+      logout,
+      saveSettings,
       stats,
       notes,
       decks,

@@ -14,17 +14,17 @@
   <style>
     /* Premium CSS Variables & Theme definitions */
     :root {
-      --bg-start: #040D21;
-      --bg-end: #081730;
-      --bg-solid: #061229;
-      --card-bg: #0E223D;
-      --card-border: #1E3A5F;
+      --bg-start: #0E1E38;
+      --bg-end: #1C3D5A;
+      --bg-solid: #112345;
+      --card-bg: #1E365C;
+      --card-border: #2E548A;
       --text-color: #FFFFFF;
-      --text-muted: #7C8BA1;
-      --active-tab-bg: #1B3E63;
+      --text-muted: #94A3B8;
+      --active-tab-bg: #2E5B88;
       --active-tab-border: #3B82F6;
-      --input-bg: #0A1B33;
-      --input-border: #162E4C;
+      --input-bg: #14294A;
+      --input-border: #244574;
       --primary: #3B82F6;
       --primary-glow: rgba(59, 130, 246, 0.4);
       --success: #10B981;
@@ -32,24 +32,24 @@
       --error: #EF4444;
       --purple: #8B5CF6;
       --cyan: #06B6D4;
-      --divider: #162E4C;
-      --badge-bg: rgba(59, 130, 246, 0.15);
-      --badge-text: #60A5FA;
-      --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+      --divider: #1E3A5F;
+      --badge-bg: rgba(59, 130, 246, 0.2);
+      --badge-text: #93C5FD;
+      --glass-glow: 0 8px 32px 0 rgba(14, 30, 56, 0.5);
     }
 
     body.light-mode {
-      --bg-start: #F0F4FF;
+      --bg-start: #E6F0FA;
       --bg-end: #FFFFFF;
-      --bg-solid: #E6EDFF;
+      --bg-solid: #F0F7FF;
       --card-bg: #FFFFFF;
-      --card-border: #C4D5F2;
-      --text-color: #1E293B;
-      --text-muted: #64748B;
+      --card-border: #BFDBFE;
+      --text-color: #1E3A8A;
+      --text-muted: #3B82F6;
       --active-tab-bg: #DBEAFE;
       --active-tab-border: #2563EB;
-      --input-bg: #F5F8FF;
-      --input-border: #B9CEEB;
+      --input-bg: #F0F7FF;
+      --input-border: #93C5FD;
       --primary: #2563EB;
       --primary-glow: rgba(37, 99, 235, 0.15);
       --success: #059669;
@@ -60,7 +60,7 @@
       --divider: #CBD9F4;
       --badge-bg: rgba(37, 99, 235, 0.1);
       --badge-text: #2563EB;
-      --glass-glow: 0 8px 24px 0 rgba(148, 163, 184, 0.15);
+      --glass-glow: 0 8px 24px 0 rgba(30, 58, 138, 0.1);
     }
 
     /* Base resets */
@@ -2953,7 +2953,7 @@
   <!-- ========================================== -->
   <!-- MODAL: SETTINGS -->
   <!-- ========================================== -->
-  <div class="modal-overlay" id="settings-modal" style="display: none; z-index: 10001;">
+  <div class="modal-overlay" id="settings-modal" style="z-index: 10001;">
     <div class="modal-content" style="max-width: 500px;">
       <div class="modal-header">
         <div class="modal-header-left">
@@ -4618,11 +4618,11 @@
       document.getElementById('settings-goal-input').value = appState.profile.dailyGoal;
       document.getElementById('settings-notify-checkbox').checked = appState.profile.notifications;
 
-      document.getElementById('settings-modal').style.display = 'flex';
+      document.getElementById('settings-modal').classList.add('active');
     }
 
     function closeSettingsModal() {
-      document.getElementById('settings-modal').style.display = 'none';
+      document.getElementById('settings-modal').classList.remove('active');
     }
 
     function saveSettings() {
