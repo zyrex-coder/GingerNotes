@@ -20,16 +20,12 @@ export const DashboardScreen = () => {
 
   const statItems = [
     { label: 'Notes Scanned', value: stats.notesScanned, icon: 'camera', color: theme.colors.primary },
-    { label: 'Cards Mastered', value: `${stats.cardsMastered}/${stats.totalCards || 92}`, icon: 'layers', color: theme.colors.purple },
-    { label: 'Quizzes Done', value: stats.quizzesDone, icon: 'checkbox', color: theme.colors.success },
     { label: 'Study Streak', value: `${stats.streak}d`, icon: 'flame', color: theme.colors.warning },
   ];
 
   const quickActions = [
     { title: 'Scan a Note', desc: 'Capture & digitize', icon: 'camera-outline', color: theme.colors.primary, target: 'Scan Notes' },
-    { title: 'Ask AI', desc: 'Get instant answers', icon: 'chatbubble-ellipses-outline', color: theme.colors.cyan, target: 'AI Chat' },
-    { title: 'Study Cards', desc: 'Spaced repetition', icon: 'layers-outline', color: theme.colors.purple, target: 'Flashcards' },
-    { title: 'Take Quiz', desc: 'Test your knowledge', icon: 'checkbox-outline', color: theme.colors.success, target: 'Quizzes' },
+    { title: 'Study Planner', desc: 'Schedule study sessions', icon: 'calendar-outline', color: theme.colors.purple, target: 'Study Planner' },
   ];
 
   return (
@@ -164,27 +160,18 @@ export const DashboardScreen = () => {
             </TouchableOpacity>
           </Card>
 
-          {/* AI Tip Card */}
-          <TouchableOpacity
-            onPress={() => navigate('AI Chat')}
+          {/* Study Tip Card */}
+          <View
             style={[styles.aiTipCard, { backgroundColor: theme.isDarkMode ? '#1E295D' : '#EFF6FF', borderColor: theme.isDarkMode ? '#3B82F6' : '#93C5FD' }]}
           >
             <View style={styles.tipHeader}>
-              <Ionicons name="chatbubble-ellipses-outline" size={16} color={theme.colors.primary} style={{ marginRight: 6 }} />
-              <Text style={[styles.tipTitle, { color: theme.colors.primary }]}>AI TIP</Text>
+              <Ionicons name="sparkles-outline" size={16} color={theme.colors.primary} style={{ marginRight: 6 }} />
+              <Text style={[styles.tipTitle, { color: theme.colors.primary }]}>STUDY TIP</Text>
             </View>
-            <Text style={[styles.tipText, { color: theme.colors.text }]}>
-              Try the Pomodoro technique — 25 min focus, 5 min break. Ask Ginger AI to create a plan for you!
+            <Text style={[styles.tipText, { color: theme.colors.text, marginBottom: 0 }]}>
+              Try the Pomodoro technique — 25 min of high-focus study, followed by a 5 min restorative break to maximize focus and memory retention!
             </Text>
-            <Button
-              title="Ask AI"
-              onPress={() => navigate('AI Chat')}
-              variant="primary"
-              size="small"
-              style={styles.tipBtn}
-              icon={<Ionicons name="arrow-forward" size={14} color="#FFFFFF" />}
-            />
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -216,8 +203,7 @@ export const DashboardScreen = () => {
                 <Text style={[styles.noteBodyText, { color: theme.colors.text }]}>{selectedNote.content}</Text>
               </ScrollView>
               <View style={styles.modalFooter}>
-                <Button title="Summarize with AI" onPress={() => { setSelectedNote(null); navigate('AI Chat'); }} style={{ marginRight: 12, flex: 1 }} />
-                <Button title="Close" onPress={() => setSelectedNote(null)} variant="outline" style={{ flex: 1 }} />
+                <Button title="Close" onPress={() => setSelectedNote(null)} variant="primary" style={{ flex: 1 }} />
               </View>
             </View>
           </View>

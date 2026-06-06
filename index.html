@@ -14,17 +14,17 @@
   <style>
     /* Premium CSS Variables & Theme definitions */
     :root {
-      --bg-start: #080B1E;
-      --bg-end: #0E1332;
-      --bg-solid: #0B0F2A;
-      --card-bg: #141935;
-      --card-border: #232B5C;
+      --bg-start: #040D21;
+      --bg-end: #081730;
+      --bg-solid: #061229;
+      --card-bg: #0E223D;
+      --card-border: #1E3A5F;
       --text-color: #FFFFFF;
       --text-muted: #7C8BA1;
-      --active-tab-bg: #1E295D;
+      --active-tab-bg: #1B3E63;
       --active-tab-border: #3B82F6;
-      --input-bg: #111530;
-      --input-border: #1F2552;
+      --input-bg: #0A1B33;
+      --input-border: #162E4C;
       --primary: #3B82F6;
       --primary-glow: rgba(59, 130, 246, 0.4);
       --success: #10B981;
@@ -32,24 +32,24 @@
       --error: #EF4444;
       --purple: #8B5CF6;
       --cyan: #06B6D4;
-      --divider: #1F2552;
+      --divider: #162E4C;
       --badge-bg: rgba(59, 130, 246, 0.15);
       --badge-text: #60A5FA;
-      --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
     }
 
     body.light-mode {
-      --bg-start: #F3F7FC;
+      --bg-start: #F0F4FF;
       --bg-end: #FFFFFF;
-      --bg-solid: #F0F4FA;
+      --bg-solid: #E6EDFF;
       --card-bg: #FFFFFF;
-      --card-border: #E2E8F0;
+      --card-border: #C4D5F2;
       --text-color: #1E293B;
       --text-muted: #64748B;
-      --active-tab-bg: #EFF6FF;
+      --active-tab-bg: #DBEAFE;
       --active-tab-border: #2563EB;
-      --input-bg: #F8FAFC;
-      --input-border: #CBD5E1;
+      --input-bg: #F5F8FF;
+      --input-border: #B9CEEB;
       --primary: #2563EB;
       --primary-glow: rgba(37, 99, 235, 0.15);
       --success: #059669;
@@ -57,10 +57,10 @@
       --error: #DC2626;
       --purple: #7C3AED;
       --cyan: #0891B2;
-      --divider: #E2E8F0;
+      --divider: #CBD9F4;
       --badge-bg: rgba(37, 99, 235, 0.1);
       --badge-text: #2563EB;
-      --glass-glow: 0 8px 24px 0 rgba(148, 163, 184, 0.12);
+      --glass-glow: 0 8px 24px 0 rgba(148, 163, 184, 0.15);
     }
 
     /* Base resets */
@@ -501,7 +501,7 @@
     /* Stats Grid */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
       margin-bottom: 24px;
     }
@@ -2164,6 +2164,87 @@
       color: var(--warning);
     }
 
+    /* Sweep Scanner Animation styling */
+    .scanner-container {
+      position: relative;
+      background-color: var(--input-bg);
+      border: 1.5px dashed var(--input-border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .scanner-container.active-scan {
+      border-color: var(--primary);
+    }
+
+    .scanner-container .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, transparent, var(--primary), transparent);
+      box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+      animation: scan-move 2.5s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes scan-move {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+
+    .selected-file-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 10px;
+      width: 100%;
+      box-shadow: var(--glass-glow);
+    }
+
+    .file-icon {
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    .file-info-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .file-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-color);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+      text-align: left;
+    }
+
+    .file-size {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 1024px) {
       .sidebar {
@@ -2207,8 +2288,11 @@
         <div class="mobile-icon-btn" onclick="toggleAppTheme()">
           <i class="fa-solid fa-sun" id="mobile-theme-icon"></i>
         </div>
-        <div class="mobile-icon-btn">
-          <i class="fa-solid fa-bell"></i>
+        <div class="mobile-icon-btn" onclick="openSettingsModal()" style="cursor: pointer;" title="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </div>
+        <div class="mobile-icon-btn" onclick="handleLogout()" style="cursor: pointer; color: var(--error);" title="Log Out">
+          <i class="fa-solid fa-right-from-bracket"></i>
         </div>
       </div>
     </header>
@@ -2251,27 +2335,6 @@
             </div>
             <i class="fa-solid fa-chevron-right chevron"></i>
           </a>
-          <a class="menu-item" data-screen="chat" onclick="switchScreen('chat')">
-            <div class="menu-item-left">
-              <i class="fa-solid fa-comments menu-icon"></i>
-              <span>AI Chat</span>
-            </div>
-            <i class="fa-solid fa-chevron-right chevron"></i>
-          </a>
-          <a class="menu-item" data-screen="flashcards" onclick="switchScreen('flashcards')">
-            <div class="menu-item-left">
-              <i class="fa-solid fa-layer-group menu-icon"></i>
-              <span>Flashcards</span>
-            </div>
-            <i class="fa-solid fa-chevron-right chevron"></i>
-          </a>
-          <a class="menu-item" data-screen="quizzes" onclick="switchScreen('quizzes')">
-            <div class="menu-item-left">
-              <i class="fa-solid fa-square-check menu-icon"></i>
-              <span>Quizzes</span>
-            </div>
-            <i class="fa-solid fa-chevron-right chevron"></i>
-          </a>
           <a class="menu-item" data-screen="planner" onclick="switchScreen('planner')">
             <div class="menu-item-left">
               <i class="fa-solid fa-calendar-days menu-icon"></i>
@@ -2296,15 +2359,18 @@
           </label>
         </div>
 
-        <div class="profile-card">
-          <div class="profile-left">
+        <div class="profile-card" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+          <div class="profile-left" onclick="openSettingsModal()" style="cursor: pointer;">
             <div class="profile-avatar">S</div>
             <div class="profile-info">
-              <span class="profile-name">Student</span>
+              <span class="profile-name" id="sidebar-profile-name">Student</span>
               <span class="profile-plan">Free Plan</span>
             </div>
           </div>
-          <i class="fa-solid fa-gear profile-settings"></i>
+          <div style="display: flex; gap: 14px; align-items: center;">
+            <i class="fa-solid fa-gear profile-settings" onclick="openSettingsModal()" title="Settings"></i>
+            <i class="fa-solid fa-right-from-bracket profile-settings" onclick="handleLogout()" title="Log Out" style="color: var(--error);"></i>
+          </div>
         </div>
       </div>
     </aside>
@@ -2330,34 +2396,6 @@
             </div>
             <span class="stat-card-value" id="stat-scanned-count">24</span>
             <span class="stat-card-label">Notes Scanned</span>
-          </div>
-
-          <div class="card stat-card">
-            <div class="stat-card-header">
-              <div class="stat-card-icon" style="background-color: rgba(139, 92, 246, 0.15); color: var(--purple);">
-                <i class="fa-solid fa-layer-group"></i>
-              </div>
-              <div class="sparkline">
-                <div class="sparkline-dot"></div>
-                <div class="sparkline-line"></div>
-              </div>
-            </div>
-            <span class="stat-card-value" id="stat-mastered-count">63/92</span>
-            <span class="stat-card-label">Cards Mastered</span>
-          </div>
-
-          <div class="card stat-card">
-            <div class="stat-card-header">
-              <div class="stat-card-icon" style="background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
-                <i class="fa-solid fa-square-check"></i>
-              </div>
-              <div class="sparkline">
-                <div class="sparkline-dot"></div>
-                <div class="sparkline-line"></div>
-              </div>
-            </div>
-            <span class="stat-card-value" id="stat-quizzes-count">12</span>
-            <span class="stat-card-label">Quizzes Done</span>
           </div>
 
           <div class="card stat-card">
@@ -2391,30 +2429,12 @@
                 <i class="fa-solid fa-arrow-right arrow"></i>
               </a>
 
-              <a class="action-button" onclick="switchScreen('chat')">
-                <div class="action-icon-badge" style="background-color: rgba(6, 182, 212, 0.15); color: var(--cyan);">
-                  <i class="fa-solid fa-comments"></i>
-                </div>
-                <span class="action-title">Ask AI</span>
-                <span class="action-desc">Get instant answers</span>
-                <i class="fa-solid fa-arrow-right arrow"></i>
-              </a>
-
-              <a class="action-button" onclick="switchScreen('flashcards')">
+              <a class="action-button" onclick="switchScreen('planner')">
                 <div class="action-icon-badge" style="background-color: rgba(139, 92, 246, 0.15); color: var(--purple);">
-                  <i class="fa-solid fa-layer-group"></i>
+                  <i class="fa-solid fa-calendar-days"></i>
                 </div>
-                <span class="action-title">Study Cards</span>
-                <span class="action-desc">Spaced repetition</span>
-                <i class="fa-solid fa-arrow-right arrow"></i>
-              </a>
-
-              <a class="action-button" onclick="switchScreen('quizzes')">
-                <div class="action-icon-badge" style="background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
-                  <i class="fa-solid fa-square-check"></i>
-                </div>
-                <span class="action-title">Take Quiz</span>
-                <span class="action-desc">Test your knowledge</span>
+                <span class="action-title">Study Planner</span>
+                <span class="action-desc">Schedule study sessions</span>
                 <i class="fa-solid fa-arrow-right arrow"></i>
               </a>
             </div>
@@ -2499,16 +2519,13 @@
               </a>
             </div>
 
-            <!-- AI Tip Glow Card -->
-            <div class="card ai-tip-card" onclick="switchScreen('chat')">
+            <!-- Study Tip Card -->
+            <div class="card ai-tip-card" style="cursor: default;">
               <div class="tip-header">
-                <i class="fa-regular fa-comments"></i>
-                <span>AI TIP</span>
+                <i class="fa-solid fa-sparkles" style="color: var(--primary);"></i>
+                <span style="color: var(--primary);">STUDY TIP</span>
               </div>
-              <p class="tip-text">Try the Pomodoro technique — 25 min focus, 5 min break. Ask Ginger AI to create a plan for you!</p>
-              <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); switchScreen('chat')">
-                Ask AI <i class="fa-solid fa-arrow-right"></i>
-              </button>
+              <p class="tip-text" style="margin-bottom: 0;">Try the Pomodoro technique — 25 min of high-focus study, followed by a 5 min restorative break to maximize focus and memory retention!</p>
             </div>
 
           </div>
@@ -2519,6 +2536,9 @@
       <!-- 2. SCAN NOTES SCREEN -->
       <!-- ========================================== -->
       <section id="screen-scan" class="screen-view">
+        <!-- Hidden file input for real OS file browsing -->
+        <input type="file" id="real-file-input" accept="image/*,application/pdf" style="display: none;" onchange="handleRealFileSelected(event)">
+
         <div style="margin-bottom: 24px;">
           <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Scan Notes</h2>
           <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Upload handwritten or printed notes — AI will extract and organize them</p>
@@ -2527,37 +2547,76 @@
         <div class="scan-layout">
           <!-- Left Column -->
           <div>
-            <div class="card drop-card">
-              <div class="upload-circle">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
+            <div class="card drop-card" onclick="triggerFileBrowser(event)" style="cursor: pointer;">
+              <!-- Default state content -->
+              <div id="drop-zone-content">
+                <div class="upload-circle">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <span class="drop-title">Drop your notes here</span>
+                <span class="drop-subtitle">PNG, JPG, PDF supported</span>
               </div>
-              <span class="drop-title">Drop your notes here</span>
-              <span class="drop-subtitle">PNG, JPG, PDF supported</span>
 
-              <span class="selector-label">Select a template below to simulate OCR scanning:</span>
-              <div class="template-list">
-                <button class="template-btn" onclick="simulateOcrScan(0)">
+              <!-- Sweep Scanner active container, hidden by default -->
+              <div id="active-scanner-area" style="display: none; width: 100%;">
+                <div class="scanner-container active-scan">
+                  <div class="scan-line"></div>
+                  <div class="selected-file-preview">
+                    <div class="file-icon">
+                      <i class="fa-regular fa-file-image" id="selected-file-type-icon"></i>
+                    </div>
+                    <div class="file-info-col">
+                      <span class="file-name" id="selected-file-name">math_hw.jpg</span>
+                      <span class="file-size" id="selected-file-size">1.4 MB</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <span class="selector-label" id="ocr-selector-label">Select a template below to simulate OCR scanning:</span>
+              <div class="template-list" id="ocr-template-list">
+                <button class="template-btn" onclick="event.stopPropagation(); simulateOcrScan(0)">
                   <i class="fa-solid fa-flask" style="color: var(--cyan);"></i>
                   <span>Physics — Quantum Mechanics Intro</span>
                   <i class="fa-solid fa-wand-magic-sparkles spark"></i>
                 </button>
-                <button class="template-btn" onclick="simulateOcrScan(1)">
+                <button class="template-btn" onclick="event.stopPropagation(); simulateOcrScan(1)">
                   <i class="fa-solid fa-vial" style="color: var(--error);"></i>
                   <span>Chemistry — Organic Carbon Chains</span>
                   <i class="fa-solid fa-wand-magic-sparkles spark"></i>
                 </button>
-                <button class="template-btn" onclick="simulateOcrScan(2)">
+                <button class="template-btn" onclick="event.stopPropagation(); simulateOcrScan(2)">
                   <i class="fa-solid fa-landmark" style="color: var(--purple);"></i>
                   <span>History — French Revolution Summary</span>
                   <i class="fa-solid fa-wand-magic-sparkles spark"></i>
                 </button>
               </div>
 
-              <div class="or-divider">— OR —</div>
+              <div class="or-divider" id="ocr-or-divider">— OR —</div>
 
-              <button class="btn btn-outline" style="width: 100%;" onclick="simulateOcrScan(0)">
+              <button class="btn btn-outline" id="ocr-browse-btn" style="width: 100%;" onclick="triggerFileBrowser(event)">
                 <i class="fa-solid fa-folder-open"></i> Browse files
               </button>
+
+              <!-- Active progress steps logs -->
+              <div id="active-scan-progress-logs" style="display: none; font-size: 12px; font-weight: 600; text-align: left; background-color: var(--input-bg); border: 1.5px solid var(--input-border); padding: 16px; border-radius: 12px; width: 100%; flex-direction: column; gap: 10px; margin-top: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;" id="scan-step-1">
+                  <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary);"></i>
+                  <span style="color: var(--text-color);">Analyzing document structure...</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; opacity: 0.4;" id="scan-step-2">
+                  <i class="fa-regular fa-circle" id="scan-icon-2"></i>
+                  <span style="color: var(--text-color);">Recognizing handwriting and text...</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; opacity: 0.4;" id="scan-step-3">
+                  <i class="fa-regular fa-circle" id="scan-icon-3"></i>
+                  <span style="color: var(--text-color);">Running Ginger AI OCR formatting...</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; opacity: 0.4;" id="scan-step-4">
+                  <i class="fa-regular fa-circle" id="scan-icon-4"></i>
+                  <span style="color: var(--text-color);">Structuring study guide sections...</span>
+                </div>
+              </div>
             </div>
 
             <!-- Tips Card -->
@@ -2855,17 +2914,9 @@
         <i class="fa-solid fa-camera"></i>
         <span>Scan</span>
       </a>
-      <a class="mobile-tab-item" data-tab="chat" onclick="switchScreen('chat')">
-        <i class="fa-solid fa-comments"></i>
-        <span>Chat</span>
-      </a>
-      <a class="mobile-tab-item" data-tab="flashcards" onclick="switchScreen('flashcards')">
-        <i class="fa-solid fa-layer-group"></i>
-        <span>Cards</span>
-      </a>
-      <a class="mobile-tab-item" data-tab="quizzes" onclick="switchScreen('quizzes')">
-        <i class="fa-solid fa-square-check"></i>
-        <span>Quizzes</span>
+      <a class="mobile-tab-item" data-tab="planner" onclick="switchScreen('planner')">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Planner</span>
       </a>
     </nav>
 
@@ -2894,11 +2945,129 @@
         </p>
       </div>
       <div class="modal-actions-row">
-        <button class="btn btn-primary" onclick="closeNoteViewModal(); switchScreen('chat');">
-          <i class="fa-solid fa-comments"></i> Summarize with AI
-        </button>
-        <button class="btn btn-outline" onclick="closeNoteViewModal()">Close</button>
+        <button class="btn btn-primary" onclick="closeNoteViewModal()" style="width: 100%;">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: SETTINGS -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="settings-modal" style="display: none; z-index: 10001;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="extracted-badge" style="background-color: rgba(59, 130, 246, 0.12); color: var(--primary);">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <span class="modal-title" style="font-size: 15px; font-weight: 800;">App Settings</span>
+            <span style="font-size: 12px; font-weight: 700; color: var(--primary);">Manage your study preferences</span>
+          </div>
+        </div>
+        <i class="fa-solid fa-xmark close" onclick="closeSettingsModal()"></i>
+      </div>
+
+      <div style="flex: 1; overflow-y: auto; margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px;">
+        <!-- Profile Preferences -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Your Name</label>
+          <input type="text" id="settings-name-input" class="search-input" style="width: 100%; padding: 12px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px;" placeholder="Student">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Your Email</label>
+          <input type="email" id="settings-email-input" class="search-input" style="width: 100%; padding: 12px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px;" placeholder="student@gingernotes.com">
+        </div>
+
+        <!-- OCR Preferences -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">OCR Engine Mode</label>
+          <select id="settings-ocr-select" style="width: 100%; padding: 12px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px;">
+            <option value="balanced">Balanced (Fast & Accurate)</option>
+            <option value="high-res">High-Precision (Handwriting Optimized)</option>
+            <option value="speed">Ultra-Speed (Drafts)</option>
+          </select>
+        </div>
+
+        <!-- Weekly Study Goal Hours -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Daily Study Goal (Hours)</label>
+          <input type="number" id="settings-goal-input" min="1" max="12" style="width: 100%; padding: 12px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px;" placeholder="4">
+        </div>
+
+        <!-- Notification Switch -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 13px; font-weight: 700; color: var(--text-color);">Daily Reminders</span>
+            <span style="font-size: 11px; font-weight: 600; color: var(--text-muted);">Receive study push notifications</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settings-notify-checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-actions-row">
+        <button class="btn btn-outline" onclick="closeSettingsModal()" style="flex: 1;">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSettings()" style="flex: 1;">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- AUTHENTICATION OVERLAY (LOGIN / SIGNUP) -->
+  <!-- ========================================== -->
+  <div id="auth-screen" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%); z-index: 99998; display: flex; justify-content: center; align-items: center; padding: 20px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
+    <!-- Abstract premium glowing blobs for visual wow factor -->
+    <div style="position: absolute; width: 300px; height: 300px; background-color: var(--primary); filter: blur(100px); opacity: 0.15; top: 10%; left: 15%; pointer-events: none;"></div>
+    <div style="position: absolute; width: 300px; height: 300px; background-color: var(--purple); filter: blur(100px); opacity: 0.15; bottom: 10%; right: 15%; pointer-events: none;"></div>
+
+    <div class="card" style="width: 100%; max-width: 440px; padding: 40px; display: flex; flex-direction: column; gap: 28px; box-shadow: var(--glass-glow); border: 1.5px solid var(--card-border); background-color: var(--card-bg);">
+      
+      <!-- Brand Logo & Header -->
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;">
+        <div style="width: 64px; height: 64px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px var(--primary-glow);">
+          <img src="logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <h1 style="font-size: 24px; font-weight: 800; tracking: -0.5px; color: var(--text-color);">GingerNotes</h1>
+          <p style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Smart Notes Summary & Study Planning</p>
+        </div>
+      </div>
+
+      <!-- Login Form Content -->
+      <div id="auth-login-form" style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Email Address</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-envelope" style="position: absolute; left: 14px; top: 15px; color: var(--text-muted);"></i>
+            <input type="email" id="login-email" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="student@gingernotes.com" value="student@gingernotes.com">
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Password</label>
+            <a href="#" onclick="event.preventDefault(); showToast('Password reset link sent to email!', 'success')" style="font-size: 12px; font-weight: 700; color: var(--primary); text-decoration: none;">Forgot?</a>
+          </div>
+          <div style="position: relative;">
+            <i class="fa-solid fa-lock" style="position: absolute; left: 14px; top: 15px; color: var(--text-muted);"></i>
+            <input type="password" id="login-password" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="••••••••" value="password123">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="handleLogin()" style="width: 100%; padding: 14px; font-size: 15px; margin-top: 10px;">
+          Sign In <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Toggle to Sign Up (Visual Only) -->
+      <div style="text-align: center; font-size: 13px; font-weight: 600; color: var(--text-muted);">
+        Don't have an account? <a href="#" onclick="toggleAuthMode(event)" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign up</a>
+      </div>
+
     </div>
   </div>
 
@@ -3045,7 +3214,15 @@
     /* Global Application Mock Data / State */
     const appState = {
       isDarkMode: true,
+      isLoggedIn: false,
       currentScreen: 'dashboard',
+      profile: {
+        name: 'Student',
+        email: 'student@gingernotes.com',
+        ocrMode: 'balanced',
+        dailyGoal: 4,
+        notifications: true
+      },
       
       stats: {
         notesScanned: 24,
@@ -3267,6 +3444,7 @@
 
     /* Initialize lists & view updates on load */
     window.addEventListener('DOMContentLoaded', () => {
+      initAuth();
       renderRecentNotes();
       renderChatMessages();
       renderFlashcardsDecks();
@@ -3339,10 +3517,18 @@
     /* Stats display updating methods */
     function updateGlobalStatsDisplay() {
       // Dashboard Header counters
-      document.getElementById('stat-scanned-count').innerText = appState.stats.notesScanned;
-      document.getElementById('stat-mastered-count').innerText = `${appState.stats.cardsMastered}/${appState.stats.totalCards}`;
-      document.getElementById('stat-quizzes-count').innerText = appState.stats.quizzesDone;
-      document.getElementById('stat-streak-count').innerText = `${appState.stats.streak}d`;
+      if (document.getElementById('stat-scanned-count')) {
+        document.getElementById('stat-scanned-count').innerText = appState.stats.notesScanned;
+      }
+      if (document.getElementById('stat-mastered-count')) {
+        document.getElementById('stat-mastered-count').innerText = `${appState.stats.cardsMastered}/${appState.stats.totalCards}`;
+      }
+      if (document.getElementById('stat-quizzes-count')) {
+        document.getElementById('stat-quizzes-count').innerText = appState.stats.quizzesDone;
+      }
+      if (document.getElementById('stat-streak-count')) {
+        document.getElementById('stat-streak-count').innerText = `${appState.stats.streak}d`;
+      }
 
       // Flashcards Stats Row counters
       document.getElementById('fc-total-count').innerText = appState.stats.totalCards;
@@ -3406,49 +3592,297 @@
       document.getElementById('note-view-modal').classList.remove('active');
     }
 
-    /* OCR Scan Simulator logic */
-    function simulateOcrScan(templateIndex) {
-      const loader = document.getElementById('ocr-loader');
+    /* OCR Scan UI and Simulation logic */
+    function triggerFileBrowser(event) {
+      if (event) event.stopPropagation();
+      const fileInput = document.getElementById('real-file-input');
+      if (fileInput && !fileInput.disabled) {
+        fileInput.click();
+      }
+    }
+
+    function handleRealFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const fileName = file.name;
+      const fileSizeStr = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+      
+      // Determine file icon based on file type
+      const typeIcon = document.getElementById('selected-file-type-icon');
+      if (typeIcon) {
+        if (file.type.includes('pdf')) {
+          typeIcon.className = "fa-regular fa-file-pdf";
+        } else {
+          typeIcon.className = "fa-regular fa-file-image";
+        }
+      }
+
+      // Generate a dynamic note based on file name
+      const noteTemplate = generateNoteFromFileName(fileName);
+
+      startOcrProcess(fileName, fileSizeStr, noteTemplate);
+    }
+
+    function generateNoteFromFileName(fileName) {
+      const nameLower = fileName.toLowerCase();
+      
+      if (nameLower.includes('math') || nameLower.includes('calc') || nameLower.includes('algebra') || nameLower.includes('geom') || nameLower.includes('derivat') || nameLower.includes('integral')) {
+        return {
+          title: `Math — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Summary`,
+          subject: 'Math',
+          pages: Math.floor(Math.random() * 3) + 2,
+          color: '#10B981',
+          content: `Calculus Derivatives & Integrals: ${fileName}\n\nKey Concepts Extracted:\n\n1. Derivatives of Basic Functions:\n   - d/dx [x^n] = n * x^(n-1) (Power Rule)\n   - d/dx [sin(x)] = cos(x)\n   - d/dx [cos(x)] = -sin(x)\n   - d/dx [e^x] = e^x\n\n2. Fundamentals of Integration:\n   - ∫ x^n dx = (x^(n+1))/(n+1) + C (for n != -1)\n   - ∫ (1/x) dx = ln|x| + C\n   - ∫ e^x dx = e^x + C\n\n3. Practical Theorem Application:\n   - Geometrically, the definite integral represents the signed area bounded by the graph of the function, the x-axis, and vertical limits.`
+        };
+      } else if (nameLower.includes('phys') || nameLower.includes('quantum') || nameLower.includes('mechanic') || nameLower.includes('elect') || nameLower.includes('force') || nameLower.includes('gravit')) {
+        return {
+          title: `Physics — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Guide`,
+          subject: 'Physics',
+          pages: Math.floor(Math.random() * 3) + 2,
+          color: '#06B6D4',
+          content: `Quantum Mechanics Lecture Notes: ${fileName}\n\nFormulas and Principles Extracted:\n\n1. Quantum Mechanics Core Foundations:\n   - Wave-Particle Duality: Light and matter exhibit both wave-like and particle-like properties.\n   - Planck's Constant: h = 6.626 x 10^-34 J·s, defines the scale of quantum effects.\n   - Schrödinger Wave Equation: Predicts the future behavior of a dynamic system, yielding the wave function (ψ).\n\n2. Classical Mechanics & Force Relations:\n   - Newton's Second Law: F = m * a (Net Force = mass * acceleration).\n   - Gravitational Force: F_g = G * (m1 * m2) / r^2.`
+        };
+      } else if (nameLower.includes('chem') || nameLower.includes('organic') || nameLower.includes('acid') || nameLower.includes('element') || nameLower.includes('bond') || nameLower.includes('atom')) {
+        return {
+          title: `Chemistry — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Lab`,
+          subject: 'Chemistry',
+          pages: Math.floor(Math.random() * 4) + 2,
+          color: '#EF4444',
+          content: `Organic Carbon Chains Lab: ${fileName}\n\nStructure Properties Extracted:\n\n1. Covalent Carbon Chain Rules:\n   - Alkanes: Single bonds (Saturated hydrocarbons), general formula CnH2n+2.\n   - Alkenes: Contains at least one carbon-carbon double bond, general formula CnH2n.\n   - Alkynes: Contains at least one carbon-carbon triple bond, general formula CnH2n-2.\n\n2. Functional Groups Characteristics:\n   - Alcohol group containing Hydroxyl (-OH)\n   - Carboxylic acids containing Carboxyl (-COOH)\n   - Amines containing basic Nitrogen group (-NH2).\n\n3. Acid-Base Equilibrium:\n   - pH = -log[H3O+]. Strong acids dissociate completely in water.`
+        };
+      } else if (nameLower.includes('bio') || nameLower.includes('cell') || nameLower.includes('mitosis') || nameLower.includes('gene') || nameLower.includes('protein') || nameLower.includes('dna')) {
+        return {
+          title: `Biology — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Notes`,
+          subject: 'Biology',
+          pages: Math.floor(Math.random() * 3) + 3,
+          color: '#3B82F6',
+          content: `Biology Chapter 7 — Cell Division: ${fileName}\n\nExtracted Cell Cycle Data:\n\n1. Cell Cycle Stages (PMAT):\n   - Prophase: Chromosomes pack tightly; mitotic spindle forms.\n   - Metaphase: Chromosomes line up in the middle (equatorial plate).\n   - Anaphase: Sister chromatids pull apart to opposite poles.\n   - Telophase: Two new nuclei form, followed by cytokinesis.\n\n2. DNA Transcription & Translation:\n   - DNA is transcribed into messenger RNA (mRNA) in the cell nucleus.\n   - Ribosomes translate mRNA codons into amino acid chains in the cytoplasm.`
+        };
+      } else if (nameLower.includes('hist') || nameLower.includes('revolut') || nameLower.includes('war') || nameLower.includes('french') || nameLower.includes('world') || nameLower.includes('timeline')) {
+        return {
+          title: `History — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Summary`,
+          subject: 'History',
+          pages: Math.floor(Math.random() * 3) + 3,
+          color: '#8B5CF6',
+          content: `French Revolution Key Figures: ${fileName}\n\nChronological Milestone Events:\n\n1. Major Structural Movements:\n   - Pre-crisis Phase: Socio-economic divides and unequal taxation systems (Third Estate).\n   - Catalyst Event: Outbreak of widespread popular protest (e.g. Storming of the Bastille in 1789).\n   - Regime Change: Fall of old rule and declaration of revolutionary/democratic ideals.\n\n2. Long-term Historical Impacts:\n   - Redrawing of geopolitical boundaries and rise of Napoleon Bonaparte (1799).`
+        };
+      } else {
+        // Generic template fallback
+        const subjects = [
+          { name: 'Computer Science', sub: 'CS', color: '#10B981', desc: 'Object-Oriented Programming (OOP) principles and algorithmic time complexity.' },
+          { name: 'Economics', sub: 'Econ', color: '#F59E0B', desc: 'Microeconomics supply & demand curves and macro fiscal policy effects.' },
+          { name: 'English Literature', sub: 'English', color: '#8B5CF6', desc: 'Narrative structure analysis, rhetorical devices, and historical context.' }
+        ];
+        const picked = subjects[fileName.length % subjects.length];
+        return {
+          title: `${picked.sub} — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Notes`,
+          subject: picked.sub,
+          pages: Math.floor(Math.random() * 3) + 2,
+          color: picked.color,
+          content: `Study Notes: ${fileName}\n\nExtracted details from document:\n\n1. Core Subject Overview:\n   - Topics related to ${picked.name} captured from file input scan.\n   - Detailed explanations of fundamental properties and theories.\n\n2. Key Highlights:\n   - ${picked.desc}\n   - Fully structured and categorized for study planner review and quick quizzes.`
+        };
+      }
+    }
+
+    function startOcrProcess(fileName, fileSizeStr, noteTemplate) {
+      const fileInput = document.getElementById('real-file-input');
+      if (fileInput) fileInput.disabled = true;
+
+      // Setup left column UI elements
+      const dropZoneContent = document.getElementById('drop-zone-content');
+      const activeScannerArea = document.getElementById('active-scanner-area');
+      const selectedFileName = document.getElementById('selected-file-name');
+      const selectedFileSize = document.getElementById('selected-file-size');
+      
+      const progressLogs = document.getElementById('active-scan-progress-logs');
+      const templateList = document.getElementById('ocr-template-list');
+      const orDivider = document.getElementById('ocr-or-divider');
+      const browseBtn = document.getElementById('ocr-browse-btn');
+      const selectorLabel = document.getElementById('ocr-selector-label');
+
+      // Setup right column UI elements
       const placeholder = document.getElementById('ocr-placeholder');
+      const loader = document.getElementById('ocr-loader');
       const result = document.getElementById('ocr-result');
 
-      placeholder.style.display = 'none';
-      result.style.display = 'none';
-      loader.style.display = 'flex';
+      // Hide placeholder & results, show loader
+      if (placeholder) placeholder.style.display = 'none';
+      if (result) result.style.display = 'none';
+      if (loader) loader.style.display = 'flex';
+
+      // Hide drop zone controls & templates on the left card
+      if (dropZoneContent) dropZoneContent.style.display = 'none';
+      if (templateList) templateList.style.display = 'none';
+      if (orDivider) orDivider.style.display = 'none';
+      if (browseBtn) browseBtn.style.display = 'none';
+      if (selectorLabel) selectorLabel.style.display = 'none';
+
+      // Set scanning file metrics & display sweep scanner
+      if (selectedFileName) selectedFileName.innerText = fileName;
+      if (selectedFileSize) selectedFileSize.innerText = fileSizeStr;
+      if (activeScannerArea) activeScannerArea.style.display = 'block';
+      if (progressLogs) progressLogs.style.display = 'flex';
+
+      // Reset steps
+      const steps = [
+        { id: 'scan-step-1', iconId: null, defaultIcon: '<i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary);"></i>' },
+        { id: 'scan-step-2', iconId: 'scan-icon-2', defaultIcon: '<i class="fa-regular fa-circle" id="scan-icon-2"></i>' },
+        { id: 'scan-step-3', iconId: 'scan-icon-3', defaultIcon: '<i class="fa-regular fa-circle" id="scan-icon-3"></i>' },
+        { id: 'scan-step-4', iconId: 'scan-icon-4', defaultIcon: '<i class="fa-regular fa-circle" id="scan-icon-4"></i>' }
+      ];
+
+      steps.forEach((s, idx) => {
+        const el = document.getElementById(s.id);
+        if (el) {
+          if (idx === 0) {
+            el.style.opacity = '1';
+            el.firstElementChild.outerHTML = s.defaultIcon;
+          } else {
+            el.style.opacity = '0.4';
+            const iconEl = document.getElementById(s.iconId);
+            if (iconEl) iconEl.outerHTML = s.defaultIcon;
+          }
+        }
+      });
+
+      // Step-by-step progress logging timers
+      setTimeout(() => {
+        const step1 = document.getElementById('scan-step-1');
+        if (step1) step1.firstElementChild.outerHTML = '<i class="fa-solid fa-circle-check" style="color: var(--success);"></i>';
+        
+        const step2 = document.getElementById('scan-step-2');
+        if (step2) {
+          step2.style.opacity = '1';
+          const icon2 = document.getElementById('scan-icon-2');
+          if (icon2) icon2.className = "fa-solid fa-circle-notch fa-spin";
+          if (icon2) icon2.style.color = "var(--primary)";
+        }
+      }, 800);
 
       setTimeout(() => {
-        loader.style.display = 'none';
-        
-        const tmpl = appState.ocrTemplates[templateIndex];
-        
-        // Push scanned note to state
+        const icon2 = document.getElementById('scan-icon-2');
+        if (icon2) icon2.className = "fa-solid fa-circle-check";
+        if (icon2) icon2.style.color = "var(--success)";
+
+        const step3 = document.getElementById('scan-step-3');
+        if (step3) {
+          step3.style.opacity = '1';
+          const icon3 = document.getElementById('scan-icon-3');
+          if (icon3) icon3.className = "fa-solid fa-circle-notch fa-spin";
+          if (icon3) icon3.style.color = "var(--primary)";
+        }
+      }, 1600);
+
+      setTimeout(() => {
+        const icon3 = document.getElementById('scan-icon-3');
+        if (icon3) icon3.className = "fa-solid fa-circle-check";
+        if (icon3) icon3.style.color = "var(--success)";
+
+        const step4 = document.getElementById('scan-step-4');
+        if (step4) {
+          step4.style.opacity = '1';
+          const icon4 = document.getElementById('scan-icon-4');
+          if (icon4) icon4.className = "fa-solid fa-circle-notch fa-spin";
+          if (icon4) icon4.style.color = "var(--primary)";
+        }
+      }, 2400);
+
+      setTimeout(() => {
+        const icon4 = document.getElementById('scan-icon-4');
+        if (icon4) icon4.className = "fa-solid fa-circle-check";
+        if (icon4) icon4.style.color = "var(--success)";
+      }, 3200);
+
+      setTimeout(() => {
+        // Complete the process
+        if (loader) loader.style.display = 'none';
+        if (activeScannerArea) activeScannerArea.style.display = 'none';
+        if (progressLogs) progressLogs.style.display = 'none';
+
+        // Show drop zone controls back
+        if (dropZoneContent) dropZoneContent.style.display = 'flex';
+        if (templateList) templateList.style.display = 'block';
+        if (orDivider) orDivider.style.display = 'block';
+        if (browseBtn) browseBtn.style.display = 'block';
+        if (selectorLabel) selectorLabel.style.display = 'block';
+
+        if (fileInput) {
+          fileInput.disabled = false;
+          fileInput.value = '';
+        }
+
+        // Add scanned note to local appState
         const newNote = {
           id: Date.now().toString(),
-          title: tmpl.title,
-          subject: tmpl.subject,
-          pages: tmpl.pages,
+          title: noteTemplate.title,
+          subject: noteTemplate.subject,
+          pages: noteTemplate.pages,
           time: 'Just now',
           starred: false,
-          color: tmpl.color,
-          content: tmpl.content
+          color: noteTemplate.color,
+          content: noteTemplate.content
         };
 
         appState.notes.unshift(newNote);
         appState.stats.notesScanned += 1;
 
-        // Populate elements
-        document.getElementById('extracted-title').innerText = tmpl.title;
-        document.getElementById('extracted-meta').innerText = `${tmpl.subject} • ${tmpl.pages} Pages • Extracted Successfully`;
-        document.getElementById('extracted-badge').style.color = tmpl.color;
-        document.getElementById('extracted-badge').style.backgroundColor = `${tmpl.color}12`;
-        document.getElementById('extracted-note-body').innerText = tmpl.content;
-
-        result.style.display = 'flex';
-        
-        // Refresh stats & lists
+        // Render Recent Notes List & stats counters
         renderRecentNotes();
         updateGlobalStatsDisplay();
-      }, 2500);
+
+        // Populate details & run typewriter stream note text
+        document.getElementById('extracted-title').innerText = noteTemplate.title;
+        document.getElementById('extracted-meta').innerText = `${noteTemplate.subject} • ${noteTemplate.pages} Pages • Extracted Successfully`;
+        
+        const badgeEl = document.getElementById('extracted-badge');
+        if (badgeEl) {
+          badgeEl.style.color = noteTemplate.color;
+          badgeEl.style.backgroundColor = `${noteTemplate.color}12`;
+        }
+
+        if (result) result.style.display = 'flex';
+        streamOcrText(noteTemplate.content);
+
+      }, 3600);
+    }
+
+    function streamOcrText(text) {
+      const container = document.getElementById('extracted-note-body');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      const words = text.split(' ');
+      let i = 0;
+      
+      function typeNextWord() {
+        if (i < words.length) {
+          container.innerHTML += (i === 0 ? '' : ' ') + words[i];
+          i++;
+          container.scrollTop = container.scrollHeight;
+          
+          // Stream snappily, finishing within 1-1.5s
+          const interval = Math.max(8, Math.min(25, Math.floor(1000 / words.length)));
+          setTimeout(typeNextWord, interval);
+        }
+      }
+      
+      typeNextWord();
+    }
+
+    function simulateOcrScan(templateIndex) {
+      const tmpl = appState.ocrTemplates[templateIndex];
+      const fileNames = [
+        'physics_quantum_mechanics_intro.jpg',
+        'organic_chemistry_carbon_chains.pdf',
+        'french_revolution_summary_notes.png'
+      ];
+      const fileSizes = ['2.4 MB', '4.1 MB', '1.8 MB'];
+
+      const fileName = fileNames[templateIndex] || 'lecture_notes.jpg';
+      const fileSizeStr = fileSizes[templateIndex] || '1.5 MB';
+
+      startOcrProcess(fileName, fileSizeStr, tmpl);
     }
 
     /* Render and populate Flashcards section */
@@ -3998,6 +4432,223 @@
       document.getElementById('new-event-title').value = '';
       closeAddEventModal();
       renderSchedules();
+    }
+
+    /* ========================================== */
+    /* AUTH & SETTINGS INTEGRATIONS */
+    /* ========================================== */
+
+    function showToast(message, type = 'success') {
+      const existingToast = document.getElementById('app-toast');
+      if (existingToast) existingToast.remove();
+
+      const toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.style.position = 'fixed';
+      toast.style.bottom = '24px';
+      toast.style.right = '24px';
+      toast.style.padding = '12px 20px';
+      toast.style.borderRadius = '12px';
+      toast.style.backgroundColor = type === 'success' ? 'var(--success)' : 'var(--error)';
+      toast.style.color = '#FFFFFF';
+      toast.style.fontWeight = '700';
+      toast.style.fontSize = '13px';
+      toast.style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)';
+      toast.style.display = 'flex';
+      toast.style.alignItems = 'center';
+      toast.style.gap = '8px';
+      toast.style.zIndex = '99999';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(20px)';
+      toast.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+
+      const icon = document.createElement('i');
+      icon.className = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+      toast.appendChild(icon);
+
+      const text = document.createElement('span');
+      text.innerText = message;
+      toast.appendChild(text);
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      }, 50);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function initAuth() {
+      // Load stored auth & profile details
+      const storedLoggedIn = localStorage.getItem('isLoggedIn');
+      const storedProfile = localStorage.getItem('profile');
+
+      if (storedProfile) {
+        try {
+          appState.profile = JSON.parse(storedProfile);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (storedLoggedIn === 'true') {
+        appState.isLoggedIn = true;
+        const authScreen = document.getElementById('auth-screen');
+        if (authScreen) authScreen.style.display = 'none';
+        updateProfileDisplay();
+      } else {
+        appState.isLoggedIn = false;
+        const authScreen = document.getElementById('auth-screen');
+        if (authScreen) {
+          authScreen.style.display = 'flex';
+          authScreen.style.opacity = '1';
+          authScreen.style.pointerEvents = 'all';
+        }
+      }
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      if (!email || !password) {
+        showToast('Please enter both email and password.', 'error');
+        return;
+      }
+
+      const loginBtn = document.querySelector('#auth-screen .btn-primary');
+      const origText = loginBtn.innerHTML;
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Signing in...';
+
+      setTimeout(() => {
+        appState.isLoggedIn = true;
+        appState.profile.email = email;
+        
+        // Extract name from email if name is still default
+        if (appState.profile.name === 'Student' && email.includes('@')) {
+          const part = email.split('@')[0];
+          appState.profile.name = part.charAt(0).toUpperCase() + part.slice(1);
+        }
+
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('profile', JSON.stringify(appState.profile));
+
+        updateProfileDisplay();
+
+        const authScreen = document.getElementById('auth-screen');
+        if (authScreen) {
+          authScreen.style.opacity = '0';
+          authScreen.style.pointerEvents = 'none';
+          setTimeout(() => {
+            authScreen.style.display = 'none';
+          }, 500);
+        }
+
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = origText;
+
+        showToast(`Welcome back, ${appState.profile.name}!`);
+      }, 1000);
+    }
+
+    function toggleAuthMode(e) {
+      e.preventDefault();
+      const signupLink = e.target;
+      const signupText = signupLink.innerText.toLowerCase();
+      const isSignup = signupText.includes('signup') || signupText.includes('up');
+      
+      const form = document.getElementById('auth-login-form');
+      const title = document.querySelector('#auth-screen h1');
+      const subtitle = document.querySelector('#auth-screen p');
+      const label = signupLink.parentElement;
+
+      if (isSignup) {
+        title.innerText = 'Create Account';
+        subtitle.innerText = 'Join GingerNotes today';
+        form.querySelector('.btn-primary').innerHTML = 'Create Account <i class="fa-solid fa-arrow-right"></i>';
+        label.innerHTML = 'Already have an account? <a href="#" onclick="toggleAuthMode(event)" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign in</a>';
+      } else {
+        title.innerText = 'GingerNotes';
+        subtitle.innerText = 'Smart Notes Summary & Study Planning';
+        form.querySelector('.btn-primary').innerHTML = 'Sign In <i class="fa-solid fa-arrow-right"></i>';
+        label.innerHTML = 'Don\'t have an account? <a href="#" onclick="toggleAuthMode(event)" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign up</a>';
+      }
+    }
+
+    function handleLogout() {
+      appState.isLoggedIn = false;
+      localStorage.removeItem('isLoggedIn');
+      
+      const authScreen = document.getElementById('auth-screen');
+      if (authScreen) {
+        authScreen.style.display = 'flex';
+        setTimeout(() => {
+          authScreen.style.opacity = '1';
+          authScreen.style.pointerEvents = 'all';
+        }, 50);
+      }
+      showToast('Logged out successfully.');
+    }
+
+    function updateProfileDisplay() {
+      const nameElements = document.querySelectorAll('.profile-name, #sidebar-profile-name');
+      nameElements.forEach(el => el.innerText = appState.profile.name);
+      
+      // Update avatar letter
+      const avatars = document.querySelectorAll('.profile-avatar, .mobile-logo');
+      avatars.forEach(av => {
+        if (av.classList.contains('profile-avatar')) {
+          av.innerText = appState.profile.name.charAt(0).toUpperCase();
+        }
+      });
+    }
+
+    /* Settings Modal Handles */
+    function openSettingsModal() {
+      document.getElementById('settings-name-input').value = appState.profile.name;
+      document.getElementById('settings-email-input').value = appState.profile.email;
+      document.getElementById('settings-ocr-select').value = appState.profile.ocrMode;
+      document.getElementById('settings-goal-input').value = appState.profile.dailyGoal;
+      document.getElementById('settings-notify-checkbox').checked = appState.profile.notifications;
+
+      document.getElementById('settings-modal').style.display = 'flex';
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').style.display = 'none';
+    }
+
+    function saveSettings() {
+      const name = document.getElementById('settings-name-input').value.trim();
+      const email = document.getElementById('settings-email-input').value.trim();
+      const ocrMode = document.getElementById('settings-ocr-select').value;
+      const dailyGoal = parseInt(document.getElementById('settings-goal-input').value) || 4;
+      const notifications = document.getElementById('settings-notify-checkbox').checked;
+
+      if (!name || !email) {
+        showToast('Name and email cannot be blank.', 'error');
+        return;
+      }
+
+      appState.profile = {
+        name,
+        email,
+        ocrMode,
+        dailyGoal,
+        notifications
+      };
+
+      localStorage.setItem('profile', JSON.stringify(appState.profile));
+      updateProfileDisplay();
+      closeSettingsModal();
+      showToast('Settings saved successfully!');
     }
   </script>
 </body>

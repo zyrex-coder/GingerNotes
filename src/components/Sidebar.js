@@ -14,9 +14,6 @@ export const Sidebar = () => {
   const menuItems = [
     { name: 'Dashboard', label: 'My Notes', icon: 'book-outline' },
     { name: 'Scan Notes', label: 'Scan Notes', icon: 'camera-outline' },
-    { name: 'AI Chat', label: 'AI Chat', icon: 'chatbubble-ellipses-outline' },
-    { name: 'Flashcards', label: 'Flashcards', icon: 'layers-outline' },
-    { name: 'Quizzes', label: 'Quizzes', icon: 'checkbox-outline' },
     { name: 'Study Planner', label: 'Study Planner', icon: 'calendar-outline' },
   ];
 
@@ -24,7 +21,7 @@ export const Sidebar = () => {
     // Return bottom tabs on mobile sizes
     return (
       <View style={[styles.bottomTab, { backgroundColor: theme.colors.cardBg, borderTopColor: theme.colors.cardBorder }]}>
-        {menuItems.slice(0, 5).map(item => {
+        {menuItems.map(item => {
           const isActive = currentScreen === item.name;
           return (
             <TouchableOpacity

@@ -8,9 +8,6 @@ import { Header } from './src/components/Header';
 
 import { DashboardScreen } from './src/screens/DashboardScreen';
 import { ScanNotesScreen } from './src/screens/ScanNotesScreen';
-import { AIChatScreen } from './src/screens/AIChatScreen';
-import { FlashcardsScreen } from './src/screens/FlashcardsScreen';
-import { QuizzesScreen } from './src/screens/QuizzesScreen';
 import { StudyPlannerScreen } from './src/screens/StudyPlannerScreen';
 
 const MainAppContent = () => {
@@ -26,12 +23,6 @@ const MainAppContent = () => {
         return <DashboardScreen />;
       case 'Scan Notes':
         return <ScanNotesScreen />;
-      case 'AI Chat':
-        return <AIChatScreen />;
-      case 'Flashcards':
-        return <FlashcardsScreen />;
-      case 'Quizzes':
-        return <QuizzesScreen />;
       case 'Study Planner':
         return <StudyPlannerScreen />;
       default:
