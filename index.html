@@ -1,0 +1,4004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GingerNotes - Interactive Study Assistant</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Premium CSS Variables & Theme definitions */
+    :root {
+      --bg-start: #080B1E;
+      --bg-end: #0E1332;
+      --bg-solid: #0B0F2A;
+      --card-bg: #141935;
+      --card-border: #232B5C;
+      --text-color: #FFFFFF;
+      --text-muted: #7C8BA1;
+      --active-tab-bg: #1E295D;
+      --active-tab-border: #3B82F6;
+      --input-bg: #111530;
+      --input-border: #1F2552;
+      --primary: #3B82F6;
+      --primary-glow: rgba(59, 130, 246, 0.4);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --purple: #8B5CF6;
+      --cyan: #06B6D4;
+      --divider: #1F2552;
+      --badge-bg: rgba(59, 130, 246, 0.15);
+      --badge-text: #60A5FA;
+      --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    body.light-mode {
+      --bg-start: #F3F7FC;
+      --bg-end: #FFFFFF;
+      --bg-solid: #F0F4FA;
+      --card-bg: #FFFFFF;
+      --card-border: #E2E8F0;
+      --text-color: #1E293B;
+      --text-muted: #64748B;
+      --active-tab-bg: #EFF6FF;
+      --active-tab-border: #2563EB;
+      --input-bg: #F8FAFC;
+      --input-border: #CBD5E1;
+      --primary: #2563EB;
+      --primary-glow: rgba(37, 99, 235, 0.15);
+      --success: #059669;
+      --warning: #D97706;
+      --error: #DC2626;
+      --purple: #7C3AED;
+      --cyan: #0891B2;
+      --divider: #E2E8F0;
+      --badge-bg: rgba(37, 99, 235, 0.1);
+      --badge-text: #2563EB;
+      --glass-glow: 0 8px 24px 0 rgba(148, 163, 184, 0.12);
+    }
+
+    /* Base resets */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      color: var(--text-color);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+    }
+
+    /* Desktop layout wrapper */
+    .app-wrapper {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      width: 280px;
+      height: 100vh;
+      background-color: var(--bg-solid);
+      border-right: 1px solid var(--card-border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 12px;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      color: #FFFFFF;
+      font-size: 20px;
+    }
+
+    .brand-text-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--input-border);
+      background-color: var(--input-bg);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    .search-icon {
+      color: var(--text-muted);
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    .search-input {
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      width: 100%;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .menu-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .menu-item:hover {
+      color: var(--text-color);
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .menu-item.active {
+      background-color: var(--active-tab-bg);
+      border-color: var(--active-tab-border);
+      color: var(--text-color);
+    }
+
+    .menu-item-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-icon {
+      margin-right: 12px;
+      width: 18px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .menu-item i.chevron {
+      font-size: 11px;
+      color: var(--primary);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    .divider {
+      height: 1.5px;
+      background-color: var(--divider);
+      margin: 16px 0;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .toggle-left {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      gap: 12px;
+    }
+
+    .toggle-left i {
+      color: var(--text-muted);
+    }
+
+    /* Beautiful custom switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #767577;
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .profile-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      background-color: var(--card-bg);
+    }
+
+    .profile-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .profile-plan {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .profile-settings {
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .profile-settings:hover {
+      color: var(--text-color);
+    }
+
+    /* Content Area Frame */
+    .content-area {
+      flex: 1;
+      margin-left: 280px;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Responsive Mobile Header and bottom navigation */
+    .mobile-header {
+      display: none;
+      height: 60px;
+      background-color: var(--bg-solid);
+      border-bottom: 1.5px solid var(--card-border);
+      padding: 0 16px;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 99;
+    }
+
+    .mobile-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mobile-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFFFFF;
+      font-size: 12px;
+    }
+
+    .mobile-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .mobile-header-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    .mobile-icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1.5px solid var(--card-border);
+      background-color: var(--card-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    .mobile-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background-color: var(--card-bg);
+      border-top: 1.5px solid var(--card-border);
+      z-index: 99;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .mobile-tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      height: 100%;
+      text-decoration: none;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .mobile-tab-item.active {
+      color: var(--primary);
+    }
+
+    .mobile-tab-item i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .mobile-tab-item span {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* Screen Views - Hide by default except active */
+    .screen-view {
+      display: none;
+    }
+
+    .screen-view.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Reusable Card layouts */
+    .card {
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--glass-glow);
+      position: relative;
+    }
+
+    .card.outline-glow {
+      border-color: var(--primary);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Stats Grid */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .stat-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    /* Mini Sparkline simulator */
+    .sparkline {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .sparkline-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: var(--success);
+    }
+
+    .sparkline-line {
+      width: 24px;
+      height: 2px;
+      border-radius: 1px;
+      background-color: var(--success);
+    }
+
+    .stat-card-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Dashboard Main Grid Area */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr;
+      gap: 24px;
+    }
+
+    .widget-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .widget-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    /* Quick Actions 2x2 Grid */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .action-button {
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      position: relative;
+      text-align: left;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .action-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glass-glow);
+    }
+
+    .action-icon-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .action-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-color);
+    }
+
+    .action-desc {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .action-button i.arrow {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Recent Notes Section */
+    .notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .note-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      background-color: var(--card-bg);
+      cursor: pointer;
+    }
+
+    .note-row:hover {
+      background-color: rgba(59, 130, 246, 0.02);
+      border-color: var(--primary);
+    }
+
+    .note-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .note-folder-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .note-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .note-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .note-meta-row {
+      display: flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      gap: 8px;
+    }
+
+    .note-subject {
+      font-weight: 800;
+    }
+
+    .note-meta-text {
+      color: var(--text-muted);
+    }
+
+    .star-btn {
+      padding: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .star-btn:hover {
+      color: var(--warning);
+    }
+
+    .star-btn.starred {
+      color: var(--warning);
+    }
+
+    /* Right Widgets - Goal Progress Bars */
+    .goal-widget-title {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .progress-container {
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .progress-percent {
+      font-weight: 800;
+    }
+
+    .progress-track {
+      height: 8px;
+      border-radius: 4px;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Upcoming Deadlines widget */
+    .upcoming-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .upcoming-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .upcoming-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upcoming-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .upcoming-date {
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .planner-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      align-self: flex-start;
+    }
+
+    /* AI Tip card layout */
+    .ai-tip-card {
+      border: 1.5px solid var(--primary);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(139, 92, 246, 0.08) 100%);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.1);
+    }
+
+    .tip-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .tip-text {
+      font-size: 13px;
+      lineHeight: 1.4;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Button styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: #FFFFFF;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    /* Screen Specific layouts - QUIZZES SCREEN */
+    .hero-banner {
+      border-radius: 16px;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, #1E40AF 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+      color: #FFFFFF;
+    }
+
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .trophy-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-left: 1.5px solid rgba(255, 255, 255, 0.3);
+      padding-left: 20px;
+    }
+
+    .streak-val {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .streak-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* Course Topics Selector Grid */
+    .course-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .course-card {
+      border: 1.5px solid var(--card-border);
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .course-card:hover {
+      border-color: var(--primary);
+    }
+
+    .course-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .course-icon-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+    }
+
+    .difficulty-badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .course-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .course-meta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .start-quiz-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    /* SCAN NOTES SCREEN */
+    .scan-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1.5fr;
+      gap: 24px;
+    }
+
+    .drop-card {
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .upload-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: rgba(59, 130, 246, 0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: var(--primary);
+      margin: 12px auto 16px auto;
+    }
+
+    .drop-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .drop-subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .selector-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .template-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .template-btn {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      background-color: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .template-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .template-btn i {
+      margin-right: 10px;
+    }
+
+    .template-btn i.spark {
+      margin-left: auto;
+      color: var(--primary);
+    }
+
+    .or-divider {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin: 16px 0;
+    }
+
+    .tips-card {
+      padding: 20px;
+    }
+
+    .tips-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      color: var(--text-color);
+    }
+
+    .tips-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tip-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tip-item i {
+      color: var(--cyan);
+    }
+
+    /* Extracted Note view card right */
+    .extracted-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 480px;
+    }
+
+    .ocr-loader {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .ocr-loader i {
+      font-size: 32px;
+      color: var(--primary);
+      animation: spin 1.5s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .ocr-loader-text {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .ocr-loader-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .ocr-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .placeholder-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: rgba(124, 139, 161, 0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .placeholder-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .placeholder-desc {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      line-height: 1.4;
+      max-width: 320px;
+    }
+
+    .ocr-result {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .extracted-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .extracted-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .extracted-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .extracted-title {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .extracted-meta {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .note-content-body {
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 500;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+    }
+
+    .success-alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(16, 185, 129, 0.12);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    /* AI CHAT SCREEN */
+    .chat-layout {
+      border: 1.5px solid var(--card-border);
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 520px;
+      overflow: hidden;
+      box-shadow: var(--glass-glow);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1.5px solid var(--card-border);
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFFFFF;
+      font-size: 16px;
+    }
+
+    .chat-name-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-name {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .online-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .online-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--success);
+      position: relative;
+    }
+
+    .online-pulse::after {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid var(--success);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    .chat-header-right {
+      display: flex;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .chat-header-right i {
+      cursor: pointer;
+    }
+
+    .chat-header-right i:hover {
+      color: var(--text-color);
+    }
+
+    .messages-area {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .message-row {
+      display: flex;
+      max-width: 85%;
+    }
+
+    .message-row.ai {
+      align-self: flex-start;
+    }
+
+    .message-row.user {
+      align-self: flex-end;
+      justify-content: flex-end;
+      max-width: 75%;
+    }
+
+    .msg-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background-color: var(--primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFFFFF;
+      font-size: 10px;
+      margin-right: 10px;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .bubble {
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 500;
+      white-space: pre-wrap;
+    }
+
+    .message-row.ai .bubble {
+      background-color: var(--bg-solid);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-row.user .bubble {
+      background-color: var(--primary);
+      border-color: transparent;
+      color: #FFFFFF;
+      border-bottom-right-radius: 4px;
+    }
+
+    .thinking-bubble {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .thinking-bubble i {
+      animation: spin 1s linear infinite;
+    }
+
+    .chips-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 24px;
+      overflow-x: auto;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+
+    .chips-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .chip:hover {
+      border-color: var(--primary);
+    }
+
+    .input-bar-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 24px 24px 24px;
+    }
+
+    .chat-input-box {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--card-border);
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 10px 16px;
+      flex: 1;
+    }
+
+    .chat-input {
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      flex: 1;
+    }
+
+    .send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background-color: var(--primary);
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFFFFF;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .chat-footer-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* FLASHCARDS SCREEN */
+    .flashcard-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .decks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .deck-card {
+      border: 1.5px solid var(--card-border);
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .deck-card:hover {
+      border-color: var(--primary);
+    }
+
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .deck-icon-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+    }
+
+    .percent-badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .deck-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .deck-meta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Create deck dashed card */
+    .create-deck-card {
+      border: 2px dashed var(--card-border);
+      background-color: transparent;
+      border-radius: 16px;
+      height: 175px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .create-deck-card:hover {
+      border-color: var(--primary);
+    }
+
+    .create-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--card-border);
+      background-color: var(--card-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .create-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* STUDY PLANNER SCREEN */
+    .planner-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1.2fr;
+      gap: 24px;
+    }
+
+    .calendar-card {
+      padding: 24px;
+      min-height: 380px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .month-label {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .calendar-nav i {
+      cursor: pointer;
+    }
+
+    .calendar-nav i:hover {
+      color: var(--text-color);
+    }
+
+    .weekdays-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 8px;
+      text-align: center;
+    }
+
+    .day-box {
+      height: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .day-box.today {
+      background-color: rgba(59, 130, 246, 0.12);
+      border-radius: 10px;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .day-box.muted {
+      color: rgba(124, 139, 161, 0.3);
+    }
+
+    .event-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 6px;
+    }
+
+    .card-heading-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .add-event-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background-color: rgba(59, 130, 246, 0.12);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .add-event-btn:hover {
+      background-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-item-card {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--card-border);
+      background-color: var(--bg-solid);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .check-btn {
+      padding: 6px;
+      margin-right: 10px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .check-btn:hover {
+      color: var(--success);
+    }
+
+    .check-btn.checked {
+      color: var(--success);
+    }
+
+    .event-info {
+      flex: 1;
+    }
+
+    .event-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .event-item-card.completed .event-title {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .event-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .type-badge {
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+    }
+
+    .event-meta-text {
+      color: var(--text-muted);
+    }
+
+    /* PREMIUM OVERLAY MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      animation: modalSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .modal-header i.close {
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    .modal-header i.close:hover {
+      color: var(--text-color);
+    }
+
+    /* 3D Flashcard flip simulator styles */
+    .flashcard-wrapper {
+      perspective: 1000px;
+      height: 220px;
+      margin-bottom: 16px;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flashcard-wrapper.flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      border: 1.5px solid var(--card-border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .flashcard-front {
+      background-color: var(--bg-solid);
+    }
+
+    .flashcard-back {
+      background-color: var(--bg-solid);
+      transform: rotateY(180deg);
+    }
+
+    .card-face-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    .flashcard-text {
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 700;
+      margin: auto 0;
+      color: var(--text-color);
+    }
+
+    .flip-prompt {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .mastery-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .mastery-toggle-row i {
+      color: var(--text-muted);
+    }
+
+    .mastery-toggle-row.mastered {
+      background-color: rgba(245, 158, 11, 0.12);
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .mastery-toggle-row.mastered i {
+      color: var(--warning);
+    }
+
+    .modal-actions-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-actions-row .btn {
+      flex: 1;
+    }
+
+    /* Quiz Modal layout */
+    .quiz-progress-section {
+      margin-bottom: 24px;
+    }
+
+    .question-box {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--card-border);
+      background-color: var(--input-bg);
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .option-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .option-btn.selected {
+      background-color: rgba(59, 130, 246, 0.08);
+      border-color: var(--primary);
+    }
+
+    .option-btn.correct {
+      background-color: rgba(16, 185, 129, 0.12);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .option-btn.incorrect {
+      background-color: rgba(239, 68, 68, 0.12);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .option-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--text-muted);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 14px;
+      flex-shrink: 0;
+      font-size: 10px;
+    }
+
+    .option-btn.selected .option-radio {
+      border-color: var(--primary);
+      background-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .option-btn.correct .option-radio {
+      border-color: var(--success);
+      background-color: var(--success);
+      color: #FFFFFF;
+    }
+
+    .option-btn.incorrect .option-radio {
+      border-color: var(--error);
+      background-color: var(--error);
+      color: #FFFFFF;
+    }
+
+    /* Form Styles */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      border: 1.5px solid var(--input-border);
+      background-color: var(--input-bg);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text-color);
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+
+    .type-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .type-option {
+      border: 1.5px solid var(--card-border);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .type-option.selected {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    /* Results layout */
+    .results-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .results-badge {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: rgba(16, 185, 129, 0.12);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      color: var(--success);
+      margin-bottom: 16px;
+    }
+
+    .results-score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .score-val {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .score-lbl {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .streak-alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(245, 158, 11, 0.12);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--text-color);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .streak-alert i {
+      color: var(--warning);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+      .content-area {
+        margin-left: 0;
+        padding: 84px 16px 84px 16px;
+      }
+      .mobile-header {
+        display: flex;
+      }
+      .mobile-tabs {
+        display: flex;
+      }
+      .stats-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+      .scan-layout, .planner-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- Responsive Mobile Header -->
+    <header class="mobile-header">
+      <div class="mobile-header-left">
+        <div class="mobile-logo" style="background-color: transparent;">
+          <img src="logo.jpg" alt="Logo" style="width: 100%; height: 100%; border-radius: inherit; object-fit: cover;">
+        </div>
+        <div class="mobile-title" id="mobile-title-text">GingerNotes</div>
+      </div>
+      <div class="mobile-header-right">
+        <div class="mobile-icon-btn" onclick="toggleAppTheme()">
+          <i class="fa-solid fa-sun" id="mobile-theme-icon"></i>
+        </div>
+        <div class="mobile-icon-btn">
+          <i class="fa-solid fa-bell"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Desktop Sidebar Left -->
+    <aside class="sidebar">
+      <div>
+        <!-- Brand -->
+        <div class="brand-container">
+          <div class="logo-badge" style="background-color: transparent; box-shadow: none;">
+            <img src="logo.jpg" alt="Logo" style="width: 100%; height: 100%; border-radius: inherit; object-fit: cover;">
+          </div>
+          <div class="brand-text-container">
+            <span class="brand-title">Ginger Notes</span>
+            <span class="brand-subtitle">Smart Study Assistant</span>
+          </div>
+        </div>
+
+        <!-- Quick Search -->
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" class="search-input" placeholder="⌘K Quick search..." disabled>
+        </div>
+
+        <div class="section-title">Study Tools</div>
+
+        <!-- Menu Navigation -->
+        <nav class="menu-container">
+          <a class="menu-item active" data-screen="dashboard" onclick="switchScreen('dashboard')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-book-open menu-icon"></i>
+              <span>My Notes</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="scan" onclick="switchScreen('scan')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-camera menu-icon"></i>
+              <span>Scan Notes</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="chat" onclick="switchScreen('chat')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-comments menu-icon"></i>
+              <span>AI Chat</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="flashcards" onclick="switchScreen('flashcards')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-layer-group menu-icon"></i>
+              <span>Flashcards</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="quizzes" onclick="switchScreen('quizzes')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-square-check menu-icon"></i>
+              <span>Quizzes</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+          <a class="menu-item" data-screen="planner" onclick="switchScreen('planner')">
+            <div class="menu-item-left">
+              <i class="fa-solid fa-calendar-days menu-icon"></i>
+              <span>Study Planner</span>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Footer toggles & profiles -->
+      <div class="sidebar-footer">
+        <div class="divider"></div>
+        <div class="toggle-row">
+          <div class="toggle-left">
+            <i class="fa-solid fa-moon"></i>
+            <span>Dark Mode</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="theme-switch" checked onchange="toggleAppTheme()">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="profile-card">
+          <div class="profile-left">
+            <div class="profile-avatar">S</div>
+            <div class="profile-info">
+              <span class="profile-name">Student</span>
+              <span class="profile-plan">Free Plan</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-gear profile-settings"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Frame -->
+    <main class="content-area">
+
+      <!-- ========================================== -->
+      <!-- 1. DASHBOARD SCREEN -->
+      <!-- ========================================== -->
+      <section id="screen-dashboard" class="screen-view active">
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="card stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon" style="background-color: rgba(59, 130, 246, 0.15); color: var(--primary);">
+                <i class="fa-solid fa-camera"></i>
+              </div>
+              <div class="sparkline">
+                <div class="sparkline-dot"></div>
+                <div class="sparkline-line"></div>
+              </div>
+            </div>
+            <span class="stat-card-value" id="stat-scanned-count">24</span>
+            <span class="stat-card-label">Notes Scanned</span>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon" style="background-color: rgba(139, 92, 246, 0.15); color: var(--purple);">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <div class="sparkline">
+                <div class="sparkline-dot"></div>
+                <div class="sparkline-line"></div>
+              </div>
+            </div>
+            <span class="stat-card-value" id="stat-mastered-count">63/92</span>
+            <span class="stat-card-label">Cards Mastered</span>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon" style="background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
+                <i class="fa-solid fa-square-check"></i>
+              </div>
+              <div class="sparkline">
+                <div class="sparkline-dot"></div>
+                <div class="sparkline-line"></div>
+              </div>
+            </div>
+            <span class="stat-card-value" id="stat-quizzes-count">12</span>
+            <span class="stat-card-label">Quizzes Done</span>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon" style="background-color: rgba(245, 158, 11, 0.15); color: var(--warning);">
+                <i class="fa-solid fa-fire"></i>
+              </div>
+              <div class="sparkline">
+                <div class="sparkline-dot"></div>
+                <div class="sparkline-line"></div>
+              </div>
+            </div>
+            <span class="stat-card-value" id="stat-streak-count">7d</span>
+            <span class="stat-card-label">Study Streak</span>
+          </div>
+        </div>
+
+        <!-- 2-Column Grid -->
+        <div class="grid-2col">
+          <!-- Left Main Column -->
+          <div class="widget-section">
+            <span class="widget-title">Quick Actions</span>
+            
+            <div class="quick-actions-grid">
+              <a class="action-button" onclick="switchScreen('scan')">
+                <div class="action-icon-badge" style="background-color: rgba(59, 130, 246, 0.15); color: var(--primary);">
+                  <i class="fa-solid fa-camera"></i>
+                </div>
+                <span class="action-title">Scan a Note</span>
+                <span class="action-desc">Capture & digitize</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+
+              <a class="action-button" onclick="switchScreen('chat')">
+                <div class="action-icon-badge" style="background-color: rgba(6, 182, 212, 0.15); color: var(--cyan);">
+                  <i class="fa-solid fa-comments"></i>
+                </div>
+                <span class="action-title">Ask AI</span>
+                <span class="action-desc">Get instant answers</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+
+              <a class="action-button" onclick="switchScreen('flashcards')">
+                <div class="action-icon-badge" style="background-color: rgba(139, 92, 246, 0.15); color: var(--purple);">
+                  <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <span class="action-title">Study Cards</span>
+                <span class="action-desc">Spaced repetition</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+
+              <a class="action-button" onclick="switchScreen('quizzes')">
+                <div class="action-icon-badge" style="background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
+                  <i class="fa-solid fa-square-check"></i>
+                </div>
+                <span class="action-title">Take Quiz</span>
+                <span class="action-desc">Test your knowledge</span>
+                <i class="fa-solid fa-arrow-right arrow"></i>
+              </a>
+            </div>
+
+            <span class="widget-title">Recent Notes</span>
+            <div class="notes-list" id="dashboard-notes-list">
+              <!-- Dynamically populated rows -->
+            </div>
+          </div>
+
+          <!-- Right Sidebar Column -->
+          <div class="widget-section">
+            
+            <!-- Today's Goal -->
+            <div class="card">
+              <span class="goal-widget-title">Today's Goal</span>
+              
+              <div class="progress-container">
+                <div class="progress-header">
+                  <span>Biology</span>
+                  <span class="progress-percent" style="color: var(--primary);">75%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: 75%; background-color: var(--primary);"></div>
+                </div>
+              </div>
+
+              <div class="progress-container">
+                <div class="progress-header">
+                  <span>Math</span>
+                  <span class="progress-percent" style="color: var(--purple);">40%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: 40%; background-color: var(--purple);"></div>
+                </div>
+              </div>
+
+              <div class="progress-container">
+                <div class="progress-header">
+                  <span>History</span>
+                  <span class="progress-percent" style="color: var(--success);">90%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: 90%; background-color: var(--success);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upcoming Deadlines -->
+            <div class="card">
+              <span class="goal-widget-title"><i class="fa-regular fa-calendar-days" style="margin-right: 8px; color: var(--primary);"></i>Upcoming</span>
+              
+              <div class="upcoming-list">
+                <div class="upcoming-item">
+                  <div class="upcoming-left">
+                    <div class="upcoming-dot" style="background-color: var(--error);"></div>
+                    <span>Biology Final Exam</span>
+                  </div>
+                  <span class="upcoming-date">Jun 10</span>
+                </div>
+
+                <div class="upcoming-item">
+                  <div class="upcoming-left">
+                    <div class="upcoming-dot" style="background-color: var(--warning);"></div>
+                    <span>History Essay Due</span>
+                  </div>
+                  <span class="upcoming-date">Jun 12</span>
+                </div>
+
+                <div class="upcoming-item">
+                  <div class="upcoming-left">
+                    <div class="upcoming-dot" style="background-color: var(--success);"></div>
+                    <span>Math Problem Set</span>
+                  </div>
+                  <span class="upcoming-date">Jun 14</span>
+                </div>
+              </div>
+
+              <a class="planner-link" onclick="switchScreen('planner')">
+                <span>View planner</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+
+            <!-- AI Tip Glow Card -->
+            <div class="card ai-tip-card" onclick="switchScreen('chat')">
+              <div class="tip-header">
+                <i class="fa-regular fa-comments"></i>
+                <span>AI TIP</span>
+              </div>
+              <p class="tip-text">Try the Pomodoro technique — 25 min focus, 5 min break. Ask Ginger AI to create a plan for you!</p>
+              <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); switchScreen('chat')">
+                Ask AI <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- 2. SCAN NOTES SCREEN -->
+      <!-- ========================================== -->
+      <section id="screen-scan" class="screen-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Scan Notes</h2>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Upload handwritten or printed notes — AI will extract and organize them</p>
+        </div>
+
+        <div class="scan-layout">
+          <!-- Left Column -->
+          <div>
+            <div class="card drop-card">
+              <div class="upload-circle">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <span class="drop-title">Drop your notes here</span>
+              <span class="drop-subtitle">PNG, JPG, PDF supported</span>
+
+              <span class="selector-label">Select a template below to simulate OCR scanning:</span>
+              <div class="template-list">
+                <button class="template-btn" onclick="simulateOcrScan(0)">
+                  <i class="fa-solid fa-flask" style="color: var(--cyan);"></i>
+                  <span>Physics — Quantum Mechanics Intro</span>
+                  <i class="fa-solid fa-wand-magic-sparkles spark"></i>
+                </button>
+                <button class="template-btn" onclick="simulateOcrScan(1)">
+                  <i class="fa-solid fa-vial" style="color: var(--error);"></i>
+                  <span>Chemistry — Organic Carbon Chains</span>
+                  <i class="fa-solid fa-wand-magic-sparkles spark"></i>
+                </button>
+                <button class="template-btn" onclick="simulateOcrScan(2)">
+                  <i class="fa-solid fa-landmark" style="color: var(--purple);"></i>
+                  <span>History — French Revolution Summary</span>
+                  <i class="fa-solid fa-wand-magic-sparkles spark"></i>
+                </button>
+              </div>
+
+              <div class="or-divider">— OR —</div>
+
+              <button class="btn btn-outline" style="width: 100%;" onclick="simulateOcrScan(0)">
+                <i class="fa-solid fa-folder-open"></i> Browse files
+              </button>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card tips-card">
+              <span class="tips-title">TIPS</span>
+              <div class="tips-list">
+                <div class="tip-item">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  <span>Use good lighting for clearer scans</span>
+                </div>
+                <div class="tip-item">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  <span>Flatten pages before scanning</span>
+                </div>
+                <div class="tip-item">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  <span>Works with printed & handwritten notes</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column Extracted note -->
+          <div class="card extracted-card">
+            <!-- OCR Loading State -->
+            <div class="ocr-loader" id="ocr-loader">
+              <i class="fa-solid fa-circle-notch"></i>
+              <span class="ocr-loader-text">Extracting text and organizing with AI...</span>
+              <span class="ocr-loader-sub">Formatting headers and tags</span>
+            </div>
+
+            <!-- OCR Placeholder -->
+            <div class="ocr-placeholder" id="ocr-placeholder">
+              <div class="placeholder-circle">
+                <i class="fa-regular fa-file-lines"></i>
+              </div>
+              <span class="placeholder-title">Extracted notes appear here</span>
+              <span class="placeholder-desc">Upload or select a mock note on the left and AI will extract and organize its contents</span>
+            </div>
+
+            <!-- OCR Result panel -->
+            <div class="ocr-result" id="ocr-result">
+              <div class="extracted-header">
+                <div class="extracted-badge" id="extracted-badge" style="background-color: rgba(59, 130, 246, 0.12); color: var(--primary);">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="extracted-info">
+                  <span class="extracted-title" id="extracted-title">Biology Notes</span>
+                  <span class="extracted-meta" id="extracted-meta" style="color: var(--primary);">Biology • 4 Pages</span>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="note-content-body" id="extracted-note-body">
+                Extracted contents...
+              </div>
+              <div class="success-alert">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Added to Dashboard under "Recent Notes". You can now quiz this note or chat with Ginger AI about it!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- 3. AI CHAT SCREEN -->
+      <!-- ========================================== -->
+      <section id="screen-chat" class="screen-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">AI Chat</h2>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Interact with Ginger AI to summarize, explain, or structure plans</p>
+        </div>
+
+        <div class="chat-layout">
+          <!-- Chat header bar -->
+          <div class="chat-header">
+            <div class="chat-header-left">
+              <div class="chat-avatar">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <div class="chat-name-col">
+                <span class="chat-name">Ginger AI</span>
+                <div class="online-row">
+                  <div class="online-pulse"></div>
+                  <span>Online • Ready to help</span>
+                </div>
+              </div>
+            </div>
+            <div class="chat-header-right">
+              <i class="fa-regular fa-bookmark"></i>
+              <i class="fa-solid fa-rotate-right" onclick="resetChatHistory()"></i>
+            </div>
+          </div>
+
+          <!-- Chat messages area -->
+          <div class="messages-area" id="chat-messages-container">
+            <!-- Dynamically populated chat bubbles -->
+          </div>
+
+          <!-- Chips quick list -->
+          <div class="chips-row">
+            <div class="chip" onclick="sendQuickChat('Explain cell mitosis simply')">Explain cell mitosis simply</div>
+            <div class="chip" onclick="sendQuickChat('Create a study plan for my biology exam')">Create a study plan for biology</div>
+            <div class="chip" onclick="sendQuickChat('Summarize the French Revolution')">Summarize French Revolution</div>
+            <div class="chip" onclick="sendQuickChat('What is the Pythagorean theorem?')">What is Pythagorean theorem?</div>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <div class="input-bar-row">
+            <div class="chat-input-box">
+              <input type="text" class="chat-input" id="chat-input-field" placeholder="Ask me anything about your studies..." onkeydown="handleChatKeydown(event)">
+              <button class="send-btn" id="chat-send-btn" onclick="sendUserMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="chat-footer-lbl">Ginger AI • Powered by advanced language models</div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- 4. FLASHCARDS SCREEN -->
+      <!-- ========================================== -->
+      <section id="screen-flashcards" class="screen-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Flashcard Decks</h2>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Spaced repetition for efficient memorization</p>
+        </div>
+
+        <div class="flashcard-stats">
+          <div class="card" style="padding: 14px; margin-bottom: 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background-color: rgba(59, 130, 246, 0.1); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 14px;">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 16px; font-weight: 800;" id="fc-total-count">92</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Total Cards</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 14px; margin-bottom: 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background-color: rgba(245, 158, 11, 0.1); color: var(--warning); display: flex; justify-content: center; align-items: center; font-size: 14px;">
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 16px; font-weight: 800;" id="fc-mastered-count">63</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Mastered</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 14px; margin-bottom: 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background-color: rgba(16, 185, 129, 0.1); color: var(--success); display: flex; justify-content: center; align-items: center; font-size: 14px;">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 16px; font-weight: 800;">14</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Due Today</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decks collection grid -->
+        <div class="decks-grid" id="flashcard-decks-container">
+          <!-- Dynamically populated decks -->
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- 5. QUIZZES SCREEN -->
+      <!-- ========================================== -->
+      <section id="screen-quizzes" class="screen-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Quizzes</h2>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Test your knowledge with adaptive quizzes</p>
+        </div>
+
+        <div class="hero-banner">
+          <div class="hero-left">
+            <div class="trophy-circle">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div class="hero-text">
+              <span class="hero-title" id="quiz-hero-title">Last Quiz Score: 80%</span>
+              <span class="hero-subtitle">Great job! Keep it up to improve your streak 🔥</span>
+            </div>
+          </div>
+          <div class="hero-right">
+            <span class="streak-val" id="quiz-hero-streak">7</span>
+            <span class="streak-lbl">day streak</span>
+          </div>
+        </div>
+
+        <span class="widget-title" style="display: block; margin-top: 16px;">Choose a Topic</span>
+        
+        <div class="course-grid" id="quizzes-grid-container">
+          <!-- Dynamically populated quiz topic cards -->
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- 6. STUDY PLANNER SCREEN -->
+      <!-- ========================================== -->
+      <section id="screen-planner" class="screen-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Study Planner</h2>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Schedule study sessions, track deadlines, and accomplish goals</p>
+        </div>
+
+        <div class="planner-layout">
+          <!-- Left Calendar column -->
+          <div class="card calendar-card">
+            <div class="calendar-header">
+              <span class="month-label">June 2026</span>
+              <div class="calendar-nav">
+                <i class="fa-solid fa-chevron-left" style="margin-right: 12px;"></i>
+                <i class="fa-solid fa-chevron-right"></i>
+              </div>
+            </div>
+
+            <div class="weekdays-row">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+
+            <div class="days-grid">
+              <!-- Padding days for previous month -->
+              <span class="day-box muted">27</span>
+              <span class="day-box muted">28</span>
+              <span class="day-box muted">29</span>
+              <span class="day-box muted">30</span>
+              <!-- June Days -->
+              <span class="day-box">1</span>
+              <span class="day-box">2</span>
+              <span class="day-box">3</span>
+              <span class="day-box">4</span>
+              <span class="day-box">5</span>
+              <span class="day-box today">6</span>
+              <span class="day-box">7</span>
+              <span class="day-box">8</span>
+              <span class="day-box">9</span>
+              <span class="day-box">10<span class="event-dot" style="background-color: var(--error);"></span></span>
+              <span class="day-box">11</span>
+              <span class="day-box">12<span class="event-dot" style="background-color: var(--warning);"></span></span>
+              <span class="day-box">13</span>
+              <span class="day-box">14<span class="event-dot" style="background-color: var(--success);"></span></span>
+              <span class="day-box">15</span>
+              <span class="day-box">16</span>
+              <span class="day-box">17</span>
+              <span class="day-box">18<span class="event-dot" style="background-color: var(--cyan);"></span></span>
+              <span class="day-box">19</span>
+              <span class="day-box">20</span>
+              <span class="day-box">21</span>
+              <span class="day-box">22</span>
+              <span class="day-box">23</span>
+              <span class="day-box">24</span>
+              <span class="day-box">25</span>
+              <span class="day-box">26</span>
+              <span class="day-box">27</span>
+              <span class="day-box">28</span>
+              <span class="day-box">29</span>
+              <span class="day-box">30</span>
+            </div>
+          </div>
+
+          <!-- Right event schedules column -->
+          <div class="card">
+            <div class="card-heading-row">
+              <span class="widget-title" style="margin-bottom: 0;">Events & Deadlines</span>
+              <div class="add-event-btn" onclick="openAddEventModal()">
+                <i class="fa-solid fa-plus"></i>
+              </div>
+            </div>
+
+            <div class="events-list" id="schedules-list-container">
+              <!-- Dynamically populated events -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Responsive Mobile Bottom Tabs Navigation -->
+    <nav class="mobile-tabs">
+      <a class="mobile-tab-item active" data-tab="dashboard" onclick="switchScreen('dashboard')">
+        <i class="fa-solid fa-book-open"></i>
+        <span>Notes</span>
+      </a>
+      <a class="mobile-tab-item" data-tab="scan" onclick="switchScreen('scan')">
+        <i class="fa-solid fa-camera"></i>
+        <span>Scan</span>
+      </a>
+      <a class="mobile-tab-item" data-tab="chat" onclick="switchScreen('chat')">
+        <i class="fa-solid fa-comments"></i>
+        <span>Chat</span>
+      </a>
+      <a class="mobile-tab-item" data-tab="flashcards" onclick="switchScreen('flashcards')">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Cards</span>
+      </a>
+      <a class="mobile-tab-item" data-tab="quizzes" onclick="switchScreen('quizzes')">
+        <i class="fa-solid fa-square-check"></i>
+        <span>Quizzes</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: SHOW NOTE CONTENTS -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="note-view-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="extracted-badge" id="modal-note-icon-badge" style="background-color: rgba(59, 130, 246, 0.12); color: var(--primary);">
+            <i class="fa-regular fa-file-lines"></i>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <span class="modal-title" id="modal-note-title" style="font-size: 15px; font-weight: 800;">Biology Chapter 7</span>
+            <span id="modal-note-meta" style="font-size: 12px; font-weight: 700; color: var(--primary);">Biology • 4 Pages</span>
+          </div>
+        </div>
+        <i class="fa-solid fa-xmark close" onclick="closeNoteViewModal()"></i>
+      </div>
+      <div style="flex: 1; overflow-y: auto; margin-bottom: 24px;">
+        <p id="modal-note-body" style="font-size: 14px; line-height: 1.6; font-weight: 500; white-space: pre-wrap; color: var(--text-color);">
+          Note contents...
+        </p>
+      </div>
+      <div class="modal-actions-row">
+        <button class="btn btn-primary" onclick="closeNoteViewModal(); switchScreen('chat');">
+          <i class="fa-solid fa-comments"></i> Summarize with AI
+        </button>
+        <button class="btn btn-outline" onclick="closeNoteViewModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: FLASHCARD STUDY SESSION -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="flashcards-play-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <i class="fa-solid fa-layer-group" id="fc-modal-header-icon" style="color: var(--primary);"></i>
+          <span class="modal-title" id="fc-modal-title">Biology Flashcards</span>
+        </div>
+        <i class="fa-solid fa-xmark close" onclick="closeFlashcardsPlayModal()"></i>
+      </div>
+
+      <!-- Progressive tracking -->
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">
+          <span id="fc-progress-text">Card 1 of 5</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="fc-progress-bar-fill" style="width: 20%; background-color: var(--primary);"></div>
+        </div>
+      </div>
+
+      <!-- 3D Flippable card face wrapper -->
+      <div class="flashcard-wrapper" id="fc-flip-wrapper" onclick="toggleCardFlip()">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="card-face-label">QUESTION / TERM</span>
+            <div class="flashcard-text" id="fc-question-text">Loading question...</div>
+            <div class="flip-prompt">
+              <i class="fa-solid fa-rotate"></i>
+              <span>Tap card to flip</span>
+            </div>
+          </div>
+          <div class="flashcard-back" id="fc-card-back-face">
+            <span class="card-face-label" id="fc-back-face-label">ANSWER / DEFINITION</span>
+            <div class="flashcard-text" id="fc-answer-text">Loading answer...</div>
+            <div class="flip-prompt">
+              <i class="fa-solid fa-rotate"></i>
+              <span>Tap card to flip</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Star/Mastery tracking row -->
+      <div class="mastery-toggle-row" id="fc-mastery-btn" onclick="toggleCardMastery()">
+        <i class="fa-regular fa-star" id="fc-mastery-star"></i>
+        <span id="fc-mastery-text">Mark as Mastered</span>
+      </div>
+
+      <!-- Navigation footer buttons -->
+      <div class="modal-actions-row">
+        <button class="btn btn-outline" onclick="prevFlashcard()">
+          <i class="fa-solid fa-arrow-left"></i> Previous
+        </button>
+        <button class="btn btn-primary" onclick="nextFlashcard()">
+          Next Card <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: ADD FLASHCARD DECK -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="create-deck-modal">
+    <div class="modal-content" style="max-width: 420px;">
+      <div class="modal-header">
+        <span class="modal-title">Create New Flashcard Deck</span>
+        <i class="fa-solid fa-xmark close" onclick="closeCreateDeckModal()"></i>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Deck Title</label>
+        <input type="text" class="form-input" id="new-deck-title" placeholder="e.g. Inorganic Chemistry, Physics II">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Number of Cards</label>
+        <input type="number" class="form-input" id="new-deck-cards" value="10">
+      </div>
+
+      <div class="modal-actions-row" style="margin-top: 8px;">
+        <button class="btn btn-primary" onclick="submitCreateDeck()">Create Deck</button>
+        <button class="btn btn-outline" onclick="closeCreateDeckModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: PLAY ADAPTIVE QUIZ -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content" id="quiz-modal-inner">
+      <!-- Loaded dynamically via javascript -->
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: ADD EVENT SCHEDULE -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="add-event-modal">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header">
+        <span class="modal-title">Add Schedule Item</span>
+        <i class="fa-solid fa-xmark close" onclick="closeAddEventModal()"></i>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Event Title</label>
+        <input type="text" class="form-input" id="new-event-title" placeholder="e.g. Physics midterm prep, Lab report">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="text" class="form-input" id="new-event-date" placeholder="e.g. Jun 20, Jun 25">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <div class="type-selector">
+          <div class="type-option selected" data-type="Exam" onclick="selectEventType(this)">Exam</div>
+          <div class="type-option" data-type="Assignment" onclick="selectEventType(this)">Assignment</div>
+          <div class="type-option" data-type="Homework" onclick="selectEventType(this)">Homework</div>
+          <div class="type-option" data-type="Study Session" onclick="selectEventType(this)">Study Session</div>
+        </div>
+      </div>
+
+      <div class="modal-actions-row" style="margin-top: 12px;">
+        <button class="btn btn-primary" onclick="submitAddEvent()">Add Item</button>
+        <button class="btn btn-outline" onclick="closeAddEventModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT STATE ENGINE -->
+  <!-- ========================================== -->
+  <script>
+    /* Global Application Mock Data / State */
+    const appState = {
+      isDarkMode: true,
+      currentScreen: 'dashboard',
+      
+      stats: {
+        notesScanned: 24,
+        cardsMastered: 63,
+        totalCards: 92,
+        quizzesDone: 12,
+        streak: 7,
+        lastQuizScore: 80
+      },
+
+      notes: [
+        {
+          id: '1',
+          title: 'Biology Chapter 7 — Cell Division',
+          subject: 'Biology',
+          pages: 4,
+          time: '2h ago',
+          starred: false,
+          color: '#3B82F6',
+          content: 'Cell division is the process by which a parent cell divides into two or more daughter cells. Cell division usually occurs as part of a larger cell cycle. In eukaryotes, there are two distinct types of cell division: a vegetative division, where each daughter cell is genetically identical to the parent cell (mitosis), and a reproductive cell division, where the number of chromosomes in the daughter cells is reduced by half to produce haploid gametes (meiosis).'
+        },
+        {
+          id: '2',
+          title: 'World War II Timeline Notes',
+          subject: 'History',
+          pages: 6,
+          time: 'Yesterday',
+          starred: true,
+          color: '#8B5CF6',
+          content: 'World War II (1939-1945) was a global conflict that involved the vast majority of the world\'s countries. Major alliances were the Axis powers (Germany, Japan, Italy) and the Allies (UK, US, Soviet Union, China). Key milestones include the invasion of Poland (1939), Fall of France (1940), Pearl Harbor (1941), Battle of Stalingrad (1942-1943), D-Day landings (1944), and the atomic bombings of Hiroshima and Nagasaki (1945), leading to Axis surrender.'
+        },
+        {
+          id: '3',
+          title: 'Calculus Derivatives & Integrals',
+          subject: 'Math',
+          pages: 3,
+          time: '2 days ago',
+          starred: false,
+          color: '#10B981',
+          content: 'Calculus is the mathematical study of continuous change. Derivatives represent the instantaneous rate of change of a function, defined as the limit of the difference quotient as the interval approaches zero. Integrals represent the accumulation of quantities, such as the area under a curve, and serve as the inverse operation of derivatives, as stated by the Fundamental Theorem of Calculus.'
+        },
+        {
+          id: '4',
+          title: 'Python OOP Concepts',
+          subject: 'CS',
+          pages: 5,
+          time: '3 days ago',
+          starred: false,
+          color: '#F59E0B',
+          content: 'Object-Oriented Programming (OOP) in Python is a programming paradigm that uses "objects" to represent data and methods. The four core principles of OOP are:\n1. Encapsulation: Restricting direct access to some of the object\'s components.\n2. Inheritance: Creating new classes that reuse, extend, and modify behavior from parent classes.\n3. Polymorphism: Allowing different classes to be treated as instances of the same superclass.\n4. Abstraction: Hiding complex implementation details and showing only the essential features.'
+        }
+      ],
+
+      decks: [
+        {
+          id: 'bio',
+          title: 'Biology',
+          total: 24,
+          mastered: 18,
+          color: '#3B82F6',
+          percent: 75,
+          cards: [
+            { q: 'What is the powerhouse of the cell?', a: 'Mitochondria. It generates most of the cell\'s chemical energy (ATP).' },
+            { q: 'What is mitosis?', a: 'A type of cell division that results in two daughter cells each having the same number and kind of chromosomes as the parent nucleus.' },
+            { q: 'What is the function of Ribosomes?', a: 'They are responsible for protein synthesis by translating genetic codes into amino acid chains.' },
+            { q: 'What substance is the cell wall made of in plants?', a: 'Cellulose, a complex carbohydrate.' },
+            { q: 'What is photosynthesis?', a: 'The process used by plants and other organisms to convert light energy into chemical energy (glucose).' }
+          ]
+        },
+        {
+          id: 'calc',
+          title: 'Calculus',
+          total: 16,
+          mastered: 8,
+          color: '#8B5CF6',
+          percent: 50,
+          cards: [
+            { q: 'What is the derivative of sin(x)?', a: 'cos(x)' },
+            { q: 'State the Fundamental Theorem of Calculus.', a: 'It establishes a connection between differentiation and integration, showing they are inverse operations.' },
+            { q: 'What is the derivative of e^x?', a: 'e^x (it remains unchanged!)' },
+            { q: 'What does the derivative of a function represent geometrically?', a: 'The slope of the tangent line to the function\'s graph at a given point.' }
+          ]
+        },
+        {
+          id: 'hist',
+          title: 'World History',
+          total: 32,
+          mastered: 25,
+          color: '#F59E0B',
+          percent: 78,
+          cards: [
+            { q: 'When did World War II begin?', a: 'September 1, 1939, with Germany\'s invasion of Poland.' },
+            { q: 'Who was the first Emperor of Rome?', a: 'Augustus Caesar (formerly Octavian), starting in 27 BC.' },
+            { q: 'What was the Magna Carta?', a: 'A royal charter of rights signed by King John of England in 1515, establishing that the king was not above the law.' },
+            { q: 'Which civilization built the Machu Picchu?', a: 'The Inca Empire in Peru, during the 15th century.' }
+          ]
+        },
+        {
+          id: 'cs',
+          title: 'Computer Science',
+          total: 20,
+          mastered: 12,
+          color: '#10B981',
+          percent: 60,
+          cards: [
+            { q: 'What does OOP stand for?', a: 'Object-Oriented Programming.' },
+            { q: 'What is an Abstract Data Type (ADT)?', a: 'A mathematical model for data types where the data type is defined by its behavior (operations) rather than its implementation.' },
+            { q: 'What is the time complexity of binary search?', a: 'O(log n) where n is the number of elements in the sorted array.' },
+            { q: 'Explain recursion in simple terms.', a: 'A programming method where a function calls itself to solve smaller instances of the same problem.' }
+          ]
+        }
+      ],
+
+      quizzes: [
+        {
+          id: 'q-bio',
+          title: 'Cell Biology',
+          questionsCount: 10,
+          duration: 8,
+          difficulty: 'Medium',
+          color: '#3B82F6',
+          questions: [
+            { q: 'Which organelle is responsible for cellular respiration?', options: ['Nucleus', 'Mitochondria', 'Chloroplast', 'Lysosome'], correct: 1 },
+            { q: 'Which division leads to identical daughter cells?', options: ['Meiosis', 'Mitosis', 'Binary Fission', 'Budding'], correct: 1 },
+            { q: 'What molecules form the basic structure of the cell membrane?', options: ['Proteins', 'Phospholipids', 'Carbohydrates', 'Nucleic acids'], correct: 1 }
+          ]
+        },
+        {
+          id: 'q-hist',
+          title: 'World History',
+          questionsCount: 15,
+          duration: 12,
+          difficulty: 'Easy',
+          color: '#F59E0B',
+          questions: [
+            { q: 'In which year did World War II end?', options: ['1918', '1945', '1939', '1950'], correct: 1 },
+            { q: 'The ancient city of Carthage was located in which modern country?', options: ['Egypt', 'Italy', 'Tunisia', 'Greece'], correct: 2 },
+            { q: 'Who discovered America in 1492?', options: ['Amerigo Vespucci', 'Christopher Columbus', 'Vasco da Gama', 'Ferdinand Magellan'], correct: 1 }
+          ]
+        },
+        {
+          id: 'q-calc',
+          title: 'Calculus Basics',
+          questionsCount: 8,
+          duration: 10,
+          difficulty: 'Hard',
+          color: '#EF4444',
+          questions: [
+            { q: 'What is the derivative of ln(x)?', options: ['1/x', 'e^x', 'x', '1/x^2'], correct: 0 },
+            { q: 'Who is co-credited with inventing Calculus alongside Isaac Newton?', options: ['Rene Descartes', 'Gottfried Wilhelm Leibniz', 'Blaise Pascal', 'Leonhard Euler'], correct: 1 }
+          ]
+        },
+        {
+          id: 'q-cs',
+          title: 'CS Fundamentals',
+          questionsCount: 12,
+          duration: 10,
+          difficulty: 'Medium',
+          color: '#10B981',
+          questions: [
+            { q: 'Which data structure operates on a Last-In, First-Out (LIFO) basis?', options: ['Queue', 'Stack', 'Array', 'Linked List'], correct: 1 },
+            { q: 'What is the base of the hexadecimal number system?', options: ['Base 2', 'Base 8', 'Base 10', 'Base 16'], correct: 3 }
+          ]
+        }
+      ],
+
+      chatMessages: [
+        {
+          id: '1',
+          sender: 'ai',
+          text: "Hi! I'm Ginger AI 🌟 Your personal study assistant. I can help you understand concepts, summarize notes, create study plans, or explain anything you're struggling with. What would you like to learn today?"
+        }
+      ],
+
+      schedules: [
+        { id: '1', title: 'Biology Final Exam Prep', date: 'Jun 10', time: '14:00 - 16:00', type: 'Exam', color: '#EF4444', done: false },
+        { id: '2', title: 'History Essay Draft Due', date: 'Jun 12', time: '09:00', type: 'Assignment', color: '#F59E0B', done: false },
+        { id: '3', title: 'Math Problem Set 4', date: 'Jun 14', time: '11:30 - 13:00', type: 'Homework', color: '#10B981', done: true },
+        { id: '4', title: 'Computer Science OOP Review', date: 'Jun 18', time: '16:00 - 18:00', type: 'Study Session', color: '#06B6D4', done: false },
+      ],
+
+      ocrTemplates: [
+        {
+          title: 'Physics — Quantum Mechanics Intro',
+          subject: 'Physics',
+          pages: 2,
+          color: '#06B6D4',
+          content: 'Quantum mechanics is a fundamental theory in physics that provides a description of the physical properties of nature at the scale of atoms and subatomic particles.\n\nKey Concepts:\n1. Wave-Particle Duality: Light and matter exhibit both wave-like and particle-like properties.\n2. Planck\'s Constant: h = 6.626 x 10^-34 J·s, defines the scale of quantum effects.\n3. Schrödinger Equation: Predicts the future behavior of a dynamic system, yielding the wave function (ψ).'
+        },
+        {
+          title: 'Chemistry — Organic Carbon Chains',
+          subject: 'Chemistry',
+          pages: 5,
+          color: '#EF4444',
+          content: 'Organic chemistry focuses on compounds containing covalent carbon-hydrogen bonds.\n\nStructure Properties:\n- Alkanes: Single bonds (Saturated hydrocarbons), general formula CnH2n+2.\n- Alkenes: Contains at least one carbon-carbon double bond, general formula CnH2n.\n- Alkynes: Contains at least one carbon-carbon triple bond, general formula CnH2n-2.\n- Functional Groups: Hydroxyl (-OH), Carboxyl (-COOH), Amino (-NH2).'
+        },
+        {
+          title: 'History — French Revolution Key Figures',
+          subject: 'History',
+          pages: 3,
+          color: '#8B5CF6',
+          content: 'The French Revolution (1789-1799) was a period of radical political and societal change in France.\n\nKey Figures:\n- Louis XVI: King of France, executed in 1793 during the revolution.\n- Maximilien Robespierre: Leader of the Jacobins, heavily associated with the Reign of Terror.\n- Napoleon Bonaparte: General who rose to prominence and ended the revolution in 1799, establishing the French Consulate.'
+        }
+      ]
+    };
+
+    /* ACTIVE PLAY MODAL STATE variables */
+    let currentStudyDeck = null;
+    let currentStudyCardIndex = 0;
+    let currentStudyMasteredMap = {};
+
+    let activePlayQuiz = null;
+    let activeQuizQuestionIdx = 0;
+    let activeQuizSelectedIdx = null;
+    let activeQuizCorrectCount = 0;
+    let activeQuizSubmitted = false;
+
+    let selectedAddEventType = 'Exam';
+
+    /* Initialize lists & view updates on load */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderRecentNotes();
+      renderChatMessages();
+      renderFlashcardsDecks();
+      renderQuizzesGrid();
+      renderSchedules();
+      updateGlobalStatsDisplay();
+    });
+
+    /* Global screen switching routing logic */
+    function switchScreen(screenName) {
+      appState.currentScreen = screenName;
+      
+      // Update screen view class triggers
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      const activeScreen = document.getElementById(`screen-${screenName}`);
+      if (activeScreen) activeScreen.classList.add('active');
+
+      // Update Desktop Sidebar active triggers
+      document.querySelectorAll('.menu-item').forEach(m => {
+        if (m.getAttribute('data-screen') === screenName) {
+          m.classList.add('active');
+        } else {
+          m.classList.remove('active');
+        }
+      });
+
+      // Update Mobile Navigation active triggers
+      document.querySelectorAll('.mobile-tab-item').forEach(m => {
+        if (m.getAttribute('data-tab') === screenName) {
+          m.classList.add('active');
+        } else {
+          m.classList.remove('active');
+        }
+      });
+
+      // Update Mobile Title text
+      const titlesMap = {
+        'dashboard': 'GingerNotes',
+        'scan': 'Scan Notes',
+        'chat': 'AI Chat',
+        'flashcards': 'Flashcards',
+        'quizzes': 'Quizzes',
+        'planner': 'Study Planner'
+      };
+      document.getElementById('mobile-title-text').innerText = titlesMap[screenName] || 'GingerNotes';
+
+      // Special action: scroll to bottom of chat if entering chat
+      if (screenName === 'chat') {
+        const chatContainer = document.getElementById('chat-messages-container');
+        setTimeout(() => { chatContainer.scrollTop = chatContainer.scrollHeight; }, 100);
+      }
+    }
+
+    /* Global Theme Toggling Manager */
+    function toggleAppTheme() {
+      appState.isDarkMode = !appState.isDarkMode;
+      const themeSwitch = document.getElementById('theme-switch');
+      
+      if (appState.isDarkMode) {
+        document.body.classList.remove('light-mode');
+        if (themeSwitch) themeSwitch.checked = true;
+        document.getElementById('mobile-theme-icon').className = "fa-solid fa-sun";
+      } else {
+        document.body.classList.add('light-mode');
+        if (themeSwitch) themeSwitch.checked = false;
+        document.getElementById('mobile-theme-icon').className = "fa-solid fa-moon";
+      }
+    }
+
+    /* Stats display updating methods */
+    function updateGlobalStatsDisplay() {
+      // Dashboard Header counters
+      document.getElementById('stat-scanned-count').innerText = appState.stats.notesScanned;
+      document.getElementById('stat-mastered-count').innerText = `${appState.stats.cardsMastered}/${appState.stats.totalCards}`;
+      document.getElementById('stat-quizzes-count').innerText = appState.stats.quizzesDone;
+      document.getElementById('stat-streak-count').innerText = `${appState.stats.streak}d`;
+
+      // Flashcards Stats Row counters
+      document.getElementById('fc-total-count').innerText = appState.stats.totalCards;
+      document.getElementById('fc-mastered-count').innerText = appState.stats.cardsMastered;
+
+      // Quizzes banner
+      document.getElementById('quiz-hero-title').innerText = `Last Quiz Score: ${appState.stats.lastQuizScore}%`;
+      document.getElementById('quiz-hero-streak').innerText = appState.stats.streak;
+    }
+
+    /* Render and populate list of Recent Notes */
+    function renderRecentNotes() {
+      const container = document.getElementById('dashboard-notes-list');
+      container.innerHTML = '';
+
+      appState.notes.forEach(note => {
+        const row = document.createElement('div');
+        row.className = 'note-row';
+        row.onclick = () => openNoteViewModal(note);
+
+        row.innerHTML = `
+          <div class="note-left">
+            <div class="note-folder-badge" style="background-color: ${note.color}15; color: ${note.color};">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <div class="note-details">
+              <span class="note-title">${note.title}</span>
+              <div class="note-meta-row">
+                <span class="note-subject" style="color: ${note.color};">${note.subject}</span>
+                <span class="note-meta-text">${note.pages} pages • ${note.time}</span>
+              </div>
+            </div>
+          </div>
+          <div class="star-btn ${note.starred ? 'starred' : ''}" onclick="event.stopPropagation(); toggleStar(${note.id})">
+            <i class="${note.starred ? 'fa-solid' : 'fa-regular'} fa-star"></i>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleStar(id) {
+      const note = appState.notes.find(n => n.id === String(id));
+      if (note) {
+        note.starred = !note.starred;
+        renderRecentNotes();
+      }
+    }
+
+    /* Modal handles: Note viewing */
+    function openNoteViewModal(note) {
+      document.getElementById('modal-note-title').innerText = note.title;
+      document.getElementById('modal-note-meta').innerText = `${note.subject} • ${note.pages} Pages`;
+      document.getElementById('modal-note-body').innerText = note.content;
+      document.getElementById('modal-note-icon-badge').style.color = note.color;
+      document.getElementById('modal-note-icon-badge').style.backgroundColor = `${note.color}12`;
+      document.getElementById('note-view-modal').classList.add('active');
+    }
+
+    function closeNoteViewModal() {
+      document.getElementById('note-view-modal').classList.remove('active');
+    }
+
+    /* OCR Scan Simulator logic */
+    function simulateOcrScan(templateIndex) {
+      const loader = document.getElementById('ocr-loader');
+      const placeholder = document.getElementById('ocr-placeholder');
+      const result = document.getElementById('ocr-result');
+
+      placeholder.style.display = 'none';
+      result.style.display = 'none';
+      loader.style.display = 'flex';
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+        
+        const tmpl = appState.ocrTemplates[templateIndex];
+        
+        // Push scanned note to state
+        const newNote = {
+          id: Date.now().toString(),
+          title: tmpl.title,
+          subject: tmpl.subject,
+          pages: tmpl.pages,
+          time: 'Just now',
+          starred: false,
+          color: tmpl.color,
+          content: tmpl.content
+        };
+
+        appState.notes.unshift(newNote);
+        appState.stats.notesScanned += 1;
+
+        // Populate elements
+        document.getElementById('extracted-title').innerText = tmpl.title;
+        document.getElementById('extracted-meta').innerText = `${tmpl.subject} • ${tmpl.pages} Pages • Extracted Successfully`;
+        document.getElementById('extracted-badge').style.color = tmpl.color;
+        document.getElementById('extracted-badge').style.backgroundColor = `${tmpl.color}12`;
+        document.getElementById('extracted-note-body').innerText = tmpl.content;
+
+        result.style.display = 'flex';
+        
+        // Refresh stats & lists
+        renderRecentNotes();
+        updateGlobalStatsDisplay();
+      }, 2500);
+    }
+
+    /* Render and populate Flashcards section */
+    function renderFlashcardsDecks() {
+      const container = document.getElementById('flashcard-decks-container');
+      container.innerHTML = '';
+
+      appState.decks.forEach(deck => {
+        const card = document.createElement('div');
+        card.className = 'deck-card';
+        card.onclick = () => openFlashcardsPlayModal(deck);
+
+        card.innerHTML = `
+          <div class="deck-header">
+            <div class="deck-icon-badge" style="background-color: ${deck.color}15; color: ${deck.color};">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div class="percent-badge" style="background-color: ${deck.color}12; color: ${deck.color};">
+              ${deck.percent}% done
+            </div>
+          </div>
+          <span class="deck-title">${deck.title}</span>
+          <span class="deck-meta">${deck.total} cards • ${deck.mastered} mastered</span>
+          
+          <div class="progress-track" style="margin-top: auto;">
+            <div class="progress-fill" style="width: ${deck.percent}%; background-color: ${deck.color};"></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Append create new deck card
+      const createCard = document.createElement('div');
+      createCard.className = 'create-deck-card';
+      createCard.onclick = openCreateDeckModal;
+      createCard.innerHTML = `
+        <div class="create-icon-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <span class="create-title">Create New Deck</span>
+      `;
+      container.appendChild(createCard);
+    }
+
+    /* Flashcard interactive playing modal handles */
+    function openFlashcardsPlayModal(deck) {
+      currentStudyDeck = deck;
+      currentStudyCardIndex = 0;
+      
+      // Initialize local mastery tracker array
+      currentStudyMasteredMap = {};
+      for (let i = 0; i < deck.cards.length; i++) {
+        if (i < deck.mastered) currentStudyMasteredMap[i] = true;
+      }
+
+      document.getElementById('fc-modal-title').innerText = `${deck.title} Deck`;
+      document.getElementById('fc-modal-header-icon').style.color = deck.color;
+      document.getElementById('fc-flip-wrapper').classList.remove('flipped');
+      
+      loadStudyCardDetails();
+      document.getElementById('flashcards-play-modal').classList.add('active');
+    }
+
+    function closeFlashcardsPlayModal() {
+      document.getElementById('flashcards-play-modal').classList.remove('remove');
+      document.getElementById('flashcards-play-modal').classList.remove('active');
+      currentStudyDeck = null;
+    }
+
+    function loadStudyCardDetails() {
+      const card = currentStudyDeck.cards[currentStudyCardIndex];
+      document.getElementById('fc-progress-text').innerText = `Card ${currentStudyCardIndex + 1} of ${currentStudyDeck.cards.length}`;
+      
+      const pct = Math.round(((currentStudyCardIndex + 1) / currentStudyDeck.cards.length) * 100);
+      document.getElementById('fc-progress-bar-fill').style.width = `${pct}%`;
+      document.getElementById('fc-progress-bar-fill').style.backgroundColor = currentStudyDeck.color;
+
+      document.getElementById('fc-question-text').innerText = card.q;
+      document.getElementById('fc-answer-text').innerText = card.a;
+
+      // Update mastery star styling
+      const isMastered = !!currentStudyMasteredMap[currentStudyCardIndex];
+      const masteryBtn = document.getElementById('fc-mastery-btn');
+      const starIcon = document.getElementById('fc-mastery-star');
+      const textLabel = document.getElementById('fc-mastery-text');
+
+      if (isMastered) {
+        masteryBtn.className = "mastery-toggle-row mastered";
+        starIcon.className = "fa-solid fa-star";
+        textLabel.innerText = "Marked as Mastered";
+      } else {
+        masteryBtn.className = "mastery-toggle-row";
+        starIcon.className = "fa-regular fa-star";
+        textLabel.innerText = "Mark as Mastered";
+      }
+    }
+
+    function toggleCardFlip() {
+      document.getElementById('fc-flip-wrapper').classList.toggle('flipped');
+    }
+
+    function toggleCardMastery() {
+      const isMastered = !!currentStudyMasteredMap[currentStudyCardIndex];
+      currentStudyMasteredMap[currentStudyCardIndex] = !isMastered;
+
+      // Recompute deck mastered scaling ratio
+      const numMasteredLocally = Object.values(currentStudyMasteredMap).filter(Boolean).length;
+      const ratio = currentStudyDeck.total / currentStudyDeck.cards.length;
+      const scaledMastered = Math.round(numMasteredLocally * ratio);
+
+      currentStudyDeck.mastered = Math.min(scaledMastered, currentStudyDeck.total);
+      currentStudyDeck.percent = Math.round((currentStudyDeck.mastered / currentStudyDeck.total) * 100);
+
+      // Re-sum absolute mastered counts
+      setTimeout(() => {
+        let totalMasteredSum = 0;
+        let totalCardsSum = 0;
+        appState.decks.forEach(d => {
+          totalMasteredSum += d.mastered;
+          totalCardsSum += d.total;
+        });
+        appState.stats.cardsMastered = totalMasteredSum;
+        appState.stats.totalCards = totalCardsSum;
+
+        updateGlobalStatsDisplay();
+        renderFlashcardsDecks();
+        loadStudyCardDetails();
+      }, 50);
+    }
+
+    function nextFlashcard() {
+      document.getElementById('fc-flip-wrapper').classList.remove('flipped');
+      setTimeout(() => {
+        currentStudyCardIndex = (currentStudyCardIndex + 1) % currentStudyDeck.cards.length;
+        loadStudyCardDetails();
+      }, 150);
+    }
+
+    function prevFlashcard() {
+      document.getElementById('fc-flip-wrapper').classList.remove('flipped');
+      setTimeout(() => {
+        currentStudyCardIndex = (currentStudyCardIndex - 1 + currentStudyDeck.cards.length) % currentStudyDeck.cards.length;
+        loadStudyCardDetails();
+      }, 150);
+    }
+
+    /* Modal handles: Create Flashcards Deck */
+    function openCreateDeckModal() {
+      document.getElementById('create-deck-modal').classList.add('active');
+    }
+
+    function closeCreateDeckModal() {
+      document.getElementById('create-deck-modal').classList.remove('active');
+    }
+
+    function submitCreateDeck() {
+      const title = document.getElementById('new-deck-title').value.trim();
+      const num = parseInt(document.getElementById('new-deck-cards').value) || 10;
+
+      if (!title) return;
+
+      const colors = ['#3B82F6', '#8B5CF6', '#F59E0B', '#10B981', '#EF4444', '#06B6D4'];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+      const newDeck = {
+        id: Date.now().toString(),
+        title,
+        total: num,
+        mastered: 0,
+        color: randomColor,
+        percent: 0,
+        cards: [
+          { q: `What is the core concept of ${title}?`, a: `Sample key answer detail regarding ${title}. Customize later.` },
+          { q: `Another basic definition in ${title}?`, a: `Another key study concept answered.` }
+        ]
+      };
+
+      appState.decks.push(newDeck);
+      appState.stats.totalCards += num;
+
+      // Close modal & render
+      document.getElementById('new-deck-title').value = '';
+      closeCreateDeckModal();
+      renderFlashcardsDecks();
+      updateGlobalStatsDisplay();
+    }
+
+    /* AI Chat Panel logic */
+    function renderChatMessages() {
+      const container = document.getElementById('chat-messages-container');
+      container.innerHTML = '';
+
+      appState.chatMessages.forEach(msg => {
+        const isAi = msg.sender === 'ai';
+        const msgRow = document.createElement('div');
+        msgRow.className = `message-row ${isAi ? 'ai' : 'user'}`;
+
+        if (isAi) {
+          msgRow.innerHTML = `
+            <div class="msg-avatar">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="bubble">${msg.text}</div>
+          `;
+        } else {
+          msgRow.innerHTML = `
+            <div class="bubble">${msg.text}</div>
+          `;
+        }
+        container.appendChild(msgRow);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function sendUserMessage() {
+      const inputField = document.getElementById('chat-input-field');
+      const text = inputField.value.trim();
+      if (!text) return;
+
+      // User Msg
+      appState.chatMessages.push({ id: Date.now().toString(), sender: 'user', text });
+      inputField.value = '';
+      renderChatMessages();
+
+      // Trigger AI typing simulator bubble
+      const container = document.getElementById('chat-messages-container');
+      const typingRow = document.createElement('div');
+      typingRow.className = "message-row ai";
+      typingRow.id = "chat-typing-loader";
+      typingRow.innerHTML = `
+        <div class="msg-avatar">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="bubble thinking-bubble">
+          <i class="fa-solid fa-circle-notch"></i>
+          <span>Ginger AI is researching...</span>
+        </div>
+      `;
+      container.appendChild(typingRow);
+      container.scrollTop = container.scrollHeight;
+
+      // Determine answer
+      let answer = "That is an excellent academic question! I have scanned your Notes library to extract contextual information. To study this further, feel free to try your custom **Quizzes** or **Flashcards** tabs!";
+      
+      const promptChips = [
+        { q: 'Explain cell mitosis simply', a: "Mitosis is cell division where one parent cell splits to form **two identical daughter cells** for growth and repair. Think of PMAT:\n\n• **P (Prophase)**: Chromosomes pack tightly.\n• **M (Metaphase)**: Chromosomes line up in the *middle*.\n• **A (Anaphase)**: Sister chromatids pull *apart*.\n• **T (Telophase)**: *Two* new nuclei form, and the cell pinches into two!" },
+        { q: 'Create a study plan for my biology exam', a: "Here is your customized **4-Day Biology Study Plan**:\n\n• **Day 1: Cellular Structure** — Focus on cell organelles, membranes, and passive/active transport.\n• **Day 2: Cell Division** — Review Mitosis vs. Meiosis (PMAT stages and genetic variation).\n• **Day 3: Energy and Enzymes** — Study Photosynthesis, Cellular Respiration, and enzyme active sites.\n• **Day 4: Practice & Review** — Take our adaptive **Cell Biology Quiz** and review flashcard cards." },
+        { q: 'Summarize the French Revolution', a: "The **French Revolution (1789–1799)** was a watershed event that ended centuries of absolute monarchy in France. \n\n**Main Causes:**\n1. Extreme financial crises.\n2. Inequality of the Three Estates (Clergy, Nobility, and Commoners).\n3. Rise of Enlightenment ideals.\n\n**Major Phases:**\n- **1789**: Storming of the Bastille & Declaration of Rights.\n- **1793**: Reign of Terror led by Robespierre; execution of King Louis XVI.\n- **1799**: Rise of Napoleon Bonaparte, marking the end of the revolution." },
+        { q: 'What is the Pythagorean theorem?', a: "The **Pythagorean Theorem** is a fundamental principle in geometry for right-angled triangles:\n\n$$\\mathbf{a^2 + b^2 = c^2}$$\n\nWhere:\n- **a** and **b** are the lengths of the two shorter legs.\n- **c** is the length of the hypotenuse (the side opposite the right angle).\n\n*Example*: If a = 3 and b = 4, then $3^2 + 4^2 = 9 + 16 = 25 = c^2$, which means the hypotenuse $c = 5$." }
+      ];
+
+      const match = promptChips.find(c => c.q.toLowerCase() === text.toLowerCase());
+      if (match) answer = match.a;
+
+      setTimeout(() => {
+        // Remove typing
+        const typingEl = document.getElementById('chat-typing-loader');
+        if (typingEl) typingEl.remove();
+
+        // Push AI reply
+        appState.chatMessages.push({ id: Date.now().toString(), sender: 'ai', text: answer });
+        renderChatMessages();
+      }, 1600);
+    }
+
+    function handleChatKeydown(e) {
+      if (e.key === 'Enter') sendUserMessage();
+    }
+
+    function sendQuickChat(promptText) {
+      document.getElementById('chat-input-field').value = promptText;
+      sendUserMessage();
+    }
+
+    function resetChatHistory() {
+      appState.chatMessages = [
+        {
+          id: '1',
+          sender: 'ai',
+          text: "Hi! I'm Ginger AI 🌟 Your personal study assistant. I can help you understand concepts, summarize notes, create study plans, or explain anything you're struggling with. What would you like to learn today?"
+        }
+      ];
+      renderChatMessages();
+    }
+
+    /* Render course Quizzes topic list */
+    function renderQuizzesGrid() {
+      const container = document.getElementById('quizzes-grid-container');
+      container.innerHTML = '';
+
+      appState.quizzes.forEach(quiz => {
+        const badgeColor = quiz.difficulty === 'Easy' ? 'var(--success)' : quiz.difficulty === 'Medium' ? 'var(--warning)' : 'var(--error)';
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.onclick = () => openQuizSession(quiz);
+
+        card.innerHTML = `
+          <div class="course-header">
+            <div class="course-icon-badge" style="background-color: ${quiz.color}15; color: ${quiz.color};">
+              <i class="fa-regular fa-square-check"></i>
+            </div>
+            <div class="difficulty-badge" style="background-color: ${badgeColor}12; color: ${badgeColor};">
+              ${quiz.difficulty}
+            </div>
+          </div>
+          <span class="course-title">${quiz.title}</span>
+          <span class="course-meta">${quiz.questionsCount} questions • ${quiz.duration} min</span>
+          <a class="start-quiz-link" style="color: ${quiz.color};">
+            <span>Start Quiz</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /* Quiz Gameplay session handling */
+    function openQuizSession(quiz) {
+      activePlayQuiz = quiz;
+      activeQuizQuestionIdx = 0;
+      activeQuizSelectedIdx = null;
+      activeQuizCorrectCount = 0;
+      activeQuizSubmitted = false;
+
+      renderQuizQuestionCard();
+      document.getElementById('quiz-modal').classList.add('active');
+    }
+
+    function closeQuizSession() {
+      document.getElementById('quiz-modal').classList.remove('active');
+      activePlayQuiz = null;
+    }
+
+    function renderQuizQuestionCard() {
+      const modalInner = document.getElementById('quiz-modal-inner');
+      const q = activePlayQuiz.questions[activeQuizQuestionIdx];
+      const pct = Math.round(((activeQuizQuestionIdx + 1) / activePlayQuiz.questions.length) * 100);
+
+      modalInner.innerHTML = `
+        <div class="modal-header">
+          <span class="modal-title">${activePlayQuiz.title} Quiz</span>
+          <i class="fa-solid fa-xmark close" onclick="closeQuizSession()"></i>
+        </div>
+
+        <div class="quiz-progress-section">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">
+            <span>Question ${activeQuizQuestionIdx + 1} of ${activePlayQuiz.questions.length}</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: ${pct}%; background-color: ${activePlayQuiz.color};"></div>
+          </div>
+        </div>
+
+        <div class="question-box">
+          ${q.q}
+        </div>
+
+        <div class="options-list" id="quiz-options-list">
+          <!-- Populated options -->
+        </div>
+
+        <div class="modal-actions-row" style="margin-top: 12px;">
+          <button class="btn btn-primary" id="quiz-submit-nav-btn" style="width: 100%;" disabled onclick="submitQuizAnswer()">
+            Submit Answer
+          </button>
+        </div>
+      `;
+
+      // Render options
+      const optContainer = document.getElementById('quiz-options-list');
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('div');
+        btn.className = 'option-btn';
+        btn.onclick = () => selectQuizOption(idx);
+        btn.innerHTML = `
+          <div class="option-radio"></div>
+          <span>${opt}</span>
+        `;
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function selectQuizOption(idx) {
+      if (activeQuizSubmitted) return;
+
+      activeQuizSelectedIdx = idx;
+      
+      const optContainer = document.getElementById('quiz-options-list');
+      optContainer.querySelectorAll('.option-btn').forEach((btn, index) => {
+        if (index === idx) {
+          btn.className = 'option-btn selected';
+        } else {
+          btn.className = 'option-btn';
+        }
+      });
+
+      document.getElementById('quiz-submit-nav-btn').disabled = false;
+    }
+
+    function submitQuizAnswer() {
+      if (activeQuizSubmitted) return;
+
+      activeQuizSubmitted = true;
+      const q = activePlayQuiz.questions[activeQuizQuestionIdx];
+      const correctIdx = q.correct;
+
+      if (activeQuizSelectedIdx === correctIdx) {
+        activeQuizCorrectCount++;
+      }
+
+      // Re-render buttons with green/red feedback triggers
+      const optContainer = document.getElementById('quiz-options-list');
+      optContainer.querySelectorAll('.option-btn').forEach((btn, index) => {
+        btn.onclick = null; // disable further clicks
+        if (index === correctIdx) {
+          btn.className = 'option-btn correct';
+        } else if (index === activeQuizSelectedIdx) {
+          btn.className = 'option-btn incorrect';
+        }
+      });
+
+      const isLast = activeQuizQuestionIdx === activePlayQuiz.questions.length - 1;
+      const actBtn = document.getElementById('quiz-submit-nav-btn');
+      actBtn.innerText = isLast ? 'Finish and View Results' : 'Next Question';
+      actBtn.className = 'btn btn-success';
+      actBtn.onclick = isLast ? showQuizFinalResults : nextQuizQuestion;
+    }
+
+    function nextQuizQuestion() {
+      activeQuizQuestionIdx++;
+      activeQuizSelectedIdx = null;
+      activeQuizSubmitted = false;
+      renderQuizQuestionCard();
+    }
+
+    function showQuizFinalResults() {
+      const modalInner = document.getElementById('quiz-modal-inner');
+      const scorePct = Math.round((activeQuizCorrectCount / activePlayQuiz.questions.length) * 100);
+
+      // Increment stats
+      appState.stats.quizzesDone++;
+      appState.stats.lastQuizScore = scorePct;
+      if (scorePct >= 70) appState.stats.streak++; // increase streak on pass
+
+      updateGlobalStatsDisplay();
+
+      modalInner.innerHTML = `
+        <div class="results-panel">
+          <div class="results-badge">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h3 class="results-title">Quiz Completed!</h3>
+          <p class="results-subtitle" style="color: var(--text-muted); font-size: 13px; font-weight: 600; max-width: 320px; line-height: 1.4; margin-bottom: 20px;">
+            You have successfully answered the questions in **${activePlayQuiz.title}**!
+          </p>
+
+          <div class="results-score-circle" style="border-color: ${activePlayQuiz.color};">
+            <span class="score-val" style="color: ${activePlayQuiz.color};">${scorePct}%</span>
+            <span class="score-lbl">${activeQuizCorrectCount} of ${activePlayQuiz.questions.length} Correct</span>
+          </div>
+
+          <div class="streak-alert">
+            <i class="fa-solid fa-fire"></i>
+            <span>Streak maintained! You are on a ${appState.stats.streak}-day learning streak!</span>
+          </div>
+
+          <button class="btn btn-primary" style="width: 100%;" onclick="closeQuizSession()">
+            Done
+          </button>
+        </div>
+      `;
+    }
+
+    /* Study Planner Event schedules renderer */
+    function renderSchedules() {
+      const container = document.getElementById('schedules-list-container');
+      container.innerHTML = '';
+
+      appState.schedules.forEach(ev => {
+        const item = document.createElement('div');
+        item.className = `event-item-card ${ev.done ? 'completed' : ''}`;
+        item.innerHTML = `
+          <div class="check-btn ${ev.done ? 'checked' : ''}" onclick="toggleEventChecked(${ev.id})">
+            <i class="${ev.done ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}"></i>
+          </div>
+          <div class="event-info">
+            <span class="event-title">${ev.title}</span>
+            <div class="event-meta-row">
+              <span class="type-badge" style="background-color: ${ev.color}15; color: ${ev.color};">${ev.type}</span>
+              <span class="event-meta-text">${ev.date} • ${ev.time}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleEventChecked(id) {
+      const ev = appState.schedules.find(e => e.id === String(id));
+      if (ev) {
+        ev.done = !ev.done;
+        renderSchedules();
+      }
+    }
+
+    /* Modal handles: Add Event Schedule */
+    function openAddEventModal() {
+      document.getElementById('add-event-modal').classList.add('active');
+    }
+
+    function closeAddEventModal() {
+      document.getElementById('add-event-modal').classList.remove('active');
+    }
+
+    function selectEventType(el) {
+      document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedAddEventType = el.getAttribute('data-type');
+    }
+
+    function submitAddEvent() {
+      const title = document.getElementById('new-event-title').value.trim();
+      const date = document.getElementById('new-event-date').value.trim();
+
+      if (!title || !date) return;
+
+      const colorsMap = {
+        'Exam': '#EF4444',
+        'Assignment': '#F59E0B',
+        'Homework': '#10B981',
+        'Study Session': '#06B6D4'
+      };
+      const typeColor = colorsMap[selectedAddEventType] || '#3B82F6';
+
+      const newEv = {
+        id: Date.now().toString(),
+        title,
+        date,
+        time: 'Flexible',
+        type: selectedAddEventType,
+        color: typeColor,
+        done: false
+      };
+
+      appState.schedules.push(newEv);
+      document.getElementById('new-event-title').value = '';
+      closeAddEventModal();
+      renderSchedules();
+    }
+  </script>
+</body>
+</html>
