@@ -2331,6 +2331,569 @@
     .auth-input:focus + i {
       color: var(--primary);
     }
+
+    /* =================================================== */
+    /* PREMIUM INTERACTIVE PWA ONBOARDING STYLES */
+    /* =================================================== */
+    .pwa-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(10, 15, 30, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: all 0.35s ease;
+    }
+    
+    .pwa-modal-overlay.active {
+      display: flex;
+    }
+    
+    .pwa-card {
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px var(--primary-glow);
+      animation: slideInPwa 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    @keyframes slideInPwa {
+      from { transform: scale(0.95) translateY(20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .pwa-step {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .pwa-step.active {
+      display: flex;
+    }
+
+    /* Step 1 Options */
+    .pwa-choice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .pwa-choice-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pwa-choice-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pwa-choice-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px var(--primary-glow);
+    }
+
+    .pwa-choice-card.recommended {
+      border-color: rgba(59, 130, 246, 0.4);
+      position: relative;
+    }
+
+    .pwa-choice-card.recommended::before {
+      content: "RECOMMENDED";
+      position: absolute;
+      top: -10px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .pwa-choice-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary);
+    }
+
+    .pwa-choice-card.recommended .pwa-choice-icon {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+      color: var(--primary);
+    }
+
+    /* Search & Filter Tabs */
+    .pwa-search-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .pwa-search-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      background-color: var(--input-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      color: var(--text-color);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .pwa-search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .pwa-search-container i {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .pwa-tabs-container {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-top: -8px;
+    }
+
+    .pwa-tabs-container::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .pwa-tabs-container::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 4px;
+    }
+
+    .pwa-tab {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .pwa-tab:hover, .pwa-tab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Browser Grid */
+    .pwa-browser-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    @media (max-width: 480px) {
+      .pwa-browser-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .pwa-browser-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .pwa-browser-grid::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 10px;
+    }
+
+    .pwa-browser-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pwa-browser-card:hover {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.04);
+      transform: scale(1.03);
+    }
+
+    .pwa-browser-logo {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .pwa-browser-logo i {
+      font-size: 18px;
+    }
+
+    .pwa-browser-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    /* Instruction Screen */
+    .pwa-instruction-container {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pwa-inst-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .pwa-inst-number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pwa-inst-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-color);
+      line-height: 1.5;
+    }
+
+    .pwa-highlight {
+      color: var(--primary);
+      font-weight: 800;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Pulsing install CTA button */
+    .btn-pulse-install {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+      animation: pulseGlow 2s infinite;
+    }
+
+    .btn-pulse-install:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+      70% { transform: scale(1.01); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    }
+
+    /* =================================================== */
+    /* NATIVE-LIKE MOBILE TOUCH TARGETS & HAPTI-SCALE FEEDBACK */
+    /* =================================================== */
+    @media (max-width: 768px) {
+      /* Haptic-like scale-down compression on press for all thumb targets */
+      .btn:active, 
+      .mobile-tab-item:active, 
+      .action-button:active, 
+      .pwa-browser-card:active, 
+      .pwa-choice-card:active, 
+      .card:active,
+      .deck-card:active,
+      .create-deck-card:active,
+      .option-btn:active,
+      .chip:active,
+      .back-btn:active {
+        transform: scale(0.96) !important;
+        transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+
+      /* Enlarged, touch-friendly primary actions */
+      .btn {
+        padding: 12px 24px;
+        min-height: 48px;
+        font-size: 15px;
+        border-radius: 14px;
+      }
+      
+      .btn-small {
+        padding: 8px 16px;
+        min-height: 38px;
+        font-size: 13px;
+        border-radius: 10px;
+      }
+
+      /* Wider and taller forms to prevent keyboard/fat-finger mistakes */
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      select,
+      textarea,
+      .auth-input {
+        min-height: 48px;
+        font-size: 15px !important; /* Prevents auto-zooming on focus in mobile Safari */
+        padding: 12px 16px;
+        border-radius: 14px;
+      }
+      
+      .auth-input {
+        padding-left: 44px;
+      }
+
+      /* Compact, device-edge-optimized viewport padding */
+      .content-area {
+        padding: 76px 14px 84px 14px;
+      }
+
+      /* Snug-fitting grid card borders and paddings */
+      .card, .dashboard-card {
+        padding: 18px !important;
+        border-radius: 20px;
+      }
+
+      /* Touch targets expansion for mobile bottom tabs bar */
+      .mobile-tabs {
+        height: 70px;
+        padding-bottom: env(safe-area-inset-bottom);
+        background-color: var(--card-bg);
+        border-top: 1.5px solid var(--card-border);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+      }
+      
+      .mobile-tab-item i {
+        font-size: 20px;
+        margin-bottom: 2px;
+      }
+      
+      .mobile-tab-item span {
+        font-size: 11px;
+        letter-spacing: -0.2px;
+      }
+
+      /* Grid elements auto-adapt to clean thumb taps */
+      .stats-row {
+        gap: 10px;
+      }
+      
+      .grid-2col, .grid-3col, .grid-5col, .scan-layout, .planner-layout, .summarizer-layout {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Safe edge padding on extra small screens */
+      .content-area {
+        padding: 72px 12px 90px 12px;
+      }
+
+      .card, .dashboard-card {
+        padding: 14px !important;
+        border-radius: 16px;
+      }
+
+      /* Elegant, Native-Style Bottom-Sheet for PWA Modal Card */
+      .pwa-modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .pwa-card {
+        max-width: 100%;
+        width: 100%;
+        border-radius: 28px 28px 0 0;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        padding: 24px 20px 32px 20px;
+        max-height: 85vh;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary-glow);
+        animation: slideUpBottomSheet 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* Top Grab-Bar visual indicator to slide sheet down */
+      .pwa-card::before {
+        content: "";
+        width: 42px;
+        height: 5px;
+        background-color: var(--card-border);
+        border-radius: 3px;
+        align-self: center;
+        margin-top: -12px;
+        margin-bottom: 20px;
+        opacity: 0.8;
+      }
+
+      /* Custom Horizontal to Vertical Onboarding layout */
+      .pwa-choice-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .pwa-choice-card {
+        padding: 18px;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 16px;
+      }
+
+      .pwa-choice-card .pwa-choice-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .pwa-choice-card div {
+        flex: 1;
+      }
+
+      .pwa-choice-card h3 {
+        margin: 0 0 2px 0;
+        font-size: 15px;
+      }
+
+      .pwa-choice-card p {
+        margin: 0;
+        font-size: 12px;
+      }
+
+      /* High Density Browser Grid on Mobiles */
+      .pwa-browser-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px;
+        max-height: 210px;
+      }
+
+      .pwa-browser-card {
+        padding: 10px 6px;
+      }
+
+      .pwa-browser-logo {
+        width: 38px;
+        height: 38px;
+      }
+
+      .pwa-browser-logo i {
+        font-size: 16px;
+      }
+
+      .pwa-browser-name {
+        font-size: 10px;
+      }
+
+      /* Tighter actions layout */
+      .modal-actions-row {
+        flex-direction: column-reverse;
+        gap: 10px;
+        width: 100%;
+      }
+
+      .modal-actions-row .btn {
+        width: 100% !important;
+      }
+
+      /* Authentication viewport optimizations */
+      #auth-screen .card {
+        padding: 24px 20px !important;
+        gap: 20px !important;
+      }
+
+      #auth-screen h1 {
+        font-size: 22px !important;
+      }
+
+      #auth-screen p {
+        font-size: 12px !important;
+      }
+    }
+
+    @keyframes slideUpBottomSheet {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -3334,6 +3897,198 @@
         </div>
         <div style="border-top: 1px solid var(--input-border); padding-top: 12px; width: 100%;">
           <a href="#" onclick="openPrivacyModal(event)" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =================================================== -->
+  <!-- MODAL: INTERACTIVE PWA APP ONBOARDING ASSISTANT -->
+  <!-- =================================================== -->
+  <div class="pwa-modal-overlay" id="pwa-onboarding-modal">
+    <div class="pwa-card">
+      
+      <!-- STEP 1: Preference Selection (App vs Browser) -->
+      <div id="pwa-step-1" class="pwa-step active">
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;">
+          <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(59, 130, 246, 0.1); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 24px; box-shadow: 0 8px 24px var(--primary-glow);">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <h2 style="font-size: 20px; font-weight: 800; color: var(--text-color); margin-top: 12px;">Experience GingerNotes</h2>
+          <p style="font-size: 13px; font-weight: 600; color: var(--text-muted); max-width: 400px; line-height: 1.4;">How would you like to run GingerNotes today for the best summaries & study planning?</p>
+        </div>
+
+        <!-- Option 1: Instant Browser Launch (Premium Full-Width Call-to-Action) -->
+        <div onclick="completePwaOnboarding('browser')" style="cursor: pointer; margin-top: 16px; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(147, 51, 234, 0.12) 100%); border: 1.5px solid var(--primary); box-shadow: 0 8px 32px rgba(59, 130, 246, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 40px rgba(59, 130, 246, 0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 32px rgba(59, 130, 246, 0.12)';">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 18px; background: var(--primary); color: #fff; box-shadow: 0 4px 12px var(--primary-glow);">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div style="text-align: left;">
+              <h3 style="font-size: 14px; font-weight: 800; color: var(--text-color); margin: 0 0 2px 0;">⚡ Launch Instantly in Browser</h3>
+              <p style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin: 0; line-height: 1.2;">100% safe. Runs inside this browser tab. No setup, no codes, no downloads.</p>
+            </div>
+          </div>
+          <div style="font-size: 14px; color: var(--primary); margin-right: 4px;"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+
+        <div style="display: flex; align-items: center; text-align: center; margin: 18px 0 14px 0;">
+          <div style="flex: 1; height: 1px; background: var(--card-border);"></div>
+          <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 0 12px;">or run offline via native download</span>
+          <div style="flex: 1; height: 1px; background: var(--card-border);"></div>
+        </div>
+
+        <div class="pwa-choice-row" style="grid-template-columns: repeat(2, 1fr); gap: 14px;">
+          <!-- Option 2: Windows Desktop App -->
+          <div onclick="toggleWindowsOptions()" style="cursor: pointer; text-decoration: none; display: flex;" class="pwa-choice-card recommended">
+            <div class="pwa-choice-icon" style="width: 44px; height: 44px; font-size: 18px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%); color: var(--primary);">
+              <i class="fa-brands fa-windows"></i>
+            </div>
+            <h3 style="font-size: 14px; font-weight: 800; color: var(--text-color);">Windows Download</h3>
+            <p style="font-size: 11px; font-weight: 600; color: var(--text-muted); line-height: 1.3;">Choose Installer App (.msi) or Portable Folder (.zip). Direct download, double click, done!</p>
+          </div>
+
+          <!-- Option 3: Android App -->
+          <a href="GingerNotes-Android.apk" download style="text-decoration: none; display: flex; color: inherit;" class="pwa-choice-card">
+            <div class="pwa-choice-icon" style="width: 44px; height: 44px; font-size: 18px; background: rgba(16, 185, 129, 0.1); color: #10b981;">
+              <i class="fa-brands fa-android"></i>
+            </div>
+            <h3 style="font-size: 14px; font-weight: 800; color: var(--text-color);">Android APK</h3>
+            <p style="font-size: 11px; font-weight: 600; color: var(--text-muted); line-height: 1.3;">Instant mobile package (.apk). Tap to install on any Android phone for off-the-grid offline study.</p>
+          </a>
+        </div>
+
+        <div id="windows-options-container" style="display: none; opacity: 0; transform: translateY(-10px); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); margin-top: 14px; padding: 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); flex-direction: column; gap: 12px;">
+          <div style="text-align: center; margin-bottom: 4px;">
+            <h4 style="font-size: 13px; font-weight: 800; color: var(--text-color); margin-bottom: 2px;">Select Windows Option</h4>
+            <p style="font-size: 10px; color: var(--text-muted); font-weight: 600; line-height: 1.2;">No code or terminal setup required on either selection.</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <!-- Choice A: Installer App -->
+            <a href="GingerNotes.msi" download class="pwa-choice-card" onclick="showToast('Downloading GingerNotes App Installer (.msi)...', 'success')" style="text-decoration: none; padding: 14px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; border-color: rgba(59, 130, 246, 0.2); background: rgba(59, 130, 246, 0.03); transition: all 0.2s ease;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; background: rgba(59, 130, 246, 0.1); color: var(--primary);">
+                <i class="fa-solid fa-cube"></i>
+              </div>
+              <span style="font-size: 12px; font-weight: 800; color: var(--text-color);">Standard App Installer</span>
+              <span style="font-size: 10px; color: var(--text-muted); font-weight: 600; line-height: 1.3;">Download, double-click, installed and done! Auto-adds Start/Desktop shortcuts.</span>
+            </a>
+
+            <!-- Choice B: Portable ZIP -->
+            <a href="GingerNotes-Windows.zip" download class="pwa-choice-card" onclick="showToast('Downloading GingerNotes Portable (.zip)...', 'success')" style="text-decoration: none; padding: 14px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; border-color: rgba(147, 51, 234, 0.2); background: rgba(147, 51, 234, 0.03); transition: all 0.2s ease;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; background: rgba(147, 51, 234, 0.1); color: #a855f7;">
+                <i class="fa-solid fa-file-zipper"></i>
+              </div>
+              <span style="font-size: 12px; font-weight: 800; color: var(--text-color);">Portable ZIP Folder</span>
+              <span style="font-size: 10px; color: var(--text-muted); font-weight: 600; line-height: 1.3;">Download, extract, and double-click GingerNotes.exe to run. No installation.</span>
+            </a>
+          </div>
+        </div>
+
+        <script>
+        function toggleWindowsOptions() {
+          const container = document.getElementById('windows-options-container');
+          if (container) {
+            if (container.style.display === 'none' || !container.style.display) {
+              container.style.display = 'flex';
+              setTimeout(() => {
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+              }, 10);
+            } else {
+              container.style.opacity = '0';
+              container.style.transform = 'translateY(-10px)';
+              setTimeout(() => {
+                container.style.display = 'none';
+              }, 250);
+            }
+          }
+        }
+        </script>
+
+        <div style="text-align: center; border-top: 1px solid var(--card-border); padding-top: 16px; margin-top: 16px;">
+          <a href="#" onclick="event.preventDefault(); completePwaOnboarding('browser')" style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Skip onboarding & open browser tab</a>
+        </div>
+      </div>
+
+      <!-- STEP 2: Browser Selection Grid (20+ Supported) -->
+      <div id="pwa-step-2" class="pwa-step">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Step 2 of 3</span>
+            <button class="btn btn-outline" onclick="nextPwaStep(1)" style="padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 6px;"><i class="fa-solid fa-chevron-left"></i> Back</button>
+          </div>
+          <h2 style="font-size: 18px; font-weight: 800; color: var(--text-color);">Which browser are you on?</h2>
+          <p style="font-size: 12px; font-weight: 600; color: var(--text-muted);">We will give you custom, perfect instructions for your specific browser.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="pwa-search-container">
+          <input type="text" id="pwa-browser-search" class="pwa-search-input" placeholder="Search 24 supported browsers (e.g. Safari, Chrome, GX)..." oninput="filterPwaBrowsers()">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="pwa-tabs-container">
+          <div class="pwa-tab active" onclick="filterPwaCategory('all', this)">All Browsers</div>
+          <div class="pwa-tab" onclick="filterPwaCategory('popular', this)">Popular</div>
+          <div class="pwa-tab" onclick="filterPwaCategory('mobile', this)">Mobile-First</div>
+          <div class="pwa-tab" onclick="filterPwaCategory('desktop', this)">Desktop Only</div>
+        </div>
+
+        <!-- Scrollable Grid of Browser Cards -->
+        <div class="pwa-browser-grid" id="pwa-browser-list-grid">
+          <!-- Dynamically populated by javascript -->
+        </div>
+
+        <div style="text-align: center; border-top: 1px solid var(--card-border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+          <a href="#" onclick="event.preventDefault(); completePwaOnboarding('browser')" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-decoration: none;">Continue on Web Browser</a>
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">24 browsers supported</span>
+        </div>
+      </div>
+
+      <!-- STEP 3: Step-by-Step Interactive Guide -->
+      <div id="pwa-step-3" class="pwa-step">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Step 3 of 3</span>
+            <button class="btn btn-outline" onclick="nextPwaStep(2)" style="padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 6px;"><i class="fa-solid fa-chevron-left"></i> Back</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div id="pwa-selected-logo" class="pwa-browser-logo" style="width: 40px; height: 40px; font-size: 20px;"></div>
+            <div>
+              <h2 id="pwa-selected-title" style="font-size: 18px; font-weight: 800; color: var(--text-color);">Install on Your Browser</h2>
+              <p id="pwa-selected-engine" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Native PWA Install Button Container (only shown if PWA install prompt is stashed) -->
+        <div id="pwa-native-prompt-container" style="display: none; flex-direction: column; gap: 12px;">
+          <button class="btn-pulse-install" id="pwa-native-install-btn" onclick="triggerNativeInstall()">
+            <i class="fa-solid fa-cloud-arrow-down"></i> Install GingerNotes Instantly
+          </button>
+          <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--success);"></span>
+            <p style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Highly recommended for native app performance & icon</p>
+          </div>
+          <div style="height: 1px; background-color: var(--card-border); margin: 8px 0;"></div>
+        </div>
+
+        <!-- Custom Visual Instructions Container -->
+        <div class="pwa-instruction-container" id="pwa-visual-instructions">
+          <!-- Dynamically populated steps -->
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+          <button class="btn btn-primary" onclick="completePwaOnboarding('installed')" style="width: 100%; padding: 14px; font-size: 14px; font-weight: 800;">
+            Done, Open Dashboard <i class="fa-solid fa-circle-check"></i>
+          </button>
+          <button class="btn btn-outline" onclick="completePwaOnboarding('browser')" style="width: 100%; padding: 10px; font-size: 12px; font-weight: 700;">
+            Continue in Browser Tab instead
+          </button>
         </div>
       </div>
 
@@ -5062,6 +5817,12 @@ ${thirdSentence}.`;
           authScreen.style.pointerEvents = 'none';
           setTimeout(() => {
             authScreen.style.display = 'none';
+            // Trigger interactive PWA onboarding assistant
+            if (isAppInstalled() || localStorage.getItem('pwa_choice') === 'installed' || localStorage.getItem('pwa_choice') === 'browser') {
+              // Standard bypass if already in standalone or preferences stored
+            } else {
+              openPwaOnboarding();
+            }
           }, 500);
         }
 
@@ -5113,6 +5874,508 @@ ${thirdSentence}.`;
         }, 50);
       }
       showToast('Logged out successfully.');
+    }
+
+    // ===================================================
+    // PWA ONBOARDING CONTROLLER (20+ BROWSERS SUPPORTED)
+    // ===================================================
+    let deferredPrompt = null;
+    let selectedBrowserId = 'chrome';
+    let currentPwaFilter = 'all';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // If Step 3 is open, update native install button visibility
+      const nativeContainer = document.getElementById('pwa-native-prompt-container');
+      if (nativeContainer) {
+        nativeContainer.style.display = 'flex';
+      }
+    });
+
+    const PWA_BROWSERS = [
+      {
+        id: 'chrome',
+        name: 'Google Chrome',
+        icon: 'fa-brands fa-chrome',
+        color: '#4285F4',
+        category: 'popular',
+        engine: 'Chromium',
+        steps: [
+          'Click the <span class="pwa-highlight">Menu</span> button (three vertical dots <i class="fa-solid fa-ellipsis-vertical"></i>) at the top-right of your window.',
+          'Hover over <span class="pwa-highlight">Save and share</span>, then select <span class="pwa-highlight">Install page as app...</span>.',
+          'On mobile devices, tap the three dots next to the address bar, and select <span class="pwa-highlight">Add to Home screen</span>.'
+        ]
+      },
+      {
+        id: 'safari',
+        name: 'Apple Safari',
+        icon: 'fa-brands fa-safari',
+        color: '#00A3E0',
+        category: 'popular',
+        engine: 'WebKit',
+        steps: [
+          'On iOS/iPadOS, tap the <span class="pwa-highlight">Share</span> button (the square with an up arrow <i class="fa-solid fa-share-from-square"></i>) in the bottom menu bar.',
+          'Scroll down the share list and select <span class="pwa-highlight">Add to Home Screen</span>.',
+          'On macOS (Safari 17+), click <span class="pwa-highlight">File</span> in the top menu bar, then click <span class="pwa-highlight">Add to Dock...</span>.'
+        ]
+      },
+      {
+        id: 'edge',
+        name: 'Microsoft Edge',
+        icon: 'fa-brands fa-edge',
+        color: '#0078D7',
+        category: 'popular',
+        engine: 'Chromium',
+        steps: [
+          'Click the <span class="pwa-highlight">Settings & more</span> button (three dots <i class="fa-solid fa-ellipsis"></i>) at the top-right.',
+          'Hover over <span class="pwa-highlight">Apps</span> and click <span class="pwa-highlight">Install this site as an app</span>.',
+          'On mobile, tap the menu bar at the bottom and select <span class="pwa-highlight">Add to Home screen</span>.'
+        ]
+      },
+      {
+        id: 'firefox',
+        name: 'Mozilla Firefox',
+        icon: 'fa-brands fa-firefox-browser',
+        color: '#FF7139',
+        category: 'popular',
+        engine: 'Gecko',
+        steps: [
+          'On Android, tap the menu (three dots <i class="fa-solid fa-ellipsis-vertical"></i>) next to the address bar, and tap <span class="pwa-highlight">Install</span> or <span class="pwa-highlight">Add to Home screen</span>.',
+          'On Desktop, Firefox does not support native PWA install out-of-the-box. We recommend using a Chromium-based browser or Safari, or installing the third-party extension "PWA for Firefox" for full support.'
+        ]
+      },
+      {
+        id: 'brave',
+        name: 'Brave Browser',
+        icon: 'fa-solid fa-shield-halved',
+        color: '#FB542B',
+        category: 'popular',
+        engine: 'Chromium',
+        steps: [
+          'Click the <span class="pwa-highlight">Brave Menu</span> button (three horizontal lines <i class="fa-solid fa-bars"></i>) at the top-right.',
+          'Select <span class="pwa-highlight">Install GingerNotes</span> or <span class="pwa-highlight">Add to Applications</span>.',
+          'On mobile, tap the three dots in the bottom corner and select <span class="pwa-highlight">Add to Home screen</span>.'
+        ]
+      },
+      {
+        id: 'opera',
+        name: 'Opera',
+        icon: 'fa-brands fa-opera',
+        color: '#FF1B2D',
+        category: 'desktop',
+        engine: 'Chromium',
+        steps: [
+          'Click the <span class="pwa-highlight">O Menu</span> logo in the top-left corner of the browser window.',
+          'Navigate to the page menu and select <span class="pwa-highlight">Install app</span> or <span class="pwa-highlight">Save page as...</span>.',
+          'Alternatively, click the mini-install icon inside the right side of the address bar.'
+        ]
+      },
+      {
+        id: 'operagx',
+        name: 'Opera GX',
+        icon: 'fa-solid fa-gamepad',
+        color: '#E00435',
+        category: 'desktop',
+        engine: 'Chromium',
+        steps: [
+          'Click the <span class="pwa-highlight">GX Menu</span> logo in the top-left corner.',
+          'Select <span class="pwa-highlight">Install GingerNotes</span> from the drop-down list.',
+          'Or look for the install shortcut icon (plus/arrow icon) on the right-hand edge of the URL address bar.'
+        ]
+      },
+      {
+        id: 'vivaldi',
+        name: 'Vivaldi',
+        icon: 'fa-solid fa-v',
+        color: '#EF3F3A',
+        category: 'desktop',
+        engine: 'Chromium',
+        steps: [
+          'Right-click on the active browser tab header for GingerNotes.',
+          'Select <span class="pwa-highlight">Install GingerNotes</span> from the context menu.',
+          'Or open the main Vivaldi menu (V icon top-left) -> <span class="pwa-highlight">File</span> -> <span class="pwa-highlight">Install GingerNotes</span>.'
+        ]
+      },
+      {
+        id: 'samsung',
+        name: 'Samsung Internet',
+        icon: 'fa-solid fa-mobile-screen-button',
+        color: '#142C8E',
+        category: 'mobile',
+        engine: 'Blink Engine',
+        steps: [
+          'Tap the browser <span class="pwa-highlight">Menu</span> icon (three horizontal bars <i class="fa-solid fa-bars"></i>) in the bottom-right corner.',
+          'Tap the <span class="pwa-highlight">Add page to</span> option (+ icon).',
+          'Select <span class="pwa-highlight">Home screen</span> from the options popup.'
+        ]
+      },
+      {
+        id: 'uc',
+        name: 'UC Browser',
+        icon: 'fa-solid fa-box',
+        iconText: 'UC',
+        color: '#FF6600',
+        category: 'mobile',
+        engine: 'U3 Engine',
+        steps: [
+          'Tap the browser <span class="pwa-highlight">Menu</span> icon (three lines) in the center of the bottom navigation bar.',
+          'Swipe horizontally to find and tap the <span class="pwa-highlight">Add to desktop</span> button.',
+          'Confirm the shortcut permission dialog on your phone settings.'
+        ]
+      },
+      {
+        id: 'duckduckgo',
+        name: 'DuckDuckGo',
+        icon: 'fa-solid fa-user-shield',
+        color: '#DE5833',
+        category: 'mobile',
+        engine: 'WebKit View',
+        steps: [
+          'On Android, tap the three vertical dots next to the address bar.',
+          'Select <span class="pwa-highlight">Add to Home Screen</span> or <span class="pwa-highlight">Install</span> from the menu options.',
+          'On iOS, tap the <span class="pwa-highlight">Share</span> button at the bottom and choose <span class="pwa-highlight">Add to Home Screen</span>.'
+        ]
+      },
+      {
+        id: 'tor',
+        name: 'Tor Browser',
+        icon: 'fa-solid fa-circle-nodes',
+        color: '#7D4698',
+        category: 'desktop',
+        engine: 'Gecko Engine (Secure)',
+        steps: [
+          'Tor Browser disables native web-app installs by default to preserve maximum tracking protection.',
+          'To use GingerNotes with full-screen advantages, we recommend launching in a standard browser window without private-only configurations, or bookmarking this tab for fast onion/bridge access.'
+        ]
+      },
+      {
+        id: 'arc',
+        name: 'Arc Browser',
+        icon: 'fa-solid fa-compass-drafting',
+        color: '#FE682B',
+        category: 'desktop',
+        engine: 'Chromium',
+        steps: [
+          'On macOS, Arc integrates apps directly into your sidebar. Drag the GingerNotes tab from your temporary section into the <span class="pwa-highlight">Pinned Tabs</span> list.',
+          'On iOS (Arc Search), tap the menu button (bottom right) and select <span class="pwa-highlight">Share</span>, then choose <span class="pwa-highlight">Add to Home Screen</span>.'
+        ]
+      },
+      {
+        id: 'kiwi',
+        name: 'Kiwi Browser',
+        icon: 'fa-solid fa-kiwi-bird',
+        color: '#00A896',
+        category: 'mobile',
+        engine: 'Chromium Engine',
+        steps: [
+          'Tap the browser <span class="pwa-highlight">Menu</span> button (three vertical dots <i class="fa-solid fa-ellipsis-vertical"></i>) at the top-right.',
+          'Scroll down and tap <span class="pwa-highlight">Add to Home screen</span>.',
+          'Kiwi fully supports browser extensions! You can also manage your installed web apps directly from <span class="pwa-highlight">chrome://apps</span>.'
+        ]
+      },
+      {
+        id: 'yandex',
+        name: 'Yandex Browser',
+        icon: 'fa-solid fa-square-envelope',
+        iconText: 'Y',
+        color: '#FF0000',
+        category: 'mobile',
+        engine: 'Chromium Engine',
+        steps: [
+          'Click the <span class="pwa-highlight">Menu</span> button (three vertical dots) in the address bar (bottom or top depending on setup).',
+          'Choose the <span class="pwa-highlight">Add to Home Screen</span> or <span class="pwa-highlight">Install app</span> button.',
+          'Confirm the app shortcut creation in your device settings.'
+        ]
+      },
+      {
+        id: 'aloha',
+        name: 'Aloha Browser',
+        icon: 'fa-solid fa-water',
+        color: '#007FFF',
+        category: 'mobile',
+        engine: 'WebKit / Webview',
+        steps: [
+          'Tap the bottom menu bar <span class="pwa-highlight">Menu</span> icon (three dots/lines).',
+          'Select <span class="pwa-highlight">Add Shortcut</span> or <span class="pwa-highlight">Add to Home Screen</span>.',
+          'Confirm the phone launcher shortcut creation.'
+        ]
+      },
+      {
+        id: 'puffin',
+        name: 'Puffin Browser',
+        icon: 'fa-solid fa-wind',
+        color: '#009BD9',
+        category: 'mobile',
+        engine: 'Cloud-Blink',
+        steps: [
+          'Tap the main menu button (three dots) next to the URL address bar.',
+          'Tap the <span class="pwa-highlight">Add to Home Screen</span> button from the tools panel.',
+          'Confirm and customize the shortcut name on your Android or iOS device.'
+        ]
+      },
+      {
+        id: 'dolphin',
+        name: 'Dolphin Browser',
+        icon: 'fa-solid fa-circle-arrow-down',
+        iconText: 'D',
+        color: '#0097D8',
+        category: 'mobile',
+        engine: 'WebKit View',
+        steps: [
+          'Tap the Dolphin menu button (Dolphin icon in the bottom menu bar).',
+          'Tap the <span class="pwa-highlight">Add to Desktop</span> option or click the star/bookmark indicator.',
+          'Set the destination to <span class="pwa-highlight">Home Screen</span> and click OK.'
+        ]
+      },
+      {
+        id: 'maxthon',
+        name: 'Maxthon Browser',
+        icon: 'fa-solid fa-m',
+        color: '#1A8CFF',
+        category: 'desktop',
+        engine: 'Chromium / Retro',
+        steps: [
+          'Open the Maxthon menu (three lines <i class="fa-solid fa-bars"></i>) at the top-right corner.',
+          'Go to the tools tab and click <span class="pwa-highlight">Add to Desktop</span> or <span class="pwa-highlight">Install Page</span>.',
+          'On mobile Maxthon, click the share/menu icon at the bottom and click "Add to Home screen".'
+        ]
+      },
+      {
+        id: 'phoenix',
+        name: 'Phoenix Browser',
+        icon: 'fa-solid fa-fire',
+        color: '#FF5E00',
+        category: 'mobile',
+        engine: 'Chromium Engine',
+        steps: [
+          'Tap the center <span class="pwa-highlight">Menu</span> tab (three lines/toolbox) on the bottom navigation bar.',
+          'Look for the <span class="pwa-highlight">Add to Desktop</span> shortcut inside the utilities list.',
+          'Accept the home screen shortcut prompt.'
+        ]
+      },
+      {
+        id: 'mi',
+        name: 'Mi Browser / Mint',
+        icon: 'fa-solid fa-mobile-screen',
+        color: '#FF6700',
+        category: 'mobile',
+        engine: 'Chromium Engine',
+        steps: [
+          'Tap the Profile/Menu tab (bottom right) in the Mi Browser.',
+          'Go to settings (cog icon top right), then find <span class="pwa-highlight">Add to Home screen</span>.',
+          'Alternatively, use the share sheet icon on the URL bar and select "Add to desktop".'
+        ]
+      },
+      {
+        id: 'waterfox',
+        name: 'Waterfox',
+        icon: 'fa-solid fa-droplet',
+        color: '#0D72B9',
+        category: 'desktop',
+        engine: 'Gecko Engine',
+        steps: [
+          'Waterfox inherits Gecko engine limitations for PWAs.',
+          'We recommend using the standard browser view and pinning the GingerNotes tab, or opening this site using Chrome, Safari, or Microsoft Edge for a native experience.'
+        ]
+      },
+      {
+        id: 'palemoon',
+        name: 'Pale Moon',
+        icon: 'fa-solid fa-moon',
+        color: '#1D3B8A',
+        category: 'desktop',
+        engine: 'Goanna Engine',
+        steps: [
+          'Pale Moon utilizes the Goanna layout engine.',
+          'To install as a dedicated app, we advise bookmarking the page, or switching to Chrome or Safari where full-screen offline-enabled app shells are fully native.'
+        ]
+      },
+      {
+        id: 'orion',
+        name: 'Orion Browser',
+        icon: 'fa-solid fa-shield-halved',
+        color: '#4F46E5',
+        category: 'desktop',
+        engine: 'WebKit Engine',
+        steps: [
+          'Orion runs on WebKit! On macOS, click the <span class="pwa-highlight">Share</span> or <span class="pwa-highlight">File</span> menu, then select <span class="pwa-highlight">Add to Dock</span>.',
+          'On Orion iOS, tap the <span class="pwa-highlight">Share</span> button and select <span class="pwa-highlight">Add to Home Screen</span>. It works exactly like Safari but with native extension support!'
+        ]
+      }
+    ];
+
+    function isAppInstalled() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function openPwaOnboarding() {
+      const modal = document.getElementById('pwa-onboarding-modal');
+      if (modal) {
+        modal.classList.add('active');
+        nextPwaStep(1);
+      }
+    }
+
+    function nextPwaStep(stepNumber) {
+      // Deactivate all steps
+      document.querySelectorAll('.pwa-step').forEach(step => {
+        step.classList.remove('active');
+      });
+      
+      // Activate target step
+      const activeStep = document.getElementById(`pwa-step-${stepNumber}`);
+      if (activeStep) {
+        activeStep.classList.add('active');
+      }
+
+      if (stepNumber === 2) {
+        renderBrowserGrid();
+      }
+    }
+
+    function renderBrowserGrid(filterCategory = 'all', searchQuery = '') {
+      currentPwaFilter = filterCategory;
+      const grid = document.getElementById('pwa-browser-list-grid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+      
+      const filtered = PWA_BROWSERS.filter(browser => {
+        const matchesCategory = filterCategory === 'all' || 
+                                (filterCategory === 'popular' && browser.category === 'popular') ||
+                                (filterCategory === 'mobile' && browser.category === 'mobile') ||
+                                (filterCategory === 'desktop' && browser.category === 'desktop');
+        
+        const matchesSearch = browser.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              browser.engine.toLowerCase().includes(searchQuery.toLowerCase());
+                              
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 24px; color: var(--text-muted); font-size: 13px; font-weight: 600;">
+            <i class="fa-solid fa-ban" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted);"></i>
+            <p>No matching browsers found.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(browser => {
+        const card = document.createElement('div');
+        card.className = 'pwa-browser-card';
+        card.onclick = () => selectBrowser(browser.id);
+        
+        let logoHtml = '';
+        if (browser.iconText) {
+          logoHtml = `<span style="font-size: 14px; font-weight: 800; color: #fff;">${browser.iconText}</span>`;
+        } else {
+          logoHtml = `<i class="${browser.icon}"></i>`;
+        }
+
+        card.innerHTML = `
+          <div class="pwa-browser-logo" style="background-color: ${browser.color}18; color: ${browser.color};">
+            ${logoHtml}
+          </div>
+          <span class="pwa-browser-name">${browser.name}</span>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    function filterPwaBrowsers() {
+      const query = document.getElementById('pwa-browser-search').value.trim();
+      renderBrowserGrid(currentPwaFilter, query);
+    }
+
+    function filterPwaCategory(category, tabEl) {
+      // Set active tab styling
+      tabEl.parentElement.querySelectorAll('.pwa-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      tabEl.classList.add('active');
+      
+      const query = document.getElementById('pwa-browser-search').value.trim();
+      renderBrowserGrid(category, query);
+    }
+
+    function selectBrowser(browserId) {
+      selectedBrowserId = browserId;
+      const browser = PWA_BROWSERS.find(b => b.id === browserId);
+      if (!browser) return;
+
+      // Populate selected browser data on Step 3
+      const logoContainer = document.getElementById('pwa-selected-logo');
+      if (logoContainer) {
+        logoContainer.style.backgroundColor = `${browser.color}18`;
+        logoContainer.style.color = browser.color;
+        if (browser.iconText) {
+          logoContainer.innerHTML = `<span style="font-size: 16px; font-weight: 800;">${browser.iconText}</span>`;
+        } else {
+          logoContainer.innerHTML = `<i class="${browser.icon}"></i>`;
+        }
+      }
+
+      document.getElementById('pwa-selected-title').innerText = `Install on ${browser.name}`;
+      document.getElementById('pwa-selected-engine').innerText = browser.engine;
+
+      // Render Step Steps
+      const instructionsContainer = document.getElementById('pwa-visual-instructions');
+      if (instructionsContainer) {
+        instructionsContainer.innerHTML = '';
+        browser.steps.forEach((step, index) => {
+          const stepDiv = document.createElement('div');
+          stepDiv.className = 'pwa-inst-step';
+          stepDiv.innerHTML = `
+            <div class="pwa-inst-number">${index + 1}</div>
+            <div class="pwa-inst-text">${step}</div>
+          `;
+          instructionsContainer.appendChild(stepDiv);
+        });
+      }
+
+      // Check if native beforeinstallprompt is stashed
+      const nativeContainer = document.getElementById('pwa-native-prompt-container');
+      if (nativeContainer) {
+        if (deferredPrompt) {
+          nativeContainer.style.display = 'flex';
+        } else {
+          nativeContainer.style.display = 'none';
+        }
+      }
+
+      nextPwaStep(3);
+    }
+
+    async function triggerNativeInstall() {
+      if (!deferredPrompt) return;
+      
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to install prompt: ${outcome}`);
+      
+      if (outcome === 'accepted') {
+        completePwaOnboarding('installed');
+      }
+      deferredPrompt = null;
+    }
+
+    function completePwaOnboarding(choice) {
+      localStorage.setItem('pwa_choice', choice);
+      const modal = document.getElementById('pwa-onboarding-modal');
+      if (modal) {
+        modal.style.opacity = '0';
+        modal.style.pointerEvents = 'none';
+        setTimeout(() => {
+          modal.classList.remove('active');
+          modal.style.opacity = '';
+          modal.style.pointerEvents = '';
+        }, 350);
+      }
+      showToast('Welcome to GingerNotes!');
     }
 
     function updateProfileDisplay() {
