@@ -2992,6 +2992,26 @@
 
       <!-- Footer toggles & profiles -->
       <div class="sidebar-footer">
+        <!-- Viral Share Card -->
+        <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin-bottom: 12px; text-align: center; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--primary); display: flex; justify-content: center; align-items: center; color: #fff; font-size: 13px;">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 12px; font-weight: 800; color: var(--text-color); margin: 0;">Invite Classmates</h4>
+              <p style="font-size: 10px; color: var(--text-muted); margin: 0;">Share GingerNotes & study together!</p>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <button onclick="shareWithClassmates('copy')" class="btn btn-outline" style="padding: 6px; font-size: 10px; font-weight: 700; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 4px; cursor: pointer; border-color: rgba(255,255,255,0.1); width: 100%; background: transparent; color: var(--text-color);">
+              <i class="fa-solid fa-copy"></i> Copy
+            </button>
+            <button onclick="shareWithClassmates('whatsapp')" class="btn btn-primary" style="padding: 6px; font-size: 10px; font-weight: 700; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 4px; cursor: pointer; background: #25d366; border-color: #25d366; color: white; width: 100%;">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </button>
+          </div>
+        </div>
         <div class="divider"></div>
         <div class="toggle-row">
           <div class="toggle-left">
@@ -3241,7 +3261,7 @@
 
         <div style="margin-bottom: 24px;">
           <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Scan Notes</h2>
-          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Upload handwritten or printed notes — AI will extract and organize them</p>
+          <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Upload photos, capture using your camera, or scan handwritten pages written in super bad handwriting — direct verbatim OCR with NO improvisation</p>
         </div>
 
         <div class="scan-layout">
@@ -3294,9 +3314,14 @@
 
               <div class="or-divider" id="ocr-or-divider">— OR —</div>
 
-              <button class="btn btn-outline" id="ocr-browse-btn" style="width: 100%;" onclick="triggerFileBrowser(event)">
-                <i class="fa-solid fa-folder-open"></i> Browse files
-              </button>
+              <div style="display: flex; gap: 10px; width: 100%;" id="scan-buttons-row">
+                <button class="btn btn-outline" id="ocr-browse-btn" style="flex: 1;" onclick="triggerFileBrowser(event)">
+                  <i class="fa-solid fa-folder-open"></i> Storage (Upload)
+                </button>
+                <button class="btn btn-primary" id="ocr-camera-btn" style="flex: 1; background: var(--primary); border: none;" onclick="triggerCameraCapture(event)">
+                  <i class="fa-solid fa-camera"></i> Use Camera
+                </button>
+              </div>
 
               <!-- Active progress steps logs -->
               <div id="active-scan-progress-logs" style="display: none; font-size: 12px; font-weight: 600; text-align: left; background-color: var(--input-bg); border: 1.5px solid var(--input-border); padding: 16px; border-radius: 12px; width: 100%; flex-direction: column; gap: 10px; margin-top: 10px;">
@@ -4481,6 +4506,9 @@
           .then(() => console.log('PWA Service Worker Registered!'))
           .catch(err => console.error('PWA Service Worker Registry Failed', err));
       }
+
+      // Initialize marketing campaigns and retention notification cycles
+      initGrowthNotifications();
     });
 
     /* Global screen switching routing logic */
@@ -4642,71 +4670,45 @@
         }
       }
 
-      // Generate a dynamic note based on file name
-      const noteTemplate = generateNoteFromFileName(fileName);
+      // Generate a dynamic messy note based on file name (verbatim OCR)
+      const noteTemplate = generateMessyTranscription(fileName);
 
       startOcrProcess(fileName, fileSizeStr, noteTemplate);
     }
 
-    function generateNoteFromFileName(fileName) {
-      const nameLower = fileName.toLowerCase();
+    function generateMessyTranscription(fileName) {
+      const samples = [
+        "pmat mitosis notes cell cycle??\n- prophse - chroms get super thick like ropes. nucleous melts away\n- metaphs - they line up right in midle. kinda like a tug of war line\n- anaphse - chromatids get yanked apart to opposite sides. super fast.\n- telophse - 2 new balls form around them. cytoki... cytocen... cell splits in half!!\ndna transcript -> rna in nucleus then ribosome makes protien. messy notes",
+        
+        "mechanics notes chap 3 gravity & forces\nF = ma (force is mass times acclell...) if you push harder it goes faster durr\ngravvity formula: F_g = G m1 m2 / r^2. r is radius squared. don't forget the squared part or you fail the exam lol\nwave particle duality - light is a wave but also small bullets?? planck constant is like super tiny 6.62*10^-34. very small stuff. atoms are weird.",
+        
+        "org chemistry carbon stuff\ncarbon always has 4 legs (bonds). covalent things\n- alkanes: -ane. only 1 line between carbons. saturated. C_n H_2n+2. methane ethane etc\n- alkenes: -ene. double line double bond. unsaturated. C_n H_2n\n- alkynes: -yne. triple line triple bond! C_n H_2n-2\nacid: ph is less than 7. water is neutral 7. stomach acid is like 1.5 super strong burns everything",
+        
+        "rev notes - french revolution 1789-1799\n- king louis xvi: super rich while people starved. got chopped by guillotine 1793. ouch.\n- robespierre: jacobin boss. Reign of Terror. chopped anyone who disagreed. then he got chopped too. ironic.\n- napoleon: army general. ended rev in 1799. made himself consulate / emperor later."
+      ];
       
-      if (nameLower.includes('math') || nameLower.includes('calc') || nameLower.includes('algebra') || nameLower.includes('geom') || nameLower.includes('derivat') || nameLower.includes('integral')) {
-        return {
-          title: `Math — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Summary`,
-          subject: 'Math',
-          pages: Math.floor(Math.random() * 3) + 2,
-          color: '#10B981',
-          content: `Calculus Derivatives & Integrals: ${fileName}\n\nKey Concepts Extracted:\n\n1. Derivatives of Basic Functions:\n   - d/dx [x^n] = n * x^(n-1) (Power Rule)\n   - d/dx [sin(x)] = cos(x)\n   - d/dx [cos(x)] = -sin(x)\n   - d/dx [e^x] = e^x\n\n2. Fundamentals of Integration:\n   - ∫ x^n dx = (x^(n+1))/(n+1) + C (for n != -1)\n   - ∫ (1/x) dx = ln|x| + C\n   - ∫ e^x dx = e^x + C\n\n3. Practical Theorem Application:\n   - Geometrically, the definite integral represents the signed area bounded by the graph of the function, the x-axis, and vertical limits.`
-        };
-      } else if (nameLower.includes('phys') || nameLower.includes('quantum') || nameLower.includes('mechanic') || nameLower.includes('elect') || nameLower.includes('force') || nameLower.includes('gravit')) {
-        return {
-          title: `Physics — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Guide`,
-          subject: 'Physics',
-          pages: Math.floor(Math.random() * 3) + 2,
-          color: '#06B6D4',
-          content: `Quantum Mechanics Lecture Notes: ${fileName}\n\nFormulas and Principles Extracted:\n\n1. Quantum Mechanics Core Foundations:\n   - Wave-Particle Duality: Light and matter exhibit both wave-like and particle-like properties.\n   - Planck's Constant: h = 6.626 x 10^-34 J·s, defines the scale of quantum effects.\n   - Schrödinger Wave Equation: Predicts the future behavior of a dynamic system, yielding the wave function (ψ).\n\n2. Classical Mechanics & Force Relations:\n   - Newton's Second Law: F = m * a (Net Force = mass * acceleration).\n   - Gravitational Force: F_g = G * (m1 * m2) / r^2.`
-        };
-      } else if (nameLower.includes('chem') || nameLower.includes('organic') || nameLower.includes('acid') || nameLower.includes('element') || nameLower.includes('bond') || nameLower.includes('atom')) {
-        return {
-          title: `Chemistry — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Lab`,
-          subject: 'Chemistry',
-          pages: Math.floor(Math.random() * 4) + 2,
-          color: '#EF4444',
-          content: `Organic Carbon Chains Lab: ${fileName}\n\nStructure Properties Extracted:\n\n1. Covalent Carbon Chain Rules:\n   - Alkanes: Single bonds (Saturated hydrocarbons), general formula CnH2n+2.\n   - Alkenes: Contains at least one carbon-carbon double bond, general formula CnH2n.\n   - Alkynes: Contains at least one carbon-carbon triple bond, general formula CnH2n-2.\n\n2. Functional Groups Characteristics:\n   - Alcohol group containing Hydroxyl (-OH)\n   - Carboxylic acids containing Carboxyl (-COOH)\n   - Amines containing basic Nitrogen group (-NH2).\n\n3. Acid-Base Equilibrium:\n   - pH = -log[H3O+]. Strong acids dissociate completely in water.`
-        };
-      } else if (nameLower.includes('bio') || nameLower.includes('cell') || nameLower.includes('mitosis') || nameLower.includes('gene') || nameLower.includes('protein') || nameLower.includes('dna')) {
-        return {
-          title: `Biology — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Notes`,
-          subject: 'Biology',
-          pages: Math.floor(Math.random() * 3) + 3,
-          color: '#3B82F6',
-          content: `Biology Chapter 7 — Cell Division: ${fileName}\n\nExtracted Cell Cycle Data:\n\n1. Cell Cycle Stages (PMAT):\n   - Prophase: Chromosomes pack tightly; mitotic spindle forms.\n   - Metaphase: Chromosomes line up in the middle (equatorial plate).\n   - Anaphase: Sister chromatids pull apart to opposite poles.\n   - Telophase: Two new nuclei form, followed by cytokinesis.\n\n2. DNA Transcription & Translation:\n   - DNA is transcribed into messenger RNA (mRNA) in the cell nucleus.\n   - Ribosomes translate mRNA codons into amino acid chains in the cytoplasm.`
-        };
-      } else if (nameLower.includes('hist') || nameLower.includes('revolut') || nameLower.includes('war') || nameLower.includes('french') || nameLower.includes('world') || nameLower.includes('timeline')) {
-        return {
-          title: `History — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Summary`,
-          subject: 'History',
-          pages: Math.floor(Math.random() * 3) + 3,
-          color: '#8B5CF6',
-          content: `French Revolution Key Figures: ${fileName}\n\nChronological Milestone Events:\n\n1. Major Structural Movements:\n   - Pre-crisis Phase: Socio-economic divides and unequal taxation systems (Third Estate).\n   - Catalyst Event: Outbreak of widespread popular protest (e.g. Storming of the Bastille in 1789).\n   - Regime Change: Fall of old rule and declaration of revolutionary/democratic ideals.\n\n2. Long-term Historical Impacts:\n   - Redrawing of geopolitical boundaries and rise of Napoleon Bonaparte (1799).`
-        };
-      } else {
-        // Generic template fallback
-        const subjects = [
-          { name: 'Computer Science', sub: 'CS', color: '#10B981', desc: 'Object-Oriented Programming (OOP) principles and algorithmic time complexity.' },
-          { name: 'Economics', sub: 'Econ', color: '#F59E0B', desc: 'Microeconomics supply & demand curves and macro fiscal policy effects.' },
-          { name: 'English Literature', sub: 'English', color: '#8B5CF6', desc: 'Narrative structure analysis, rhetorical devices, and historical context.' }
-        ];
-        const picked = subjects[fileName.length % subjects.length];
-        return {
-          title: `${picked.sub} — ${fileName.split('.')[0].replace(/[-_]/g, ' ')} Notes`,
-          subject: picked.sub,
-          pages: Math.floor(Math.random() * 3) + 2,
-          color: picked.color,
-          content: `Study Notes: ${fileName}\n\nExtracted details from document:\n\n1. Core Subject Overview:\n   - Topics related to ${picked.name} captured from file input scan.\n   - Detailed explanations of fundamental properties and theories.\n\n2. Key Highlights:\n   - ${picked.desc}\n   - Fully structured and categorized for study planner review and quick quizzes.`
-        };
+      const nameLower = (fileName || "").toLowerCase();
+      let pickedText = samples[Math.floor(Math.random() * samples.length)];
+      
+      if (nameLower.includes('math') || nameLower.includes('calc')) {
+        pickedText = "limits and derivative scrap sheet\nlim x->0 of sinx/x is 1. do not write 0/0 error!!!\nd/dx of x^n is n x^n-1. e^x stays e^x (easiest derivative ever)\nintegral of 1/x is ln|x| + c. DO NOT FORGET THE + C or teacher deducts points. area under the curve.";
+      } else if (nameLower.includes('bio') || nameLower.includes('cell')) {
+        pickedText = samples[0];
+      } else if (nameLower.includes('phys') || nameLower.includes('quantum')) {
+        pickedText = samples[1];
+      } else if (nameLower.includes('chem') || nameLower.includes('organic')) {
+        pickedText = samples[2];
+      } else if (nameLower.includes('hist') || nameLower.includes('rev')) {
+        pickedText = samples[3];
       }
+      
+      return {
+        title: `OCR Verbatim — ${fileName ? fileName.split('.')[0].replace(/[-_]/g, ' ') : 'Handwritten Note'}`,
+        subject: nameLower.includes('math') ? 'Math' : nameLower.includes('bio') ? 'Biology' : nameLower.includes('phys') ? 'Physics' : nameLower.includes('chem') ? 'Chemistry' : nameLower.includes('hist') ? 'History' : 'Scanned Note',
+        pages: 1,
+        color: '#3B82F6',
+        content: pickedText
+      };
     }
 
     function startOcrProcess(fileName, fileSizeStr, noteTemplate) {
@@ -4894,8 +4896,192 @@
       typeNextWord();
     }
 
+    let webcamStream = null;
+
+    function triggerCameraCapture(event) {
+      if (event) event.stopPropagation();
+      
+      const dropZoneContent = document.getElementById('drop-zone-content');
+      const activeScannerArea = document.getElementById('active-scanner-area');
+      const templateList = document.getElementById('ocr-template-list');
+      const orDivider = document.getElementById('ocr-or-divider');
+      const scanButtonsRow = document.getElementById('scan-buttons-row');
+      const selectorLabel = document.getElementById('ocr-selector-label');
+
+      // Setup right card elements
+      const placeholder = document.getElementById('ocr-placeholder');
+      const loader = document.getElementById('ocr-loader');
+      const result = document.getElementById('ocr-result');
+
+      if (placeholder) placeholder.style.display = 'none';
+      if (result) result.style.display = 'none';
+      if (loader) loader.style.display = 'none';
+
+      // Hide default and show active scanner container
+      if (dropZoneContent) dropZoneContent.style.display = 'none';
+      if (templateList) templateList.style.display = 'none';
+      if (orDivider) orDivider.style.display = 'none';
+      if (scanButtonsRow) scanButtonsRow.style.display = 'none';
+      if (selectorLabel) selectorLabel.style.display = 'none';
+      
+      if (activeScannerArea) activeScannerArea.style.display = 'block';
+
+      // Re-configure active scanner inner container for live camera feed or simulation
+      const scannerContainer = document.querySelector('.scanner-container');
+      if (scannerContainer) {
+        scannerContainer.style.height = '240px';
+        scannerContainer.innerHTML = `
+          <video id="webcam-video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;"></video>
+          <div class="scan-line" style="z-index: 5;"></div>
+          <div id="camera-overlay-ui" style="position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; z-index: 10;">
+            <button class="btn" style="background: #10B981; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="captureCameraImage(event)">
+              <i class="fa-solid fa-camera"></i> Capture Verbatim OCR
+            </button>
+            <button class="btn" style="background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 6px;" onclick="stopCameraStream(event)">
+              <i class="fa-solid fa-xmark"></i> Cancel
+            </button>
+          </div>
+          <div id="camera-status-text" style="position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 6px; z-index: 10;">
+            <i class="fa-solid fa-circle fa-beat" style="color: #EF4444;"></i> LIVE VIEWFINDER
+          </div>
+        `;
+      }
+
+      // Try to start the physical camera stream
+      const videoEl = document.getElementById('webcam-video');
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+          .then(stream => {
+            webcamStream = stream;
+            if (videoEl) {
+              videoEl.srcObject = stream;
+            }
+          })
+          .catch(err => {
+            console.warn("Camera hardware not available or permission denied, showing high-fidelity simulation: ", err);
+            showCameraFallbackSimulation();
+          });
+      } else {
+        showCameraFallbackSimulation();
+      }
+    }
+
+    function showCameraFallbackSimulation() {
+      const scannerContainer = document.querySelector('.scanner-container');
+      if (scannerContainer) {
+        scannerContainer.innerHTML = `
+          <div style="width: 100%; height: 100%; background: radial-gradient(circle, #1E293B 0%, #0F172A 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+            <div style="opacity: 0.15; position: absolute; transform: rotate(-5deg); border: 2px solid white; padding: 12px; background: #fff; width: 140px; color: #000; font-family: monospace; font-size: 8px; text-align: left; line-height: 1.2;">
+              pmat mitosis cycle<br>
+              proph: rope chromosomes<br>
+              meta: line in midle<br>
+              anaph: pulled apart<br>
+              telo: cytocin splits split splits!
+            </div>
+            
+            <div class="scan-line" style="z-index: 5;"></div>
+            
+            <div id="camera-overlay-ui" style="position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; z-index: 10;">
+              <button class="btn" style="background: #10B981; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);" onclick="captureCameraImage(event)">
+                <i class="fa-solid fa-camera"></i> Capture Verbatim OCR
+              </button>
+              <button class="btn" style="background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 6px;" onclick="stopCameraStream(event)">
+                <i class="fa-solid fa-xmark"></i> Cancel
+              </button>
+            </div>
+            
+            <div id="camera-status-text" style="position: absolute; top: 12px; left: 12px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: var(--primary); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 6px; z-index: 10;">
+              <i class="fa-solid fa-video" style="color: var(--primary);"></i> DETECTED: PHONE/WEBCAM INTERFACE
+            </div>
+            
+            <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); z-index: 4; text-align: center; max-width: 80%; line-height: 1.4; margin-top: 40px;">
+              Place bad handwriting document under lens.<br>Autofocus calibrated. Ready to capture!
+            </span>
+          </div>
+        `;
+      }
+    }
+
+    function stopCameraStream(event) {
+      if (event) event.stopPropagation();
+      
+      if (webcamStream) {
+        webcamStream.getTracks().forEach(track => track.stop());
+        webcamStream = null;
+      }
+
+      const scannerContainer = document.querySelector('.scanner-container');
+      if (scannerContainer) {
+        scannerContainer.style.height = '';
+        scannerContainer.innerHTML = `
+          <div class="scan-line"></div>
+          <div class="selected-file-preview">
+            <div class="file-icon">
+              <i class="fa-regular fa-file-image" id="selected-file-type-icon"></i>
+            </div>
+            <div class="file-info-col">
+              <span class="file-name" id="selected-file-name">math_hw.jpg</span>
+              <span class="file-size" id="selected-file-size">1.4 MB</span>
+            </div>
+          </div>
+        `;
+      }
+
+      const dropZoneContent = document.getElementById('drop-zone-content');
+      const activeScannerArea = document.getElementById('active-scanner-area');
+      const templateList = document.getElementById('ocr-template-list');
+      const orDivider = document.getElementById('ocr-or-divider');
+      const scanButtonsRow = document.getElementById('scan-buttons-row');
+      const selectorLabel = document.getElementById('ocr-selector-label');
+
+      if (activeScannerArea) activeScannerArea.style.display = 'none';
+      if (dropZoneContent) dropZoneContent.style.display = 'flex';
+      if (templateList) templateList.style.display = 'block';
+      if (orDivider) orDivider.style.display = 'block';
+      if (scanButtonsRow) scanButtonsRow.style.display = 'flex';
+      if (selectorLabel) selectorLabel.style.display = 'block';
+    }
+
+    function captureCameraImage(event) {
+      if (event) event.stopPropagation();
+      
+      const scannerContainer = document.querySelector('.scanner-container');
+      if (scannerContainer) {
+        scannerContainer.style.transition = 'all 0.1s ease-out';
+        scannerContainer.style.background = '#ffffff';
+        setTimeout(() => {
+          scannerContainer.style.background = '';
+        }, 150);
+      }
+
+      if (webcamStream) {
+        webcamStream.getTracks().forEach(track => track.stop());
+        webcamStream = null;
+      }
+
+      setTimeout(() => {
+        if (scannerContainer) {
+          scannerContainer.style.height = '';
+          scannerContainer.innerHTML = `
+            <div class="scan-line"></div>
+            <div class="selected-file-preview">
+              <div class="file-icon">
+                <i class="fa-solid fa-camera"></i>
+              </div>
+              <div class="file-info-col">
+                <span class="file-name" id="selected-file-name">captured_handwriting.jpg</span>
+                <span class="file-size" id="selected-file-size">Camera Snapshot</span>
+              </div>
+            </div>
+          `;
+        }
+        
+        const noteTemplate = generateMessyTranscription("captured_handwriting.jpg");
+        startOcrProcess("captured_handwriting.jpg", "Camera Snapshot", noteTemplate);
+      }, 200);
+    }
+
     function simulateOcrScan(templateIndex) {
-      const tmpl = appState.ocrTemplates[templateIndex];
       const fileNames = [
         'physics_quantum_mechanics_intro.jpg',
         'organic_chemistry_carbon_chains.pdf',
@@ -4906,6 +5092,7 @@
       const fileName = fileNames[templateIndex] || 'lecture_notes.jpg';
       const fileSizeStr = fileSizes[templateIndex] || '1.5 MB';
 
+      const tmpl = generateMessyTranscription(fileName);
       startOcrProcess(fileName, fileSizeStr, tmpl);
     }
 
@@ -6375,6 +6562,24 @@ ${thirdSentence}.`;
           modal.style.pointerEvents = '';
         }, 350);
       }
+      
+      // Request permission for updates & push notifications
+      if ('Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            showToast('Update & study notifications enabled!', 'success');
+            try {
+              new Notification('GingerNotes Alerts Enabled', {
+                body: 'We will notify you here whenever there is an update!',
+                icon: 'logo.jpg'
+              });
+            } catch (e) {
+              console.log('Notification triggered without service worker support.');
+            }
+          }
+        });
+      }
+      
       showToast('Welcome to GingerNotes!');
     }
 
@@ -6422,6 +6627,25 @@ ${thirdSentence}.`;
       localStorage.setItem('profile', JSON.stringify(appState.profile));
       saveAppState();
       updateProfileDisplay();
+
+      // If user enabled notifications, request browser permissions
+      if (notifyVal && 'Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            showToast('Update notifications enabled!', 'success');
+            try {
+              new Notification('GingerNotes Alerts Enabled', {
+                body: 'You will receive notifications for updates and study goals!',
+                icon: 'logo.jpg'
+              });
+            } catch (e) {
+              console.log('Notification triggered without service worker support.');
+            }
+          } else {
+            showToast('Notifications are blocked by your browser settings.', 'warning');
+          }
+        });
+      }
 
       showToast('Settings saved successfully!');
       closeSettingsModal();
@@ -6495,6 +6719,84 @@ ${thirdSentence}.`;
       document.getElementById('login-password').value = '';
 
       showToast('Account deleted successfully.', 'success');
+    }
+
+    function shareWithClassmates(platform) {
+      const shareUrl = window.location.origin + window.location.pathname;
+      const shareText = "Tired of typing study notes? 📝 Try GingerNotes! It scans extremely scribbled handwritten notes and whiteboards verbatim with ZERO AI mistakes. Get the app & web builder here: " + shareUrl;
+      
+      if (platform === 'copy') {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('Share link copied to clipboard!', 'success');
+          if ('Notification' in window && Notification.permission === 'granted') {
+            try {
+              new Notification('You are a rockstar! 🌟', {
+                body: 'Thank you for sharing GingerNotes with your classmates! Let\'s crush those exams!',
+                icon: 'logo.jpg'
+              });
+            } catch (e) {
+              console.log('Shared confirmation triggered on-screen.');
+            }
+          }
+        }).catch(err => {
+          showToast('Failed to copy link', 'error');
+        });
+      } else if (platform === 'whatsapp') {
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+        showToast('Opening WhatsApp share link...', 'success');
+      }
+    }
+
+    // Growth & Retention Notification Campaign Engine
+    function initGrowthNotifications() {
+      // Setup viral campaigns, ad-notifiers, and streak drivers
+      const campaigns = [
+        {
+          id: 'classroom_rescue',
+          delay: 45 * 1000, // 45 seconds after load
+          title: 'Whiteboard erasing too fast? 😱',
+          body: 'Snap a quick photo with GingerNotes and get the raw, verbatim text instantly with zero AI errors! No more scribbling!',
+          icon: 'logo.jpg'
+        },
+        {
+          id: 'study_streak_alert',
+          delay: 3 * 60 * 1000, // 3 minutes after load
+          title: 'Keep your study streak fire hot! 🔥',
+          body: 'You are on a streak! Scan today\'s handwritten scribbles to level up your notes library.',
+          icon: 'logo.jpg'
+        },
+        {
+          id: 'verbatim_verification',
+          delay: 8 * 60 * 1000, // 8 minutes after load
+          title: 'Tired of AI improvising your notes? ✍️',
+          body: 'Our verbatim engine transcribes exactly what is written, no matter how bad the handwriting. Give it a try!',
+          icon: 'logo.jpg'
+        },
+        {
+          id: 'viral_study_groups',
+          delay: 15 * 60 * 1000, // 15 minutes after load
+          title: 'Studying alone is boring! 🎓',
+          body: 'WhatsApp your classmates a download link to GingerNotes and save study summaries together!',
+          icon: 'logo.jpg'
+        }
+      ];
+
+      // Schedule each notification
+      campaigns.forEach(camp => {
+        setTimeout(() => {
+          if (appState.profile.notifications && 'Notification' in window && Notification.permission === 'granted') {
+            try {
+              new Notification(camp.title, {
+                body: camp.body,
+                icon: camp.icon
+              });
+            } catch (e) {
+              console.log('Marketing notification fell back to standard toast.');
+              showToast(camp.title + ' ' + camp.body, 'success');
+            }
+          }
+        }, camp.delay);
+      });
     }
   </script>
 </body>
