@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="GingerNotes">
   <link rel="apple-touch-icon" href="logo.jpg">
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6753,50 +6754,63 @@ ${thirdSentence}.`;
       const campaigns = [
         {
           id: 'classroom_rescue',
-          delay: 45 * 1000, // 45 seconds after load
           title: 'Whiteboard erasing too fast? 😱',
           body: 'Snap a quick photo with GingerNotes and get the raw, verbatim text instantly with zero AI errors! No more scribbling!',
           icon: 'logo.jpg'
         },
         {
           id: 'study_streak_alert',
-          delay: 3 * 60 * 1000, // 3 minutes after load
           title: 'Keep your study streak fire hot! 🔥',
           body: 'You are on a streak! Scan today\'s handwritten scribbles to level up your notes library.',
           icon: 'logo.jpg'
         },
         {
           id: 'verbatim_verification',
-          delay: 8 * 60 * 1000, // 8 minutes after load
           title: 'Tired of AI improvising your notes? ✍️',
           body: 'Our verbatim engine transcribes exactly what is written, no matter how bad the handwriting. Give it a try!',
           icon: 'logo.jpg'
         },
         {
           id: 'viral_study_groups',
-          delay: 15 * 60 * 1000, // 15 minutes after load
           title: 'Studying alone is boring! 🎓',
           body: 'WhatsApp your classmates a download link to GingerNotes and save study summaries together!',
           icon: 'logo.jpg'
         }
       ];
 
-      // Schedule each notification
-      campaigns.forEach(camp => {
+      // 1. Initial quick-triggers to keep the first session lively
+      const initialDelays = [45 * 1000, 3 * 60 * 1000, 8 * 60 * 1000, 15 * 60 * 1000];
+      campaigns.forEach((camp, index) => {
         setTimeout(() => {
-          if (appState.profile.notifications && 'Notification' in window && Notification.permission === 'granted') {
-            try {
-              new Notification(camp.title, {
-                body: camp.body,
-                icon: camp.icon
-              });
-            } catch (e) {
-              console.log('Marketing notification fell back to standard toast.');
-              showToast(camp.title + ' ' + camp.body, 'success');
-            }
-          }
-        }, camp.delay);
+          triggerCampaignNotification(camp);
+        }, initialDelays[index]);
       });
+
+      // 2. Endless cycling loop running every 30 minutes
+      let currentCampIndex = 0;
+      const intervalTime = 30 * 60 * 1000; // 30 minutes
+
+      setInterval(() => {
+        const nextCamp = campaigns[currentCampIndex];
+        triggerCampaignNotification(nextCamp);
+        
+        // Advance to next or wrap around to the beginning endlessly
+        currentCampIndex = (currentCampIndex + 1) % campaigns.length;
+      }, intervalTime);
+
+      function triggerCampaignNotification(camp) {
+        if (appState.profile.notifications && 'Notification' in window && Notification.permission === 'granted') {
+          try {
+            new Notification(camp.title, {
+              body: camp.body,
+              icon: camp.icon
+            });
+          } catch (e) {
+            console.log('Marketing notification fell back to standard toast.');
+            showToast(camp.title + ' ' + camp.body, 'success');
+          }
+        }
+      }
     }
   </script>
 </body>
