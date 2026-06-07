@@ -12,6 +12,7 @@ export const AuthScreen = () => {
   const [password, setPassword] = useState('');
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleSignIn = () => {
     const trimmedEmail = email.trim();
@@ -68,8 +69,23 @@ export const AuthScreen = () => {
         <View style={styles.form}>
           <View style={styles.inputGroup}>
             <Text style={[styles.label, { color: theme.colors.textMuted }]}>Email Address</Text>
-            <View style={[styles.inputWrapper, { backgroundColor: theme.colors.inputBg, borderColor: theme.colors.inputBorder }]}>
-              <Ionicons name="mail-outline" size={18} color={theme.colors.textMuted} style={styles.inputIcon} />
+            <View style={[
+              styles.inputWrapper, 
+              { 
+                backgroundColor: theme.colors.inputBg, 
+                borderColor: focusedField === 'email' ? theme.colors.primary : theme.colors.cardBorder,
+                shadowColor: theme.colors.primary,
+                shadowOpacity: focusedField === 'email' ? 0.2 : 0,
+                shadowRadius: 8,
+                elevation: focusedField === 'email' ? 4 : 0
+              }
+            ]}>
+              <Ionicons 
+                name="mail-outline" 
+                size={18} 
+                color={focusedField === 'email' ? theme.colors.primary : theme.colors.textMuted} 
+                style={styles.inputIcon} 
+              />
               <TextInput
                 value={email}
                 onChangeText={setEmail}
@@ -78,6 +94,8 @@ export const AuthScreen = () => {
                 placeholderTextColor={theme.colors.textMuted}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                onFocus={() => setFocusedField('email')}
+                onBlur={() => setFocusedField(null)}
               />
             </View>
           </View>
@@ -91,8 +109,23 @@ export const AuthScreen = () => {
                 </TouchableOpacity>
               )}
             </View>
-            <View style={[styles.inputWrapper, { backgroundColor: theme.colors.inputBg, borderColor: theme.colors.inputBorder }]}>
-              <Ionicons name="lock-closed-outline" size={18} color={theme.colors.textMuted} style={styles.inputIcon} />
+            <View style={[
+              styles.inputWrapper, 
+              { 
+                backgroundColor: theme.colors.inputBg, 
+                borderColor: focusedField === 'password' ? theme.colors.primary : theme.colors.cardBorder,
+                shadowColor: theme.colors.primary,
+                shadowOpacity: focusedField === 'password' ? 0.2 : 0,
+                shadowRadius: 8,
+                elevation: focusedField === 'password' ? 4 : 0
+              }
+            ]}>
+              <Ionicons 
+                name="lock-closed-outline" 
+                size={18} 
+                color={focusedField === 'password' ? theme.colors.primary : theme.colors.textMuted} 
+                style={styles.inputIcon} 
+              />
               <TextInput
                 value={password}
                 onChangeText={setPassword}
@@ -101,6 +134,8 @@ export const AuthScreen = () => {
                 placeholderTextColor={theme.colors.textMuted}
                 secureTextEntry
                 autoCapitalize="none"
+                onFocus={() => setFocusedField('password')}
+                onBlur={() => setFocusedField(null)}
               />
             </View>
           </View>

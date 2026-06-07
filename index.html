@@ -2284,6 +2284,53 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Premium Login/Auth Screen Input Styles */
+    .auth-input-container {
+      position: relative;
+      width: 100%;
+    }
+    
+    .auth-input {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-weight: 600;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    
+    /* Hover state for type box */
+    .auth-input:hover {
+      border-color: var(--primary);
+    }
+    
+    /* Highly visible and responsive Focus state for type box on PC */
+    .auth-input:focus {
+      border-color: var(--primary) !important;
+      background-color: rgba(59, 130, 246, 0.08) !important;
+      box-shadow: 0 0 0 4px var(--primary-glow) !important;
+    }
+    
+    /* Make the input icon reactive to input focus */
+    .auth-input-container i {
+      position: absolute;
+      left: 16px;
+      top: 15px;
+      color: var(--text-muted);
+      font-size: 14px;
+      transition: color 0.25s ease;
+      pointer-events: none;
+    }
+    
+    .auth-input:focus + i {
+      color: var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -3258,9 +3305,9 @@
       <div id="auth-login-form" style="display: flex; flex-direction: column; gap: 20px;">
         <div style="display: flex; flex-direction: column; gap: 6px;">
           <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Email Address</label>
-          <div style="position: relative;">
-            <i class="fa-solid fa-envelope" style="position: absolute; left: 14px; top: 15px; color: var(--text-muted);"></i>
-            <input type="email" id="login-email" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="student@gingernotes.com">
+          <div class="auth-input-container">
+            <input type="email" id="login-email" class="auth-input" placeholder="student@gingernotes.com">
+            <i class="fa-solid fa-envelope"></i>
           </div>
         </div>
 
@@ -3269,9 +3316,9 @@
             <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Password</label>
             <a href="#" onclick="event.preventDefault(); showToast('Password reset link sent to email!', 'success')" style="font-size: 12px; font-weight: 700; color: var(--primary); text-decoration: none;">Forgot?</a>
           </div>
-          <div style="position: relative;">
-            <i class="fa-solid fa-lock" style="position: absolute; left: 14px; top: 15px; color: var(--text-muted);"></i>
-            <input type="password" id="login-password" style="width: 100%; padding: 14px 14px 14px 40px; border: 1.5px solid var(--input-border); border-radius: 12px; background-color: var(--input-bg); color: var(--text-color); font-weight: 600; font-family: inherit; font-size: 14px; outline: none;" placeholder="••••••••">
+          <div class="auth-input-container">
+            <input type="password" id="login-password" class="auth-input" placeholder="••••••••">
+            <i class="fa-solid fa-lock"></i>
           </div>
         </div>
 
