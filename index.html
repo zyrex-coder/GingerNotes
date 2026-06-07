@@ -3302,19 +3302,19 @@
               <div id="active-scan-progress-logs" style="display: none; font-size: 12px; font-weight: 600; text-align: left; background-color: var(--input-bg); border: 1.5px solid var(--input-border); padding: 16px; border-radius: 12px; width: 100%; flex-direction: column; gap: 10px; margin-top: 10px;">
                 <div style="display: flex; align-items: center; gap: 10px;" id="scan-step-1">
                   <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary);"></i>
-                  <span style="color: var(--text-color);">Analyzing document structure...</span>
+                  <span style="color: var(--text-color);">Detecting bounding boxes and contours...</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px; opacity: 0.4;" id="scan-step-2">
                   <i class="fa-regular fa-circle" id="scan-icon-2"></i>
-                  <span style="color: var(--text-color);">Recognizing handwriting and text...</span>
+                  <span style="color: var(--text-color);">Running pixel-to-character transcription...</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px; opacity: 0.4;" id="scan-step-3">
                   <i class="fa-regular fa-circle" id="scan-icon-3"></i>
-                  <span style="color: var(--text-color);">Running Ginger AI OCR formatting...</span>
+                  <span style="color: var(--text-color);">Verifying exact lexical alignment...</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px; opacity: 0.4;" id="scan-step-4">
                   <i class="fa-regular fa-circle" id="scan-icon-4"></i>
-                  <span style="color: var(--text-color);">Structuring study guide sections...</span>
+                  <span style="color: var(--text-color);">Pasting raw transcribed text verbatim...</span>
                 </div>
               </div>
             </div>
@@ -3344,8 +3344,8 @@
             <!-- OCR Loading State -->
             <div class="ocr-loader" id="ocr-loader">
               <i class="fa-solid fa-circle-notch"></i>
-              <span class="ocr-loader-text">Extracting text and organizing with AI...</span>
-              <span class="ocr-loader-sub">Formatting headers and tags</span>
+              <span class="ocr-loader-text">Performing literal OCR transcription...</span>
+              <span class="ocr-loader-sub">Recognizing handwritten strokes verbatim</span>
             </div>
 
             <!-- OCR Placeholder -->
@@ -3354,7 +3354,7 @@
                 <i class="fa-regular fa-file-lines"></i>
               </div>
               <span class="placeholder-title">Extracted notes appear here</span>
-              <span class="placeholder-desc">Upload or select a mock note on the left and AI will extract and organize its contents</span>
+              <span class="placeholder-desc">Upload or select a handwritten photo and OCR will transcribe its exact text verbatim.</span>
             </div>
 
             <!-- OCR Result panel -->
@@ -3374,7 +3374,7 @@
               </div>
               <div class="success-alert">
                 <i class="fa-solid fa-circle-info"></i>
-                <span>Added to Dashboard under "Recent Notes". You can now quiz this note or chat with Ginger AI about it!</span>
+                <span>Added to Dashboard under "Recent Notes". You can now review or test your scanned note!</span>
               </div>
             </div>
           </div>
@@ -4434,21 +4434,21 @@
           subject: 'Physics',
           pages: 2,
           color: '#06B6D4',
-          content: 'Quantum mechanics is a fundamental theory in physics that provides a description of the physical properties of nature at the scale of atoms and subatomic particles.\n\nKey Concepts:\n1. Wave-Particle Duality: Light and matter exhibit both wave-like and particle-like properties.\n2. Planck\'s Constant: h = 6.626 x 10^-34 J·s, defines the scale of quantum effects.\n3. Schrödinger Equation: Predicts the future behavior of a dynamic system, yielding the wave function (ψ).'
+          content: 'quant mech intro - nature at subatom scale. v small stuff.\nKey ideas:\n1. wave particle duality - light & matter act like waves and also particles at same time?? wild.\n2. plancks constant h = 6.626 x 10^-34 J.s - scale of quantum stuff.\n3. schrodinger eq: predicts behavior. yields wave function psi (looks like a trident Ψ).'
         },
         {
           title: 'Chemistry — Organic Carbon Chains',
           subject: 'Chemistry',
           pages: 5,
           color: '#EF4444',
-          content: 'Organic chemistry focuses on compounds containing covalent carbon-hydrogen bonds.\n\nStructure Properties:\n- Alkanes: Single bonds (Saturated hydrocarbons), general formula CnH2n+2.\n- Alkenes: Contains at least one carbon-carbon double bond, general formula CnH2n.\n- Alkynes: Contains at least one carbon-carbon triple bond, general formula CnH2n-2.\n- Functional Groups: Hydroxyl (-OH), Carboxyl (-COOH), Amino (-NH2).'
+          content: 'chem notes - org chem = carbon + hydrogen covalent bonds. carbon has 4 valence electrons so always forms 4 bonds\nchains:\n- alkanes: single bonds only. saturated hydrocarbon. formula CnH2n+2. eg methane, ethane\n- alkenes: double bond! unsaturated. CnH2n.\n- alkynes: triple bond!! CnH2n-2.\nfunctional grps: -OH (hydroxyl), -COOH (carboxyl, acidic), -NH2 (amino)'
         },
         {
           title: 'History — French Revolution Key Figures',
           subject: 'History',
           pages: 3,
           color: '#8B5CF6',
-          content: 'The French Revolution (1789-1799) was a period of radical political and societal change in France.\n\nKey Figures:\n- Louis XVI: King of France, executed in 1793 during the revolution.\n- Maximilien Robespierre: Leader of the Jacobins, heavily associated with the Reign of Terror.\n- Napoleon Bonaparte: General who rose to prominence and ended the revolution in 1799, establishing the French Consulate.'
+          content: 'french rev 1789 to 1799. big political chaos in france.\nppl to remember:\n- Louis XVI: king of France. got executed in 1793. guillotine.\n- Maximilien Robespierre: leader of jacobins. run the Reign of Terror. lots of executions. got executed himself too lol irony.\n- Napoleon Bonaparte: army general. ended rev in 1799. made himself consulate / emperor later.'
         }
       ]
     };
