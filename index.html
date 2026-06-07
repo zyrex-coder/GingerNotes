@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GingerNotes - Interactive Study Assistant</title>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GingerNotes">
+  <link rel="apple-touch-icon" href="logo.jpg">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3149,6 +3156,15 @@
           </label>
         </div>
 
+        <!-- Privacy Policy Option -->
+        <div style="margin-top: 8px; padding-top: 16px; border-top: 1.5px solid var(--input-border); display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 13px; font-weight: 700; color: var(--text-color);">Data Privacy</span>
+            <span style="font-size: 11px; font-weight: 600; color: var(--text-muted);">View GingerNotes privacy practices</span>
+          </div>
+          <button class="btn btn-outline" onclick="openPrivacyModal(event)" style="padding: 8px 16px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">View Policy</button>
+        </div>
+
         <!-- Delete Account Option (Danger Zone) -->
         <div style="margin-top: 8px; padding-top: 16px; border-top: 1.5px dashed var(--input-border); display: flex; flex-direction: column; gap: 8px;">
           <span style="font-size: 12px; font-weight: 700; color: #ef4444; text-transform: uppercase; letter-spacing: 0.5px;">Danger Zone</span>
@@ -3161,6 +3177,58 @@
       <div class="modal-actions-row">
         <button class="btn btn-outline" onclick="closeSettingsModal()" style="flex: 1;">Cancel</button>
         <button class="btn btn-primary" onclick="saveSettings()" style="flex: 1;">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: PRIVACY POLICY -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="privacy-modal" style="z-index: 10002;">
+    <div class="modal-content" style="max-width: 460px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="extracted-badge" style="background-color: rgba(16, 185, 129, 0.12); color: #10b981;">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <span class="modal-title" style="font-size: 15px; font-weight: 800;">Privacy Policy</span>
+            <span style="font-size: 12px; font-weight: 700; color: #10b981;">Your data is secure and on-device</span>
+          </div>
+        </div>
+        <i class="fa-solid fa-xmark close" onclick="closePrivacyModal()"></i>
+      </div>
+
+      <div style="flex: 1; overflow-y: auto; margin-bottom: 20px; display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.5; color: var(--text-color);">
+        <p style="font-weight: 600; color: var(--text-muted);">At GingerNotes, we believe that your study materials, thoughts, and progress belong strictly to you. Our privacy commitments are straightforward:</p>
+        
+        <div style="display: flex; gap: 12px; padding: 12px; border-radius: 12px; background-color: rgba(59, 130, 246, 0.05); border: 1px solid var(--input-border);">
+          <i class="fa-solid fa-database" style="color: var(--primary); font-size: 16px; margin-top: 2px;"></i>
+          <div>
+            <strong style="display: block; font-size: 13px; color: var(--text-color); margin-bottom: 2px;">100% Local Storage</strong>
+            All your notes, flashcard decks, study sessions, and progress metrics are stored securely in your browser's local sandbox storage. We never upload your notes to any cloud database.
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; padding: 12px; border-radius: 12px; background-color: rgba(16, 185, 129, 0.05); border: 1px solid var(--input-border);">
+          <i class="fa-solid fa-bolt" style="color: #10b981; font-size: 16px; margin-top: 2px;"></i>
+          <div>
+            <strong style="display: block; font-size: 13px; color: var(--text-color); margin-bottom: 2px;">AI Summarizer Privacy</strong>
+            Text processed through our advanced AI summarization pipes is securely analyzed in real-time. Your source texts and generated notes are never cached, saved, or used to train public models.
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; padding: 12px; border-radius: 12px; background-color: rgba(239, 68, 68, 0.05); border: 1px solid var(--input-border);">
+          <i class="fa-solid fa-trash-can" style="color: #ef4444; font-size: 16px; margin-top: 2px;"></i>
+          <div>
+            <strong style="display: block; font-size: 13px; color: var(--text-color); margin-bottom: 2px;">Complete Deletion Control</strong>
+            You are in full control of your account. When you select "Delete Account" in Settings, our code instantly executes a full sweep of your device's memory, deleting all traces of your logs and database.
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions-row">
+        <button class="btn btn-primary" onclick="closePrivacyModal()" style="width: 100%;">I Understand</button>
       </div>
     </div>
   </div>
@@ -3213,8 +3281,13 @@
       </div>
 
       <!-- Toggle to Sign Up (Visual Only) -->
-      <div style="text-align: center; font-size: 13px; font-weight: 600; color: var(--text-muted);">
-        Don't have an account? <a href="#" onclick="toggleAuthMode(event)" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign up</a>
+      <div style="text-align: center; font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; flex-direction: column; gap: 12px; margin-top: 4px;">
+        <div>
+          Don't have an account? <a href="#" onclick="toggleAuthMode(event)" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign up</a>
+        </div>
+        <div style="border-top: 1px solid var(--input-border); padding-top: 12px; width: 100%;">
+          <a href="#" onclick="openPrivacyModal(event)" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
+        </div>
       </div>
 
     </div>
@@ -3599,6 +3672,13 @@
       renderQuizzesGrid();
       renderSchedules();
       updateGlobalStatsDisplay();
+
+      // Register Service Worker for Progressive Web App (PWA) installation
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(() => console.log('PWA Service Worker Registered!'))
+          .catch(err => console.error('PWA Service Worker Registry Failed', err));
+      }
     });
 
     /* Global screen switching routing logic */
@@ -4148,6 +4228,7 @@
         });
         appState.stats.cardsMastered = totalMasteredSum;
         appState.stats.totalCards = totalCardsSum;
+        saveAppState();
 
         updateGlobalStatsDisplay();
         renderFlashcardsDecks();
@@ -4204,6 +4285,7 @@
 
       appState.decks.push(newDeck);
       appState.stats.totalCards += num;
+      saveAppState();
 
       // Close modal & render
       document.getElementById('new-deck-title').value = '';
@@ -4460,6 +4542,7 @@ ${thirdSentence}.`;
 
       appState.notes.unshift(newNote);
       appState.stats.notesScanned++;
+      saveAppState();
 
       // Re-render dashboard list & global counters
       renderRecentNotes();
@@ -4629,6 +4712,7 @@ ${thirdSentence}.`;
       appState.stats.quizzesDone++;
       appState.stats.lastQuizScore = scorePct;
       if (scorePct >= 70) appState.stats.streak++; // increase streak on pass
+      saveAppState();
 
       updateGlobalStatsDisplay();
 
@@ -4688,6 +4772,7 @@ ${thirdSentence}.`;
       if (ev) {
         ev.done = !ev.done;
         renderSchedules();
+        saveAppState();
       }
     }
 
@@ -4734,6 +4819,7 @@ ${thirdSentence}.`;
       document.getElementById('new-event-title').value = '';
       closeAddEventModal();
       renderSchedules();
+      saveAppState();
     }
 
     /* ========================================== */
@@ -4786,14 +4872,58 @@ ${thirdSentence}.`;
       }, 3000);
     }
 
+    function saveAppState() {
+      localStorage.setItem('profile', JSON.stringify(appState.profile));
+      localStorage.setItem('stats', JSON.stringify(appState.stats));
+      localStorage.setItem('notes', JSON.stringify(appState.notes));
+      localStorage.setItem('decks', JSON.stringify(appState.decks));
+      localStorage.setItem('schedules', JSON.stringify(appState.schedules));
+    }
+
     function initAuth() {
       // Load stored auth & profile details
       const storedLoggedIn = localStorage.getItem('isLoggedIn');
       const storedProfile = localStorage.getItem('profile');
+      const storedStats = localStorage.getItem('stats');
+      const storedNotes = localStorage.getItem('notes');
+      const storedDecks = localStorage.getItem('decks');
+      const storedSchedules = localStorage.getItem('schedules');
 
       if (storedProfile) {
         try {
           appState.profile = JSON.parse(storedProfile);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (storedStats) {
+        try {
+          appState.stats = JSON.parse(storedStats);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (storedNotes) {
+        try {
+          appState.notes = JSON.parse(storedNotes);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (storedDecks) {
+        try {
+          appState.decks = JSON.parse(storedDecks);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (storedSchedules) {
+        try {
+          appState.schedules = JSON.parse(storedSchedules);
         } catch (e) {
           console.error(e);
         }
@@ -4839,7 +4969,7 @@ ${thirdSentence}.`;
       const loginBtn = document.querySelector('#auth-screen .btn-primary');
       const origText = loginBtn.innerHTML;
       loginBtn.disabled = true;
-      loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Signing in...';
+      loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
 
       setTimeout(() => {
         appState.isLoggedIn = true;
@@ -4851,10 +4981,33 @@ ${thirdSentence}.`;
           appState.profile.name = part.charAt(0).toUpperCase() + part.slice(1);
         }
 
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('profile', JSON.stringify(appState.profile));
+        // Detect if creating a new account (Sign Up / Create Account mode)
+        const isSignUp = document.querySelector('#auth-screen h1').innerText === 'Create Account';
+        if (isSignUp) {
+          // Zero-out all stats and empty notes & decks & schedules
+          appState.stats = {
+            notesScanned: 0,
+            cardsMastered: 0,
+            totalCards: 0,
+            quizzesDone: 0,
+            streak: 0,
+            lastQuizScore: 0
+          };
+          appState.notes = [];
+          appState.decks = [];
+          appState.schedules = [];
+        }
 
+        localStorage.setItem('isLoggedIn', 'true');
+        saveAppState();
+
+        // Refresh all UI rendering with updated state
         updateProfileDisplay();
+        renderRecentNotes();
+        renderFlashcardsDecks();
+        renderQuizzesGrid();
+        renderSchedules();
+        updateGlobalStatsDisplay();
 
         const authScreen = document.getElementById('auth-screen');
         if (authScreen) {
@@ -4868,7 +5021,11 @@ ${thirdSentence}.`;
         loginBtn.disabled = false;
         loginBtn.innerHTML = origText;
 
-        showToast(`Welcome back, ${appState.profile.name}!`);
+        if (isSignUp) {
+          showToast(`Account created! Welcome, ${appState.profile.name}!`);
+        } else {
+          showToast(`Welcome back, ${appState.profile.name}!`);
+        }
       }, 1000);
     }
 
@@ -4940,29 +5097,34 @@ ${thirdSentence}.`;
     }
 
     function saveSettings() {
-      const name = document.getElementById('settings-name-input').value.trim();
-      const email = document.getElementById('settings-email-input').value.trim();
-      const ocrMode = document.getElementById('settings-ocr-select').value;
-      const dailyGoal = parseInt(document.getElementById('settings-goal-input').value) || 4;
-      const notifications = document.getElementById('settings-notify-checkbox').checked;
+      const nameVal = document.getElementById('settings-name-input').value.trim();
+      const emailVal = document.getElementById('settings-email-input').value.trim();
+      const ocrVal = document.getElementById('settings-ocr-select').value;
+      const goalVal = parseInt(document.getElementById('settings-goal-input').value) || 4;
+      const notifyVal = document.getElementById('settings-notify-checkbox').checked;
 
-      if (!name || !email) {
-        showToast('Name and email cannot be blank.', 'error');
-        return;
-      }
-
-      appState.profile = {
-        name,
-        email,
-        ocrMode,
-        dailyGoal,
-        notifications
-      };
+      appState.profile.name = nameVal || 'Student';
+      appState.profile.email = emailVal || '';
+      appState.profile.ocrMode = ocrVal;
+      appState.profile.dailyGoal = goalVal;
+      appState.profile.notifications = notifyVal;
 
       localStorage.setItem('profile', JSON.stringify(appState.profile));
+      saveAppState();
       updateProfileDisplay();
-      closeSettingsModal();
+
       showToast('Settings saved successfully!');
+      closeSettingsModal();
+    }
+
+    /* Modal handles: Privacy Policy */
+    function openPrivacyModal(e) {
+      if (e) e.preventDefault();
+      document.getElementById('privacy-modal').classList.add('active');
+    }
+
+    function closePrivacyModal() {
+      document.getElementById('privacy-modal').classList.remove('active');
     }
 
     function handleDeleteAccount() {
@@ -4991,8 +5153,10 @@ ${thirdSentence}.`;
         lastQuizScore: 0
       };
 
-      // Reset notes array
+      // Reset data arrays
       appState.notes = [];
+      appState.decks = [];
+      appState.schedules = [];
 
       // Update UI components with clean data
       renderRecentNotes();
